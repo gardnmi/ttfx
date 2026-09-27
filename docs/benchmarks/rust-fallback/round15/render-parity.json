@@ -1,0 +1,4555 @@
+{
+  "before_sha256": "a20a54c13e9a07c244c617055490ba737366ff0c444b5bdba00a8d8bd6e871e2",
+  "candidate_sha256": "0847e30af7dd9f2e130c32f8875c5f3d6dddacaac4f4cf301ac69c00fa69b0a7",
+  "comparisons": 562,
+  "cases": [
+    {
+      "effect": "beams",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1787493,
+        "sha256": "eea993f0d8f859012bb2041325888c828fca16b8738ef12515210e03c98a513b",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "beams",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 502753,
+        "sha256": "1a3ee88c83bd7ef89a824e72605242ef0e9bf4584f019b7452e234599c6df428",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "beams",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 888598,
+        "sha256": "10a7dff21e4dde2019c313d07ad0e2841964da8d58baa1d01437dde4ab5ad40f",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "beams",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 669064,
+        "sha256": "c6637c64a75ea1c9685d32fdb5d6612d85b4fcf601afb55c08e9737dbe54b209",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "beams",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 143205,
+        "sha256": "f78ac44f0bd539eb20bdf327fb93df9099f97e1d617303d38b54f728499d2a2c",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "binarypath",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1737731,
+        "sha256": "4ff702b476b38f30193283dfc61c91fa107d6b2ac566a5f2c0a387984c66e391",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "binarypath",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 330772,
+        "sha256": "ca9b99365771a560b02638f27bac44ec10a97d57d06618a87216cec15cf425ba",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "binarypath",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 266338,
+        "sha256": "4a98b51e90dc4dcb43b3b5b3ebb09d44498d62957b7c4deeabd5e33ea5337bc1",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "binarypath",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 245717,
+        "sha256": "3a8808eec33e7df842c677c7bf14a1d8c611382febd08f1ef673c765dac10697",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "binarypath",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 257928,
+        "sha256": "3c4d2905acbb0828d2a95e89dc9a0c166c90faa2229dba554cff69d2357b30ac",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "blackhole",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1949028,
+        "sha256": "f8cdbbf7abdf401870beb5f8a336cf7b0efa9613421a3ab4c646974f016c23c3",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "blackhole",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 345308,
+        "sha256": "383d1013a652a70bc3cb033c25a3b84154e83c401f85ba2d0c8ade46e849bf7f",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "blackhole",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 323435,
+        "sha256": "a124bf00058bccada9cc6897f4cb0e3860a2ef819ed4fbbe117fbf3a2f46d8f8",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "blackhole",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 250539,
+        "sha256": "7ca3fc91255f1d97ccc1bdc33a9c6283a94e1a14ce63803ef76e9c5117e01a41",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "blackhole",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 345817,
+        "sha256": "c4abc0273bfb1952544f2e4090d6066114ea5dc90994eeba161b9b90496009ff",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 785246,
+        "sha256": "67fd6b440b8f2094390c5ac8c65d81e82a1c5673bcf5001df0d9448f5ccde9b7",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 76723,
+        "sha256": "6a3314fe41d3182ada1d6e61bba64111c1a370d8cf6f37ee4df05ae1c27f766c",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 57320,
+        "sha256": "083303981e8b73cba28dbb6de08d9fae8a77522468c4554642c162e3b56c3962",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 46716,
+        "sha256": "241efef418763ca3427c9ffe4ef27388f856d334cee624df07c4dbb1d489a637",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 118087,
+        "sha256": "2ac6c5f9300858e750ee867b1d564a8bf0deeb1a039090f413092f9c1a68906b",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bubbles",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1215773,
+        "sha256": "a89e3e23e66b67a1a7195cdb7cebde1bc2788557fb847d6872c0fa045531ae2e",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bubbles",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 97931,
+        "sha256": "114abe823920d3ceab4469794bb82d5f99e01ae8563c782981f6c420182bf085",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bubbles",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 96212,
+        "sha256": "282ff12926dc7d2d21e5fe2039188f49291641f0011fbd4481ff4f1ea726f88e",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bubbles",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 83487,
+        "sha256": "deaa45f302f96f8122f37546bc2022e21551756b12c444bad87ca2e33171bad0",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bubbles",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 212792,
+        "sha256": "f716a7c4b7615d41433b6da696ce411bd883d00912794c980300d968d8ec75a3",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1287889,
+        "sha256": "e02d6cfc5a3bc070469801878891bac46b1a7b7559245311abfe30105c301489",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 219997,
+        "sha256": "6d951cbd65c592faef1cdd9cb4e9c73475eda0f355bb0d01324c3a766fe611ce",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 164009,
+        "sha256": "5b4b180ab82fd88b1a5cab29ef50caf0ae6b4052adf41f8fb4191e5f42b2f56c",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 118648,
+        "sha256": "ddd2acc78bb1bc14dda042f448f1844d3c759d02641aeffa8717d78fec67ae5c",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 165485,
+        "sha256": "53ca2e308d14b0331b74b33d79fbe046cac19df8fa1ad340bfd82a3049956d20",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "colorshift",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1988555,
+        "sha256": "021ed5a33b12b7b521f5607276d77b99ae01d5afb4bde11178d8587a075a9555",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "colorshift",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 413059,
+        "sha256": "1f68cb8f8e39a6f6b1ec6aad084ae9f614f6f32ca3a6f0b5a4f3b4b29bc2e908",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "colorshift",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 345162,
+        "sha256": "0e49e971ba9d7d03b512b1fde98b3af325a368fce9fca66c0d34bafd5d2ba03e",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "colorshift",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 219422,
+        "sha256": "8f69b79dc12d048695308aa5146e788c3ec2fdf7a3797c931539c54ef25a5516",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "colorshift",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 213195,
+        "sha256": "feedb0bff1148af6f2b1448935343e04c49f7b016c04f0230f34f2d5bc641cfc",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "crumble",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1082345,
+        "sha256": "30ee55c9b788c6f3bf9881044cc788cdb0c5b7e00acd4a70b50a103626deb903",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "crumble",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 165906,
+        "sha256": "cc44f59090e3995ab1eba3d3dee40875b67eb510c8d3db6be118be2d549e5373",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "crumble",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 148224,
+        "sha256": "cc622f257fc45ed5a40e7b93e2277b74f83f8a0662a3b27fa679ffae6a2d433c",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "crumble",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 103220,
+        "sha256": "e07d4bfe6b9480b898eef98faea7750378db7620039094634205abf3e1ce4dc0",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "crumble",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 135013,
+        "sha256": "27e546054ffc28ab0558407e5aa8fbbcb0691b9235399859c17d138c204a1de3",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "decrypt",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2455640,
+        "sha256": "6289a75d05a127ed2571f6a382da5c879293c286155c36c9ceaa2bd76b6bca91",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "decrypt",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 412031,
+        "sha256": "d09681d20e0e3f601c2c0e121219918b2eb081aa54a19607235bd37fe9553742",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "decrypt",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 283148,
+        "sha256": "20946c074272d079f7ce75846ae68f0701d75540910148ab4ef4985ee7778dac",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "decrypt",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 230017,
+        "sha256": "2f16241f26490211b084b28302e7c038f574e9f9a4b1b0ed753969b07adf752d",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "decrypt",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 354764,
+        "sha256": "14f4cda540958c6560ebb2b7064670af2afa8614496e062f301ace93aea99da3",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1070046,
+        "sha256": "6b8bbe829aabcb51ad5beb2eda59fcb6c7cef65324dbc9bb1c6af41bb96e6e9e",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 116418,
+        "sha256": "7e0418e431c5e21dc9dc00956fc79f05d6a7a52301402b0c9eb95f4e1c9e7533",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 69290,
+        "sha256": "cd0fe4e11cd1df5d27410345ef05ebd144029c875670049247769249c98f7d07",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 62738,
+        "sha256": "662962ea257f79f10b9e08e3be45aeb5594d5d8a60f868b55b66e222f9ce0e87",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 119030,
+        "sha256": "88c47fb7ef90bb74bbfc185142889931107f9461894247f44dfd640a5a439240",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "expand",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 246925,
+        "sha256": "80b149831ad672eaab3dbe174b0a1b3db36c0e8e83537fd32902490c782d03a2",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "expand",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 26025,
+        "sha256": "57b6165d6bd7a342d6c3b0990043f73d475ac830b99f2d9f12b80385c8e6153f",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "expand",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 22928,
+        "sha256": "1d785d724799ce5af7b15876ef05027b7be6279fe80c2ec6e1d0e2a218477fcc",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "expand",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 21214,
+        "sha256": "6d5b3b2c371e0869b5da8b22e3951774509b591a3a00a157f1987bfce095da51",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "expand",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 37487,
+        "sha256": "7ab7f7a9ed6701b6b62e13ad1df2c2e43144b33fbfc340ca2c61d6ed47565687",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "fireworks",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2604390,
+        "sha256": "39278c32fd03528f4c8c6db0a85df9fd37eede4d2f52a4d6e0cf769abc4b1a0b",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "fireworks",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 759692,
+        "sha256": "9b61cc2ae435a989f7a6399863b6d758a2f71ef604e4e026ab227134c76c977a",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "fireworks",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 379219,
+        "sha256": "0384678f9ced0c5470089a756feda0881da5c49219ac997a213d9ed4c88fb4cf",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "fireworks",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 339261,
+        "sha256": "b2a8b555749e00b913eaec754f65a257bea24b19e37550321101b6bb2d4c2c40",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "fireworks",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 469100,
+        "sha256": "b43c029cbb900e39a2696df9e0671045c2955c7eab0d3df435cad2a5527e08bb",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "highlight",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 504330,
+        "sha256": "cc2898fbba86d3a04c8cd9dce618080eeffb06ebfbff3e0a395778a12a8ac54f",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "highlight",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 104097,
+        "sha256": "b53ccb5073bb26294f9a12a0432381655768f9f21454ae3bf7d2e7f0c466c871",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "highlight",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 59558,
+        "sha256": "008266499c4e4ba2cc39d1b9019d7893e05ee9e7173f2016cecf9ddeb1738f90",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "highlight",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 53837,
+        "sha256": "7e66b0188dbeb4fb02b15dce2f4158f877d0609a3dbdaf8ebcfe66640a726266",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "highlight",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 52398,
+        "sha256": "96484e55d3ed3e58692eaccb5481e8f831fd4dd18ca0046c51e245e6c910cfe9",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1350227,
+        "sha256": "4847a9477a93cb93ff1dc5d860115153bc4f461574dcb9bb25d832d6dc0e5ead",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 167394,
+        "sha256": "f6e1625fd4ce7de1a97d55e67cbdd127759cfdd6e05b2e323cbe1dd5d789733a",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 118918,
+        "sha256": "7c19142f440cbb018a616d4bfc747ebf25c4669d4b89673ad4d5f003b1167469",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 91737,
+        "sha256": "d757d969dc45b054ac31ccd0aaffb07b5294751cf4b481ddcc1c10173da828f2",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 181761,
+        "sha256": "9f86634ea0b97ce3d6bf7a3ad0d92d050a323457c1d7959ec013def8fca99488",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 3801965,
+        "sha256": "a2c91e72ab8939b62d98688aa992ab33839868dd69f7e5fa0d1028f781b01808",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2158712,
+        "sha256": "37a8efd9dc2033e55e8553b0f6c36e4e5a7638a2dfa233acecee5d38db335e06",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 3571169,
+        "sha256": "a006b5503f19d7a2c72b6c29dbf534cf453f08fe7959dedf4e7b4492694eebd1",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 2711834,
+        "sha256": "bdb615485566ce98dfd8998641b7c0b49d471d8f6d6129c5b1bac505659c0b28",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 619235,
+        "sha256": "25f1d84516fc6adc4ed04f437afd3d3cd65fc8276580a9c902b9ae88a06dd269",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "middleout",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 315379,
+        "sha256": "1b7bf762fe2be9d55870c73ff4ce17f414ca25f7dfcc04a25bdafed20622fd10",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "middleout",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 62068,
+        "sha256": "e4bc16bf4e9430bec8c0068533e5160ee5e9ff5a65037119288ddc493f79031b",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "middleout",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 45089,
+        "sha256": "fda553976b68dfd29e586cd7ceba17f1d96ce6d3648a7aa118741d7830ac109c",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "middleout",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 38185,
+        "sha256": "59d1b4938c1ea4a373a34f712875bf369bb14818d027906f8649b752cf0dce92",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "middleout",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 48368,
+        "sha256": "080c5332c55fad187b3ce4dfe9ca3fe15e816f58c128761546cce8364ab36648",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "orbittingvolley",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2817006,
+        "sha256": "901ac6ef0047fe9e39e28e6a6b19ae9a6fe03b5b8288604a1d8955518748f1b4",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "orbittingvolley",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 124105,
+        "sha256": "c3390c12badfd791082d2d2b02900bf00892656c10772affdb37c782122e00d1",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "orbittingvolley",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 60222,
+        "sha256": "1938b41fe595071945400b4a73f9f643fde38de0e321b91a8c3ac98b4ed1c183",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "orbittingvolley",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 54048,
+        "sha256": "bfff2ebf876795f1aad07a76b5359763d24e3d8fdafe3b3d91222eb08ae3216a",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "orbittingvolley",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 502645,
+        "sha256": "a2efc87629c61db61a9fe1cc952bfbe7de698d06ac167bb1db224b9bdfda9cc1",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "overflow",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 100615,
+        "sha256": "285c124ca0fc6959149a00aa501ecb53e64ff4e11f03a51f5aa7410dc2280fcd",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "overflow",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 19134,
+        "sha256": "e4100b66a5774d11785359624ded5784e0ebf4b975d2b32f23b56ae501d9ee2a",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "overflow",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 13072,
+        "sha256": "93b16968b16dd8ac6861ab7f000dc5495149aa57393600982ded53f11a851cb1",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "overflow",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 31173,
+        "sha256": "69e7bc593722bde824dbb3e65e8acb18fbc5234ed82889c8005ec1e9305cf32e",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "overflow",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 6859,
+        "sha256": "02f0b6b8c6c85557cf4a78bae5d99d363b32451e4050f2976f19d9c7992373d2",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "pour",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 636773,
+        "sha256": "72c3c373d82c82893911c2f681d945f0b1a98d0cf47e8a65f8e4282357ac3a57",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "pour",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 75936,
+        "sha256": "ca2b82aa2f8b252077327a97683f2311dbb4c8f408ed11c81c7eb6ce4c79ad6c",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "pour",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 37512,
+        "sha256": "ff2f564cee2d2b13a230899a957fa006d0dccd1838cc310520aab09f9205cd4c",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "pour",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 38284,
+        "sha256": "ff90c20dae8ec2d791ac818bd8f4686eeaf6059aa1b38f1e6f34d8cb2ed30923",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "pour",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 93907,
+        "sha256": "99510088e6649636e9baedb11f9bb05a88baf41ae16b7f4bc5369684f106e991",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "print",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 588181,
+        "sha256": "fc861206488ad26649d4e318f87deb47331545ddeb8b757aeb34656610b02905",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "print",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 37653,
+        "sha256": "db09ec57caaba6d4e969de381d75ae41a0c6c341dfbf1cc0c2ef5eeed10e98ca",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "print",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 25599,
+        "sha256": "0e835f3ace8e52d1f545549125224e18941f67e11e4101796b4a3a4b0211b38e",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "print",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 22496,
+        "sha256": "4d0f8ab457db22aa6d82de9a63eac42346305371e264d735240ab4abe193addd",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "print",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 90343,
+        "sha256": "fe71ff8bb8743a7acec0916a4dee848d003b3a976a3e24db5350c068c6f80be6",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "rain",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 374921,
+        "sha256": "4a04fdae5b47e1c89ff2a3f9dede5f4ce3cba1d6cd0695fe1a8a5ccea11f1df6",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "rain",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 33838,
+        "sha256": "cd9bfcd72cb975d146578b22e4ef0db3d9b012f67324fce587dfe70f6f65695f",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "rain",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 31653,
+        "sha256": "1f44ea00661865ce4876aaa9aee76401099a21ef7712af9868c596e8e352166f",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "rain",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 24629,
+        "sha256": "175293ef463f93d8525573595115605557421df5fc8a4f073c9aac7f43846043",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "rain",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 58040,
+        "sha256": "8d17b81cc0e3b4437b6cbe655de92c3c5e96f5ad04f6377e0a74978d165a2c93",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "randomsequence",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 566592,
+        "sha256": "32b82b5052e742e2cd5eb29bfc2c1aeaa4aef26f0917e4b257ead4fe20212c23",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "randomsequence",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 61668,
+        "sha256": "2f3fbe5c3107409ca7e8157f9873717b4c02901a0038ebaca9e7856fc8259ddf",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "randomsequence",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 49427,
+        "sha256": "1dde4dc13fae75abf641c3e8c08b936a99c22a86b7b442d0ea604cdb796f0fba",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "randomsequence",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 32548,
+        "sha256": "6e26168f28cc12a77b582fda0870ed45fc66ef4072451a1fd879f71794c19a93",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "randomsequence",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 88668,
+        "sha256": "61c1074301151f5e532ff9f19614b92ae6bcf707b4b0df62749886814939eade",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "rings",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2950173,
+        "sha256": "16f35ba36596286be2078dcf531308eb76360bb4748e4d0ff81b86a0e4466b33",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "rings",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 917103,
+        "sha256": "7a5107b1e9312e3eee68b5bbe0ab45b5edfaca1e5bb6897c211da4fcf6bf0fae",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "rings",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 575816,
+        "sha256": "cbcc19c0b6909d62c4d8a830d9eb5065a0c010b53bcc6e57374cdd68acf8b104",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "rings",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 554767,
+        "sha256": "08dcc662f01d6ca363cf0e687e340b8699d37e918243905a454b47ec879cfc2a",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "rings",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 563805,
+        "sha256": "9c6c67bdf898a10a6159a4887fcf2da1589aff49442e90e84e016f2419682ccd",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "scattered",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 527772,
+        "sha256": "9dd41efa68f07217216615e87af82bdacf7e77aac0d9336f5e4bb23765395a44",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "scattered",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 62804,
+        "sha256": "3051d38306e047dabb8953ca021745ef4f26e281102bd1f4bf1203d4227f1f25",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "scattered",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 39126,
+        "sha256": "5d5551381f205f3827300a0e93a18820e2da7c6b52317b1b814c0f4170a5197e",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "scattered",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 35880,
+        "sha256": "47dcc7e2b40997f0a62e98d6f2a06f6746d113827a2afe3749f4e56889a1a328",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "scattered",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 61264,
+        "sha256": "10c4bff8ac04c0cafd9bebf1754417a356b838535dfdb6872f3677df681d46fd",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "slice",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 139812,
+        "sha256": "71513d15601ab767eb6ee23901167a4baf87c07dc2068eaf8b21953890ae018e",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "slice",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 24763,
+        "sha256": "6ffdccd4ac6290649422b5add682c4431f25d70409c9ce754cf26aa46e770564",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "slice",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 23360,
+        "sha256": "69d7377778831ccc1245a882914dac1fb4077f7a6c378ea912fe748d6febfc5c",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "slice",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 21617,
+        "sha256": "9165e094caf7070998e95f6274439839a9d2788007487a68e9fe3d398c5d33ba",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "slice",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 19755,
+        "sha256": "78663994db69a1aa7c57e9ff8232bccc97eca495b18952dbc4a3948025b1934c",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "slide",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 332747,
+        "sha256": "e83b36e49914666690f395f91ab2fb2e513fb22c4fd41c7b0683ac4e253bfbe3",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "slide",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 58919,
+        "sha256": "225b809c6076045cea616041d760d86a8404d852f3c198fed47f512c05422f01",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "slide",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 7110,
+        "sha256": "ecff0a5715d448a15b0145e62bc7ed4d35f984cb1e8854a9675bd58e51608f27",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "slide",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 31587,
+        "sha256": "d7a5df896e01169f9f4b135cdfcb616c799fade554935193606826b6fba57ee2",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "slide",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 50786,
+        "sha256": "75c5bd136ee215386ba6b871a5fbf3d14df4ad1c11f6d515962e2d789b9b4d6e",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "smoke",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1758994,
+        "sha256": "7650df064f889662e0da7e356941447e76914570dfe6739ab3d4ef4c8dd7378a",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "smoke",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 582402,
+        "sha256": "cf261752da14233d32bd3f1daac1fdc3337a990470b3a1c6dabfe1f778f0c6ca",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "smoke",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 338744,
+        "sha256": "937f399a781328131ecdbc76257a6b4ca99a6d7343c8035c04053de2b8a8398b",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "smoke",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 625305,
+        "sha256": "3366af010a40146220ce92329cdb40642f40ee71ec17862a7bbda86d712afbb5",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "smoke",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 94505,
+        "sha256": "ca10b95c38ba43edd22e68cf5e3c5429fa203a58d00daab5cf4c974f146dace0",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "spotlights",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2194836,
+        "sha256": "4cdbef769d480d7185a6fc4a450a7969f3082f3eaed8283892b06e310d29fc60",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "spotlights",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 435137,
+        "sha256": "c5b3933c55d4b2798bd8c1cd998c7d046cb95a9e8fb640643bd898d131a147e5",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "spotlights",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 395889,
+        "sha256": "7a74a04645f70acca0f074b85b1e0d3d0c4eb8e84a89247b88bb15c3143e4ca9",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "spotlights",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 250962,
+        "sha256": "c90c33d97da21a13ce289fd0677d9df9dffd2803ee11d6027f338e698b94df21",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "spotlights",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 251077,
+        "sha256": "7358d6ea13ef457c77d6d2c16dd5d28ec7431e6c06b1d62b1f03550476ab748a",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "spray",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 928464,
+        "sha256": "8c04ee545bea9e6bd490218837467969738e3b4040501b3602ec54290b8faa32",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "spray",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 139145,
+        "sha256": "f61faaf4006ad461ba6fadae3601fd8905f78b371a804fe48616a9b8b5c0ea19",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "spray",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 69145,
+        "sha256": "465445119da3ae7b0010ac937e9aa1fb38dc1c3a0d7947b9c1761991cbf86eb7",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "spray",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 71574,
+        "sha256": "51cadc7a238a23e720700a2cf13f9ffafe0f8adc7d0f469adcb8cb9a2590fa09",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "spray",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 127356,
+        "sha256": "735fe54e033f5ed297a8441f713b20d4e8382ab0f6a45d337604e2c14ba6a0ec",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "swarm",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 3337343,
+        "sha256": "477bfefc3926b70bf4b165b375c54af3484275e9d30f27cf665ad50a304d41eb",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "swarm",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 616059,
+        "sha256": "e1c68d366e89141d4486c26f1d349d4c3f95e270b971870c57f6ed47345828b7",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "swarm",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 617917,
+        "sha256": "53b9e667fede9a3581276e77e856ca01d3d145a4524c4707682344f37372a74b",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "swarm",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 544029,
+        "sha256": "a42fb1033a11fe427a7ff3d3c9cd34752f5b6bfa114e356af6cf8473ed3204b1",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "swarm",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 602090,
+        "sha256": "ee0e7fdb25c9d11d173c9b8b0e7925c2e86b1e2694280c3d7a75dc3c1d121922",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "sweep",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1547664,
+        "sha256": "a6b7c8f333f70324714e2b49c5f04300e97d5ca0b8508ce88c52ab43c75bda0b",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "sweep",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 648409,
+        "sha256": "0d188e5b65a6d7ceb13cbf0861fdfd00e81da6d47ef421dc95222531c80adc4c",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "sweep",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 845915,
+        "sha256": "69b14399b4f6c3b6aa06b13c90f96845de759dfccd960518b87da1f333edf2b2",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "sweep",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 702390,
+        "sha256": "de098ddac6d4809d907cdced749a37ec49598b7813ad090af3a593ac161cfe18",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "sweep",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 120187,
+        "sha256": "8ca17906977a6826eba30924de110509fa7b8364f88d5d32453e49ac9cacb80c",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "synthgrid",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2758346,
+        "sha256": "e8e5329c66fb769e6161248d581b4ef8b0d8e106b71cbbb4cf887809e1ba32b1",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "synthgrid",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 862063,
+        "sha256": "95708ec44b512005a5fe2d31e7999b8b3914f15410868b2afdb4a17ad420aaa5",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "synthgrid",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 575288,
+        "sha256": "0f319313c348f0cffc5f873cd7508e80d2114ba5b6ef9119deaa36bac2ebb85d",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "synthgrid",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 403334,
+        "sha256": "d3c71a1907269a7524452d6f30d65d921e7dc387db8d7d1605bb4a43304a5daa",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "synthgrid",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 358297,
+        "sha256": "654c031131380fddc931887c0e17b00d63c98b220f3880555abb10cba25f3713",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "thunderstorm",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 4030662,
+        "sha256": "f19c2d44c2dc1558325d663a84f6b3ee889f7c899b7cb3c72fecc8af9b6452df",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "thunderstorm",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 952024,
+        "sha256": "b8589651cd73a574bcd9a2c469ef051a96447bde3d530d4784f36e9219b40304",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "thunderstorm",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 964137,
+        "sha256": "78a420c9153ced8f2660a7f4e8144013d92129eb1453c5b506f3804163836b5f",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "thunderstorm",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 607347,
+        "sha256": "f61aa7902a6dcf5ff5ca2f283806beae14e5486fcbf5a01bd7c98d42107e2ff0",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "thunderstorm",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 407441,
+        "sha256": "a10f757840af77306310e693a0f447ea5befc560e820ba8d84d6a13c9c67ef75",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "unstable",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 878730,
+        "sha256": "791d650def5c9924003707e421523a6bae8d2091ed51d3abc256fc5b101e012d",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "unstable",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 174003,
+        "sha256": "ea792d5d20b740e2580d0e951a21720dfe192255f3b3e3016becacd9da82f76d",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "unstable",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 163969,
+        "sha256": "2a297e0f7b439df76756e820cf75ec4fec42330f5dc5c9108435759c6276f9cd",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "unstable",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 99187,
+        "sha256": "abef50edc463b24df306a24cdfa04cde9ee3d3808af52f9807ae7cfd9b0428b8",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "unstable",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 109221,
+        "sha256": "9d549a2f5d97f2ceecbaef5baf8f15119fc1f01366bf1b4efa98a373f68eff44",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "vhstape",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2413956,
+        "sha256": "98e1261df8850c2191d8303853cbd4ed6f6a4290e0e09ffd9560e5f40216a7e1",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "vhstape",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 528675,
+        "sha256": "5bcd557a6924a0284cb4424c005a12652211a156dd66e653e73d5581b1361d89",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "vhstape",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 397156,
+        "sha256": "b6c74ef8ad61e3ffd8934358bb42ff3844507a03ec9e0f8f482190903e3b1d3e",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "vhstape",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 259177,
+        "sha256": "8c98be0a358f70a1b23789d827e5efd98632f4019a8b726857d833b79c8b82ba",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "vhstape",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 284786,
+        "sha256": "44e5f12d1c5cf42516993bb104c1fe7c22f846c87ad2664660b0b2b0d48fb50c",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2084576,
+        "sha256": "8e588affdffe16670d91227f83731ee1ecb756ead783e9e0ad39862419ac6932",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 402644,
+        "sha256": "5cabb21e28285a08195e865c4819e3a78e1829cec063b592cec82ae0a5d0f8ec",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 312414,
+        "sha256": "fe1fda531a1e63ea2bef27c108a0f0a4dfe87935ea10b5b8df636e174e96d234",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 215448,
+        "sha256": "22033225acda84b55ed2f755f2cddbd88fff5b1f02122a74e88b2a63de8196e9",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 323292,
+        "sha256": "c9922851ea26c2aa206ab325012ab7b1bc29eadaa30f40198ae04a940ed2feb5",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "wipe",
+      "case": "plain",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [],
+      "output": {
+        "bytes": 352988,
+        "sha256": "285d0f3656ae39a3706f820a4f745d10009ff1766bbf14b82d25e3c412b96366",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "wipe",
+      "case": "unicode",
+      "canvas": [
+        33,
+        5
+      ],
+      "options": [],
+      "output": {
+        "bytes": 76968,
+        "sha256": "61f47e5136871638c822fb3e58eb72e053e73c253ced7f700b0f2fd4e31ab5e9",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "wipe",
+      "case": "ansi-dynamic",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "dynamic"
+      ],
+      "output": {
+        "bytes": 54567,
+        "sha256": "58b9055cab6cd60c2ea3a89334ada874fc0a7ade9143d07c4fee93718c8c3077",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "wipe",
+      "case": "xterm",
+      "canvas": [
+        40,
+        7
+      ],
+      "options": [
+        "--existing-color-handling",
+        "always",
+        "--xterm-colors"
+      ],
+      "output": {
+        "bytes": 51320,
+        "sha256": "25938e70af3845034a5f12a11e7b20fc7a491a7b9c31aabadfd9bcf74be94a64",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "wipe",
+      "case": "no-color",
+      "canvas": [
+        65,
+        6
+      ],
+      "options": [
+        "--no-color"
+      ],
+      "output": {
+        "bytes": 56025,
+        "sha256": "430f02ed3a04f49c11fce3277a68565725139776280ad8896e486aa5435c6e1b",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "width-15",
+      "canvas": [
+        15,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 138302,
+        "sha256": "44d9674403695cc9ad63a72b0a7024c9eff45bc8dc23a9b7e15e19dc134e2c49",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "width-15",
+      "canvas": [
+        15,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 91110,
+        "sha256": "cd58581a91bc8739817dfb673fd887c9d31b2bc86f13fdbaf9db7384e948fa98",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "width-15",
+      "canvas": [
+        15,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 42314,
+        "sha256": "9fb3a226e8523e256b80c360106df0eaaa9d2645eeec30f220c518fb8f35a3f3",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "width-15",
+      "canvas": [
+        15,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 77417,
+        "sha256": "3f7414541bd7153ade019756f94dc3eabd2917fcdd41c6e9a1aaf5935a815b07",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "width-15",
+      "canvas": [
+        15,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 260291,
+        "sha256": "94c1f3dca79fbe55bf9641a40aac0d830901d871d5157e1d4bf1dc90565ff380",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "width-15",
+      "canvas": [
+        15,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 808509,
+        "sha256": "4b25cace36b8ab3c1553c5900b9088307efc8d8826196afeb5b203d4cb2d4b91",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "width-16",
+      "canvas": [
+        16,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 145038,
+        "sha256": "650dcd8cb9716321d1bbc168184385e2064a948f0f58e3df26526714a29cfe2a",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "width-16",
+      "canvas": [
+        16,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 98630,
+        "sha256": "a73c372006b4d961afed3a603d7744f5a99922586da58dc1db10bafdb7301f9a",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "width-16",
+      "canvas": [
+        16,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 44153,
+        "sha256": "03aaa2437a11541c147d83d2ca974a005289a57e4e0ecc4476c7bfce0b8e2d62",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "width-16",
+      "canvas": [
+        16,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 77552,
+        "sha256": "b313edd357eb630fa758a43a37a7198c603304096bfb36286f9096142f0117e2",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "width-16",
+      "canvas": [
+        16,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 273787,
+        "sha256": "1d1703a49be7a4ac192b5dba1598e796dabfcda63f3b999e530fb8a9b046657e",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "width-16",
+      "canvas": [
+        16,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 893954,
+        "sha256": "740a231c79db6e408b64488c27c196cd9d08541174ee9fad202ed613491eff63",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "width-17",
+      "canvas": [
+        17,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 152611,
+        "sha256": "381223d0e5d20ed107e7d3c6d4735f73774e6c1b70effeeaf904efad845392ed",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "width-17",
+      "canvas": [
+        17,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 105142,
+        "sha256": "b3440a596131fd98c0afd0ba1bb212a1d7080dab7f4d355a7616a8be5e019fdc",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "width-17",
+      "canvas": [
+        17,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 48435,
+        "sha256": "c23f0e5128f99d2f3968bf42c8cb6d282000b9741d3ee53bdd67dd7a8e564791",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "width-17",
+      "canvas": [
+        17,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 81451,
+        "sha256": "793c580a647e93f50c95b469e1afc68505da4987b36bdea3a301b093ab8eae6d",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "width-17",
+      "canvas": [
+        17,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 286992,
+        "sha256": "27031e073368abe856ad10e9b73219a10fbf8604487a1531d6e9a689da3d32fe",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "width-17",
+      "canvas": [
+        17,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 974331,
+        "sha256": "4cc3103342e5b629cf99dcd7ab5945d50b9e10bfeffc8878e56a34bf71af4625",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "width-31",
+      "canvas": [
+        31,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 259073,
+        "sha256": "50a65821bda236e2f54ae755f40afc58a38254ebfd7609238cf1d3c1aa7e05c7",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "width-31",
+      "canvas": [
+        31,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 202394,
+        "sha256": "52c87d039af441f9389abcaacd19968c49992bbcefa4e10130249e0d0012dbfc",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "width-31",
+      "canvas": [
+        31,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 95527,
+        "sha256": "c344a5bff69e74d53560768429792a4bf8a068e25e6e44da73561c5fa94f4d0e",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "width-31",
+      "canvas": [
+        31,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 153722,
+        "sha256": "120e1b2446905c7bedaf005fa743a159f3a538394ac5d02651f619ee4eb087d9",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "width-31",
+      "canvas": [
+        31,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 477872,
+        "sha256": "8aabc3b0be1ca62d7c8e208e2319cdb4167ac2e33f9d8d0b5a8a481ee9720cc9",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "width-31",
+      "canvas": [
+        31,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1643358,
+        "sha256": "3e3d281e586614822e77ca369a47beffe8c9b2afa38448341353e79321fe2c2b",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "width-32",
+      "canvas": [
+        32,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 266460,
+        "sha256": "69e1f4009551de806b2f38f121864e23d84b3a29007641fe06d8c8a28108195c",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "width-32",
+      "canvas": [
+        32,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 205679,
+        "sha256": "257413da95d08f0247cac97e717ebb6c015c8841679535dfe4d03e1256a82840",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "width-32",
+      "canvas": [
+        32,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 102219,
+        "sha256": "36708b27b2d5795617b298409986c9817e57d2a5bc0f526a90563aa825998f62",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "width-32",
+      "canvas": [
+        32,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 158738,
+        "sha256": "f0b7ec8c0d2e7e485cad598ad4c11efa8550af007e79143dd7f233925d21227c",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "width-32",
+      "canvas": [
+        32,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 491735,
+        "sha256": "00b7b5f7af3ab157701892c8d2f1a7ebabe8e7e0a675a64e9f634ae144a0aea1",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "width-32",
+      "canvas": [
+        32,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1709810,
+        "sha256": "07cb0afae6e2b231d233aa7b72bdba3c8dcf7b3e9b65c847688090d41fd49a4c",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "width-33",
+      "canvas": [
+        33,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 274697,
+        "sha256": "0d4ac817ea4b3057d6dd6bdc58ad2481cf3cc26dfbe8319a7601f75a92192625",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "width-33",
+      "canvas": [
+        33,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 219240,
+        "sha256": "8aa111561fffba7a7b0305503b4cad861960351b4092eb776be825e3463a0020",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "width-33",
+      "canvas": [
+        33,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 96020,
+        "sha256": "cd498426e12e87cee545d7e849173a914a029cb4eab603407b584ee2b605696a",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "width-33",
+      "canvas": [
+        33,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 169562,
+        "sha256": "4c2382c3a7a777f55bb0220febef8d1f9f84bda995cd40e94d577cc97e9e317a",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "width-33",
+      "canvas": [
+        33,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 505723,
+        "sha256": "1ffe1da3d04773e3b98814d36e4ea3b816079e0416c4f534c95e900d4589f767",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "width-33",
+      "canvas": [
+        33,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1714471,
+        "sha256": "a683577c7151292af4579800d789bd9def126bc11ef62f9df8efeccc6eacf163",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "width-63",
+      "canvas": [
+        63,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 530940,
+        "sha256": "faae35580f298d4b6f6801d8fe3a6010f20507e69319c6bd80fc47ccd625382a",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "width-63",
+      "canvas": [
+        63,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 467270,
+        "sha256": "5a22bd246ca043ca37018410ca50e66997548e8197b4dde40e36a778a1342a7e",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "width-63",
+      "canvas": [
+        63,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 218545,
+        "sha256": "3d80c0ec2d110ee2ea095d42769bf94d34c7197f3cc7762b23cefe4e5e341da4",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "width-63",
+      "canvas": [
+        63,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 351387,
+        "sha256": "eb9cba0eabb1ed980f6d9a38884fd0eaf83fd47471088830c8c6f4dca9b00714",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "width-63",
+      "canvas": [
+        63,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 935524,
+        "sha256": "f789363da3fa4d6a2b7e44ef1ee2114a80f0a50372633a0df05874a8823351cf",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "width-63",
+      "canvas": [
+        63,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2350623,
+        "sha256": "bd1b5b5aa9736f08479dad63c8520462a6a022147558c3c90560831797e7740a",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "width-64",
+      "canvas": [
+        64,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 541353,
+        "sha256": "23b6b5c35bd7b351a0821410e39ca018b0cb25247bde68ad3b312e2b4957fd08",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "width-64",
+      "canvas": [
+        64,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 486872,
+        "sha256": "c7a56766dc850af18ea3c28f4d0f0230bacdc8eb0bcd86f12afe397fd484d8b5",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "width-64",
+      "canvas": [
+        64,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 205089,
+        "sha256": "fb9d40cf297a10a9f638714a55b44d7fc55259c3f11577d150ce1ba681cf0742",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "width-64",
+      "canvas": [
+        64,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 356211,
+        "sha256": "a4a5f3376e1ec72f096f460956fc2df4638b17c22ebec75af3493204d9562fc5",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "width-64",
+      "canvas": [
+        64,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 950277,
+        "sha256": "b1ad91eeb772420739542eacc87f540d0387e29fd1d2b2f23490d4f56dba0189",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "width-64",
+      "canvas": [
+        64,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2034474,
+        "sha256": "4e170899711a53618ebdcbb66b29e2cb5fe83917ae7030d6f42ac30fbd160610",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "width-65",
+      "canvas": [
+        65,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 549871,
+        "sha256": "f645fc239682be5bdf29515e3fb0cb7ce58c5a220de65753639a08f1ca4376d5",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "width-65",
+      "canvas": [
+        65,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 487576,
+        "sha256": "8f5c717bfeae28290be5ee49808de6891a3cd789aef04992b3414349bca5227d",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "width-65",
+      "canvas": [
+        65,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 214496,
+        "sha256": "3846b74dc19c3a02762f91e3314049d4d4d0892c8aceff70279a82a673933d40",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "width-65",
+      "canvas": [
+        65,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 353146,
+        "sha256": "e149131f9ab25fca270f23cb51c13b96a25a6338f93919e6a92300bfeb0fa416",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "width-65",
+      "canvas": [
+        65,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 965098,
+        "sha256": "f5c08fe498351bd9118eecb29b33f39c9f56bf02ea166f4efcef7598d03f04a4",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "width-65",
+      "canvas": [
+        65,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2185038,
+        "sha256": "9e51bf5f7413b926d15b4681760c03f679fc2b6fa86a5dd182e4e16d44ee3a04",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "width-511",
+      "canvas": [
+        511,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1181219,
+        "sha256": "3ccbc0b13a13244084a5a60a11d25f91890e01f3db6252d2599767047dfbe9d4",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "width-511",
+      "canvas": [
+        511,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1159572,
+        "sha256": "9638aece42eb34212d7a43e5e3afc1e7b541218d7f17ab2071b05069c4c5d4d9",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "width-511",
+      "canvas": [
+        511,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 591217,
+        "sha256": "2bbce4b2e72e41155318abbb410107cb89f6f838ebeac2542f791ae86591e217",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "width-511",
+      "canvas": [
+        511,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 992033,
+        "sha256": "a2eab9818946897310d620141793b0b0ac27a6efb8b4b96407f7fdacf3250753",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "width-511",
+      "canvas": [
+        511,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2064013,
+        "sha256": "1855c423916d6b30eb14df431afd02c94c5479b596434093ce6f8cb12e825ba7",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "width-511",
+      "canvas": [
+        511,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 5495922,
+        "sha256": "8f69027278fe6abf85d990b578ba0782843651ea60f9111d5cf23dd781125c30",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "width-512",
+      "canvas": [
+        512,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1182185,
+        "sha256": "6f33e08cf47dcf346fb5b356028631f44814f2c04013e22d263d6b87c3a3fa4b",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "width-512",
+      "canvas": [
+        512,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1160565,
+        "sha256": "6ebac9917f9ffaf57c4bc8a1ed256f1a2f92cb5ee6f7564d5c279c562336d008",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "width-512",
+      "canvas": [
+        512,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 591817,
+        "sha256": "0f428875219985be554e21447718e4a6510a7e91aba15cbaffcb9cf942d1a89d",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "width-512",
+      "canvas": [
+        512,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 992846,
+        "sha256": "a07f2b1bb65778ab2455d3e50d43d3adb2f4a04d4749ee44a09aa42be3dc647b",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "width-512",
+      "canvas": [
+        512,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2065723,
+        "sha256": "6d7099bc81e70900f14d0d4b020e0ab0f6bd3c67dee52cae8daed3512c8b9994",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "width-512",
+      "canvas": [
+        512,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 5898773,
+        "sha256": "2322de1e98f6f738a859f248b33a56364d8c9cbc4b6faa60f4b74c3ae6216473",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "width-513",
+      "canvas": [
+        513,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1183151,
+        "sha256": "c7b0f05abc89a3e8c4252bb879cba90d77c09392b40834adca1379e1ce8f4219",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "width-513",
+      "canvas": [
+        513,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1161558,
+        "sha256": "97856027019f0345f01f4a1f36bb8e88932185aba201e4f120bfd3a8a1fed97b",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "width-513",
+      "canvas": [
+        513,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 592417,
+        "sha256": "e4871401f606e458129193fb36c49a32bc4a59effe7d670bb429c4fc095eff40",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "width-513",
+      "canvas": [
+        513,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 993659,
+        "sha256": "f33008165ee832017c9c094a1f36dc69771562a35c8aae06ec7dff9728ace09b",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "width-513",
+      "canvas": [
+        513,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2067433,
+        "sha256": "d3e5be1b21a1010d2d1d107bd9c2a2a1607d424df6522dcaac5d0c6fc586fd9b",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "width-513",
+      "canvas": [
+        513,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 5710471,
+        "sha256": "03629e0ad9e16e91a593116dd014a195c1b2338a321905663e803e4af4234033",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "width-1023",
+      "canvas": [
+        1023,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1675811,
+        "sha256": "49d2492628fd772b9bad42d4787c6dfdd9f3395f1592ce0575337ca1ab86a0ec",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "width-1023",
+      "canvas": [
+        1023,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1667988,
+        "sha256": "e9458b535dcb7ef663f3b630d2741d8d0bdc65027cf7a32513c0318e4c0bfc6b",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "width-1023",
+      "canvas": [
+        1023,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 898417,
+        "sha256": "29ce3daa062bf14d141d7cbe803f1e704fac073d3ea53977eac8cf2532e411b6",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "width-1023",
+      "canvas": [
+        1023,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1408289,
+        "sha256": "32281cf15ceef5ddc468e6264413a38201310709b8abbf555bc0db0e1c5f4d99",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "width-1023",
+      "canvas": [
+        1023,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2939533,
+        "sha256": "1d455b852370a7e6d34a4990be7b50abf4df59dfc8ceb10bfec7c20c8197bd12",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "width-1023",
+      "canvas": [
+        1023,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 8050114,
+        "sha256": "534406f9dfb42ce4c5ee426de8cb06093f3c432d614676501f17f2e4b0e8baf0",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "width-1024",
+      "canvas": [
+        1024,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1676777,
+        "sha256": "d45ed4dda41ab4f80575b336b4e534f34d122e3e1f26cecb6b8a78dcabde3fd0",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "width-1024",
+      "canvas": [
+        1024,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1668981,
+        "sha256": "ef2b3ad4429397e5ab7669aea820742ed162c8ed54255cca1ed9691b20d697b0",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "width-1024",
+      "canvas": [
+        1024,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 899017,
+        "sha256": "40b308dc493e03e08fc01d91011417ed7ada320c9055129b0240e86c7e837039",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "width-1024",
+      "canvas": [
+        1024,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1409102,
+        "sha256": "4431175842138e9d392a9259286e060d9947cf288b0c5c1ffea88543ac46acd8",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "width-1024",
+      "canvas": [
+        1024,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2941243,
+        "sha256": "dd31e3d47075db1ee74849a42b2cedd7d1e697e1dfd2ff06e503d405987a593e",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "width-1024",
+      "canvas": [
+        1024,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 8665242,
+        "sha256": "1d3f3d446fe76b9bd203f870b8ababa1f82147a662fe96638201d5494ffdf157",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "width-1025",
+      "canvas": [
+        1025,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1677743,
+        "sha256": "8941f0f5b0b0985a225e93094e34015db3010b2436e67ce906a03aa463803e91",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "width-1025",
+      "canvas": [
+        1025,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1669974,
+        "sha256": "d83ba9e952442dafd8b4ae0c136667e6dd7de2c2cb6d2633f3bb8cae5210873b",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "width-1025",
+      "canvas": [
+        1025,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 899617,
+        "sha256": "b3750a6a02045457f966699a3adcdd2c26295570be1c11869f5a65bb9d41f794",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "width-1025",
+      "canvas": [
+        1025,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1409915,
+        "sha256": "4fe97a6c5445846a75a8060b7a540a5bfac20f4b7ac5cdb8e0b81a70944a5933",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "width-1025",
+      "canvas": [
+        1025,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2942953,
+        "sha256": "98a9e2e69efeb807c6e00962fad4d970ee9b6bee8616e6972d6ba34f1204e8ce",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "width-1025",
+      "canvas": [
+        1025,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 8597619,
+        "sha256": "2652595cf5c26e376df9ce09b00514eacec0da894f2eda478d7f6b5b9cd94bbd",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "burn",
+      "case": "width-2048",
+      "canvas": [
+        2048,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2665961,
+        "sha256": "2cc69bca59c8a9c4d3542c2522d38b3f427b66987cd187dfa2a74206b0deb23f",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "laseretch",
+      "case": "width-2048",
+      "canvas": [
+        2048,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2685813,
+        "sha256": "35c8909b4a00969152566e8aa01f21708b925527983790a307235e9cccd07e6f",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "bouncyballs",
+      "case": "width-2048",
+      "canvas": [
+        2048,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 1513417,
+        "sha256": "4afa7c3bffb123ea8018b551179fc6fd59faacb8cb691047c6c3c482f9064e5b",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "errorcorrect",
+      "case": "width-2048",
+      "canvas": [
+        2048,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 2241614,
+        "sha256": "edad696072878f71e38a658eea96ab5dd64c30046c2d30df62aea0cff2ee1254",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "waves",
+      "case": "width-2048",
+      "canvas": [
+        2048,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 4692283,
+        "sha256": "5513d500c48b9ab7b741faf58be91f657738b796f5c88b8510102c962fc3c954",
+        "stderr": "",
+        "returncode": 0
+      }
+    },
+    {
+      "effect": "matrix",
+      "case": "width-2048",
+      "canvas": [
+        2048,
+        3
+      ],
+      "options": [],
+      "output": {
+        "bytes": 15206830,
+        "sha256": "aff5b348ab19bb9710d66d9ce19dd84192185ae62c96e6850c683480dcbfa22b",
+        "stderr": "",
+        "returncode": 0
+      }
+    }
+  ]
+}

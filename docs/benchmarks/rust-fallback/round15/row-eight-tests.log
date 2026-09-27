@@ -1,0 +1,69 @@
+   Compiling ttfx v0.4.0 (/home/gardnmi/Worktrees/ttfx/perf-rust-engine)
+    Finished `release` profile [optimized] target(s) in 35.46s
+     Running unittests src/lib.rs (target/release/deps/ttfx-828b9cd7131fac88)
+
+running 51 tests
+test engine::active_characters::tests::preserves_order_and_set_semantics_across_word_boundaries ... ok
+test engine::animation::frame_index_tests::duration_lookup_matches_expanded_ticks_after_preparation_and_appends ... ok
+test engine::animation::frame_index_tests::diverse_eased_scenes_do_not_rebuild_large_tables_on_every_tick ... ok
+test engine::animation::shared_visual_tests::different_symbol_or_styling_do_not_share ... ok
+test engine::animation::shared_visual_tests::equal_symbol_and_styling_share_one_visual ... ok
+test engine::animation::frame_index_tests::eased_cache_distinguishes_curves_and_durations_after_eviction ... ok
+test engine::effect::tests::a_lost_output_stream_is_not_an_error ... ok
+test engine::animation::shared_visual_tests::scene_frames_share_visuals_across_scenes ... ok
+test engine::animation::appearance_palette_tests::palette_observes_color_code_edits_even_when_constructor_arguments_match ... ok
+test engine::events::sharing_tests::callback_can_extend_shared_action_list_during_dispatch ... ok
+test engine::events::sharing_tests::shared_prefix_keeps_local_appends_and_copy_on_write_independent ... ok
+test engine::motion_runtime::tests::vector_point_matches_geometry_at_ties_overshoot_and_conversion_limits ... ok
+test engine::motion_runtime::tests::prepared_overshoot_keeps_rounding_and_retires_exit_flags_before_reuse ... ok
+test engine::motion_runtime::tests::integer_prefix_preparation_matches_sequential_subtraction_and_event_flags ... ok
+test engine::motion::sharing_tests::shared_routes_keep_playback_origins_and_mutations_independent ... ok
+test engine::scene_runtime::tests::compact_plans_preserve_exact_frame_indices_and_curve_reversals ... ok
+test engine::scene_runtime::tests::unobserved_moving_loops_wrap_without_changing_public_counters ... ok
+test effects::colorshift::tests::shared_gradient_frames_keep_playback_and_public_edits_independent ... ok
+test engine::scene_runtime::tests::active_easing_plans_are_bounded_and_fall_back_when_full ... ok
+test tests::terminal_resize_notifications_are_consumed ... ok
+test engine::active_characters::tests::matches_btree_set_through_mixed_operations ... ok
+test utils::ansi::tests::parse_8_bit ... ok
+test utils::ansi::tests::parse_24_bit ... ok
+test utils::easing::tests::sequence_easer_reports_reversed_easing_as_removed ... ok
+test utils::easing::tests::sequence_easer_returns_borrowed_deltas_without_clone ... ok
+test utils::graphics::tests::color_debug_hides_the_cached_representation ... ok
+test utils::graphics::tests::coordinate_mapping_keeps_bounds_and_public_iteration_order ... ok
+test utils::graphics::tests::extrapolated_colors_keep_hex_validation_behavior ... ok
+test utils::ansi::tests::sgr_emission ... ok
+test utils::graphics::tests::rgb_string_borrowed_lookup_matches_str_hash ... ok
+test utils::graphics::tests::rgb_string_constructors_preserve_complete_utf8_and_borrowed_hashing ... ok
+test engine::terminal::dense_output_cache_tests::recycled_dense_frames_track_consumed_mutations_and_geometry ... ok
+test effects::spotlights::distance_tests::unchanged_lighting_respects_external_edits_rendering_maps_and_other_animations ... ok
+test utils::hexterm::tests::repeated_and_equivalent_spellings_share_the_exact_result ... ok
+test utils::hexterm::tests::table_spot_checks ... ok
+test utils::hexterm::tests::valid_hex ... ok
+test utils::pycompat::tests::floor_div_matches_python ... ok
+test utils::pycompat::tests::round_matches_python ... ok
+test utils::ordered_map::tests::indexed_maps_preserve_order_and_lookup_after_mutation ... ok
+test engine::animation::shared_visual_tests::dropped_visuals_are_swept_out_of_the_table ... ok
+test utils::rng::tests::deterministic_for_seed ... ok
+test utils::rng::tests::ranges_respected ... ok
+test effects::spotlights::distance_tests::cached_and_fallback_distances_match_hypot_bit_for_bit ... ok
+test utils::graphics::tests::fraction_lookup_preserves_division_boundaries ... ok
+test engine::animation::appearance_palette_tests::palette_matches_ordinary_appearance_across_modes_eviction_and_mutation ... ok
+test engine::terminal::dense_output_cache_tests::coordinate_index_and_clipped_ellipses_follow_map_mutations ... ok
+test utils::graphics::tests::generated_rgb_preserves_hex_identity_and_channels ... ok
+test utils::pycompat::tests::rounding_matches_previous_arithmetic_at_boundaries_and_across_exponents ... ok
+test utils::hexterm::tests::cached_conversion_matches_reference_across_rgb_space ... ok
+test engine::render::cached_row_tests::partial_rows_match_fresh_utf8_output_through_growth_shrink_and_resize ... ok
+test engine::render::tests::comparison_matches_slices_at_every_tail_alignment_and_mismatch ... ok
+
+test result: ok. 51 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/render_incremental.rs (target/release/deps/render_incremental-521dc92dae4bfff9)
+
+running 5 tests
+test vectored_frame_output_handles_interrupts_and_partial_writes ... ok
+test dense_repaint_clips_boundaries_and_resolves_overlaps_like_checked_reference ... ok
+test switching_between_dense_and_sparse_updates_keeps_cached_rows_current ... ok
+test cached_frames_match_full_repaint_through_mutation_overlap_and_geometry_changes ... ok
+test stationary_playback_reuses_layout_until_geometry_or_painter_state_changes ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

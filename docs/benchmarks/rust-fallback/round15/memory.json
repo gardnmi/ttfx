@@ -1,0 +1,252 @@
+{
+  "method": "Linux wait4 ru_maxrss, KiB; separate complete untimed CLI runs",
+  "cpu": 2,
+  "input_sha256": "5520772cb3e4a78263b258c2020280ce291135615cbc193e89added6c41d732b",
+  "binary_sha256": {
+    "goal_start": "90508073407bc6b5ac83d9c685859b95573fbdfd313db17267c14eac17c27b24",
+    "checkpoint": "a20a54c13e9a07c244c617055490ba737366ff0c444b5bdba00a8d8bd6e871e2",
+    "candidate": "0847e30af7dd9f2e130c32f8875c5f3d6dddacaac4f4cf301ac69c00fa69b0a7"
+  },
+  "results": {
+    "binarypath": {
+      "rss_kib": {
+        "goal_start": [
+          220740,
+          219412,
+          220836
+        ],
+        "checkpoint": [
+          221072,
+          219780,
+          219804
+        ],
+        "candidate": [
+          219920,
+          219868,
+          219820
+        ]
+      },
+      "median_mib": {
+        "goal_start": 215.56640625,
+        "checkpoint": 214.65234375,
+        "candidate": 214.71484375
+      }
+    },
+    "rings": {
+      "rss_kib": {
+        "goal_start": [
+          185656,
+          183752,
+          185548
+        ],
+        "checkpoint": [
+          185568,
+          185236,
+          185768
+        ],
+        "candidate": [
+          183500,
+          185596,
+          184756
+        ]
+      },
+      "median_mib": {
+        "goal_start": 181.19921875,
+        "checkpoint": 181.21875,
+        "candidate": 180.42578125
+      }
+    },
+    "colorshift": {
+      "rss_kib": {
+        "goal_start": [
+          60464,
+          58744,
+          59956
+        ],
+        "checkpoint": [
+          55896,
+          57740,
+          55932
+        ],
+        "candidate": [
+          56036,
+          57844,
+          55912
+        ]
+      },
+      "median_mib": {
+        "goal_start": 58.55078125,
+        "checkpoint": 54.62109375,
+        "candidate": 54.72265625
+      }
+    },
+    "burn": {
+      "rss_kib": {
+        "goal_start": [
+          43016,
+          42508,
+          43632
+        ],
+        "checkpoint": [
+          42904,
+          43584,
+          42632
+        ],
+        "candidate": [
+          42924,
+          43632,
+          43672
+        ]
+      },
+      "median_mib": {
+        "goal_start": 42.0078125,
+        "checkpoint": 41.8984375,
+        "candidate": 42.609375
+      }
+    },
+    "laseretch": {
+      "rss_kib": {
+        "goal_start": [
+          31820,
+          31244,
+          30864
+        ],
+        "checkpoint": [
+          31404,
+          31940,
+          30836
+        ],
+        "candidate": [
+          31436,
+          32076,
+          31312
+        ]
+      },
+      "median_mib": {
+        "goal_start": 30.51171875,
+        "checkpoint": 30.66796875,
+        "candidate": 30.69921875
+      }
+    },
+    "errorcorrect": {
+      "rss_kib": {
+        "goal_start": [
+          33164,
+          34376,
+          34332
+        ],
+        "checkpoint": [
+          35124,
+          33216,
+          35016
+        ],
+        "candidate": [
+          35084,
+          34452,
+          35240
+        ]
+      },
+      "median_mib": {
+        "goal_start": 33.52734375,
+        "checkpoint": 34.1953125,
+        "candidate": 34.26171875
+      }
+    },
+    "bouncyballs": {
+      "rss_kib": {
+        "goal_start": [
+          41640,
+          40380,
+          40180
+        ],
+        "checkpoint": [
+          40420,
+          41840,
+          40400
+        ],
+        "candidate": [
+          40524,
+          40596,
+          41908
+        ]
+      },
+      "median_mib": {
+        "goal_start": 39.43359375,
+        "checkpoint": 39.47265625,
+        "candidate": 39.64453125
+      }
+    },
+    "matrix": {
+      "rss_kib": {
+        "goal_start": [
+          29148,
+          27168,
+          29176
+        ],
+        "checkpoint": [
+          27404,
+          25452,
+          25480
+        ],
+        "candidate": [
+          25536,
+          25668,
+          27496
+        ]
+      },
+      "median_mib": {
+        "goal_start": 28.46484375,
+        "checkpoint": 24.8828125,
+        "candidate": 25.06640625
+      }
+    },
+    "spotlights": {
+      "rss_kib": {
+        "goal_start": [
+          19720,
+          19720,
+          19720
+        ],
+        "checkpoint": [
+          19720,
+          19720,
+          19720
+        ],
+        "candidate": [
+          19720,
+          19720,
+          19720
+        ]
+      },
+      "median_mib": {
+        "goal_start": 19.2578125,
+        "checkpoint": 19.2578125,
+        "candidate": 19.2578125
+      }
+    },
+    "overflow": {
+      "rss_kib": {
+        "goal_start": [
+          44208,
+          42896,
+          42912
+        ],
+        "checkpoint": [
+          35844,
+          35804,
+          36332
+        ],
+        "candidate": [
+          36436,
+          35976,
+          35876
+        ]
+      },
+      "median_mib": {
+        "goal_start": 41.90625,
+        "checkpoint": 35.00390625,
+        "candidate": 35.1328125
+      }
+    }
+  }
+}

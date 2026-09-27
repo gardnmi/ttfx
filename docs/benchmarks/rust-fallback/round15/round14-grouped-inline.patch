@@ -1,0 +1,702 @@
+diff --git i/src/engine/character.rs w/src/engine/character.rs
+index 87d5646..810131d 100644
+--- i/src/engine/character.rs
++++ w/src/engine/character.rs
+@@ -129,22 +129,60 @@ impl CharacterArena {
+         &self.characters
+     }
+ 
+-    pub(crate) fn begin_update(&mut self, members: &[u64]) {
++    pub(crate) fn begin_update(&mut self, members: &[u64], allow_groups: bool) {
+         self.playback.begin(members, &self.characters, &self.scene_runtime);
++        self.scene_runtime.begin_groups(members, &self.characters, &mut self.playback, allow_groups);
+     }
+     pub(crate) fn finish_update(&mut self, members: &[u64]) {
++        self.scene_runtime.finish_groups(members);
+         self.playback.finish(members, &self.characters, &self.scene_runtime);
+     }
+     pub(crate) fn begin_sparse_update(&mut self, members: &super::active_characters::ActiveCharacters) {
++        self.scene_runtime.dissolve_groups();
++        self.scene_runtime.drain_group_wakes(&mut self.playback.woken);
+         self.playback.begin_sparse(members, &self.characters, &self.scene_runtime);
+     }
+     pub(crate) fn finish_sparse_update(&mut self, members: &super::active_characters::ActiveCharacters) {
++        self.scene_runtime.finish_groups(&[]);
+         self.playback.finish_sparse(members, &self.characters, &self.scene_runtime);
+     }
+     pub(crate) fn wake_all(&mut self) {
++        self.scene_runtime.dissolve_groups();
++        self.scene_runtime.drain_group_wakes(&mut self.playback.woken);
+         self.playback.wake_all(&self.characters, &self.scene_runtime);
+     }
+ 
++    pub(crate) fn set_update_cursor(&mut self, id: usize) {
++        self.playback.set_cursor(id);
++        self.scene_runtime.set_group_cursor(id);
++    }
++
++    pub(crate) fn group_skip_mask(&self) -> &[u64] {
++        self.scene_runtime.group_skip_mask()
++    }
++
++    pub(crate) fn has_groups(&self) -> bool {
++        self.scene_runtime.has_groups()
++    }
++
++    #[inline]
++    pub(crate) fn detach_group(&mut self, id: usize) {
++        self.scene_runtime.detach_group(id);
++    }
++
++    pub(crate) fn collect_group_wakes(&mut self) {
++        self.scene_runtime.drain_group_wakes(&mut self.playback.woken);
++    }
++
++    #[inline]
++    pub(crate) fn group_tick(&mut self, id: usize) -> bool {
++        let Some(changed) = self.scene_runtime.group_tick(id, &mut self.characters) else { return false };
++        if changed {
++            self.mark_visual(id);
++        }
++        true
++    }
++
+     pub(crate) fn set_scene_runtime(&mut self, enabled: bool) {
+         self.wake_all();
+         for id in 0..self.characters.len() {
+diff --git i/src/engine/ctx.rs w/src/engine/ctx.rs
+index b0d575e..3f4fcda 100644
+--- i/src/engine/ctx.rs
++++ w/src/engine/ctx.rs
+@@ -718,6 +718,12 @@ impl EngineCtx {
+ 
+     /// EffectCharacter.tick: motion first, then animation.
+     pub fn tick(&mut self, hooks: &mut dyn EffectHooks, id: CharId) {
++        self.terminal.arena.detach_group(id.0 as usize);
++        self.tick_individual(hooks, id);
++    }
++
++    #[inline(always)]
++    fn tick_individual(&mut self, hooks: &mut dyn EffectHooks, id: CharId) {
+         if self.terminal.arena.scene_tick(
+             id.0 as usize,
+             self.idle_scheduling && self.nested_updates == 0,
+@@ -786,24 +792,50 @@ impl EngineCtx {
+         }
+         let mut members = std::mem::take(&mut self.active_members_scratch);
+         self.active_characters.copy_words_into(&mut members);
+-        self.terminal.arena.begin_update(&members);
++        self.terminal.arena.begin_update(&members, self.idle_scheduling);
+         let mut snapshot = std::mem::take(&mut self.active_character_scratch);
+         snapshot.clear();
+-        snapshot.extend(
+-            members
+-                .iter()
+-                .enumerate()
+-                .map(|(i, word)| word & !self.terminal.arena.playback.sleeping.get(i).copied().unwrap_or(0)),
+-        );
++        snapshot.extend(members.iter().enumerate().map(|(i, word)| {
++            word & !self.terminal.arena.playback.sleeping.get(i).copied().unwrap_or(0)
++                & !self.terminal.arena.group_skip_mask().get(i).copied().unwrap_or(0)
++        }));
++        if self.terminal.arena.has_groups() {
++            self.tick_snapshot::<true>(hooks, &members, &mut snapshot);
++        } else {
++            self.tick_snapshot::<false>(hooks, &members, &mut snapshot);
++        }
++        let arena = &self.terminal.arena;
++        self.active_characters.retain_unless_masked(arena.active_masks(), |id| arena.is_active(id.0 as usize));
++        self.active_characters.copy_words_into(&mut members);
++        self.terminal.arena.finish_update(&members);
++        self.active_members_scratch = members;
++        self.active_character_scratch = snapshot;
++    }
++
++    fn tick_snapshot<const GROUPED: bool>(
++        &mut self,
++        hooks: &mut dyn EffectHooks,
++        members: &[u64],
++        snapshot: &mut [u64],
++    ) {
+         for word in 0..snapshot.len() {
+             while snapshot[word] != 0 {
+                 let bit = snapshot[word].trailing_zeros() as usize;
+                 snapshot[word] &= snapshot[word] - 1;
+                 let id = word * 64 + bit;
+-                self.terminal.arena.playback.set_cursor(id);
+-                self.tick(hooks, CharId(id as u32));
++                if GROUPED {
++                    self.terminal.arena.set_update_cursor(id);
++                } else {
++                    self.terminal.arena.playback.set_cursor(id);
++                }
++                if !GROUPED || !self.terminal.arena.group_tick(id) {
++                    self.tick_individual(hooks, CharId(id as u32));
++                }
+                 // A callback may wake a higher slot after snapshot filtering.
+                 // Reinsert only original members which have not ticked yet.
++                if GROUPED {
++                    self.terminal.arena.collect_group_wakes();
++                }
+                 for awakened in self.terminal.arena.playback.woken.drain(..) {
+                     if awakened > id {
+                         let word = awakened / 64;
+@@ -815,12 +847,6 @@ impl EngineCtx {
+                 }
+             }
+         }
+-        let arena = &self.terminal.arena;
+-        self.active_characters.retain_unless_masked(arena.active_masks(), |id| arena.is_active(id.0 as usize));
+-        self.active_characters.copy_words_into(&mut members);
+-        self.terminal.arena.finish_update(&members);
+-        self.active_members_scratch = members;
+-        self.active_character_scratch = snapshot;
+     }
+ 
+     /// A few high-numbered characters should cost O(active), not require a
+@@ -834,7 +860,7 @@ impl EngineCtx {
+         for &id in &snapshot {
+             self.terminal.arena.playback.set_cursor(id.0 as usize);
+             if !self.terminal.arena.playback.is_sleeping(id.0 as usize) {
+-                self.tick(hooks, id);
++                self.tick_individual(hooks, id);
+             }
+         }
+         let arena = &self.terminal.arena;
+diff --git i/src/engine/scene_runtime.rs w/src/engine/scene_runtime.rs
+index 7f7a175..69a6eef 100644
+--- i/src/engine/scene_runtime.rs
++++ w/src/engine/scene_runtime.rs
+@@ -14,7 +14,9 @@ use super::motion_runtime::MotionRuntime;
+ use crate::utils::easing::Easing;
+ use crate::utils::pycompat::round_half_even;
+ 
+-#[derive(Clone, Copy, Debug, Default)]
++mod groups;
++
++#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash)]
+ struct Cursor {
+     ticks: i64,
+     duration: i64,
+@@ -121,6 +123,7 @@ pub(crate) struct SceneRuntime {
+     stationary_members: Vec<u64>,
+     stationary_count: usize,
+     eased_programs: EasedPrograms,
++    groups: groups::Groups,
+     pub(crate) enabled: bool,
+ }
+ 
+@@ -134,6 +137,7 @@ impl Default for SceneRuntime {
+             stationary_members: Vec::new(),
+             stationary_count: 0,
+             eased_programs: EasedPrograms::default(),
++            groups: groups::Groups::default(),
+             enabled: std::env::var_os("TTFX_SCENE_RUNTIME").is_none_or(|value| value != "0"),
+         }
+     }
+@@ -151,6 +155,7 @@ impl SceneRuntime {
+         self.programs.resize_with(len, || None);
+         self.members.resize(len.div_ceil(64), 0);
+         self.stationary_members.resize(len.div_ceil(64), 0);
++        self.groups.resize(len);
+     }
+ 
+     #[inline]
+@@ -223,6 +228,7 @@ impl SceneRuntime {
+             looping: scene.is_looping,
+             stationary,
+         });
++        self.groups.reset_shape(id);
+         self.members[id / 64] |= 1 << (id % 64);
+         self.count += 1;
+         if stationary {
+@@ -247,7 +253,7 @@ impl SceneRuntime {
+             // Synced playback chooses a visual without advancing scene counters.
+             return;
+         }
+-        let cursor = self.cursors[id].get();
++        let cursor = self.group_cursor(id).unwrap_or_else(|| self.cursors[id].get());
+         let scene = characters[id].animation.scenes.at(program.scene);
+         if program.eased.is_some() {
+             scene.set_eased_cursor(cursor.ticks);
+@@ -265,6 +271,7 @@ impl SceneRuntime {
+ 
+     #[inline(never)]
+     fn invalidate_cached(&mut self, id: usize, characters: &[EffectCharacter]) {
++        self.detach_group(id);
+         self.materialize_cached(id, characters);
+         if self.programs[id].as_ref().unwrap().stationary {
+             self.stationary_members[id / 64] &= !(1 << (id % 64));
+diff --git 1/src/engine/scene_runtime/groups.rs 2/src/engine/scene_runtime/groups.rs
+new file mode 100644
+index 0000000..f255828
+--- /dev/null
++++ 2/src/engine/scene_runtime/groups.rs
+@@ -0,0 +1,467 @@
++//! Share progress across stationary, non-looping scenes with identical timing.
++//! Visuals remain per character and are committed in the ordinary update order.
++//! During callbacks, the update cursor selects the old or advanced counters;
++//! mutation detaches just that member and restores its individual runtime.
++use super::{Cursor, EasedProgram, SceneRuntime};
++use crate::engine::character::EffectCharacter;
++use crate::engine::playback::PlaybackScheduler;
++use rustc_hash::FxBuildHasher;
++use std::collections::HashMap;
++use std::rc::Rc;
++
++const NONE: usize = usize::MAX;
++const MIN_GROUP: usize = 8;
++const MAX_GROUPS: usize = 1024;
++
++#[derive(Clone, Debug)]
++struct Group {
++    before: Cursor,
++    after: Cursor,
++    eased: Option<Rc<EasedProgram>>,
++    // Sorted, non-overlapping character masks. Mutations clear their own bit.
++    blocks: Vec<(usize, u64)>,
++    count: usize,
++}
++
++#[derive(Clone, Debug)]
++pub(super) struct Groups {
++    slots: Vec<Option<Group>>,
++    owners: Vec<usize>,
++    // 0: unexamined, 1: uniform remaining frames, -1: rejected.
++    shapes: Vec<i8>,
++    members: Vec<u64>,
++    skipped: Vec<u64>,
++    cursor: Option<usize>,
++    woken: Vec<usize>,
++    count: usize,
++    generation: u64,
++    enabled: bool,
++}
++
++impl Default for Groups {
++    fn default() -> Self {
++        Self {
++            slots: Vec::new(),
++            owners: Vec::new(),
++            shapes: Vec::new(),
++            members: Vec::new(),
++            skipped: Vec::new(),
++            cursor: None,
++            woken: Vec::new(),
++            count: 0,
++            generation: 0,
++            enabled: std::env::var_os("TTFX_SCENE_GROUPS").is_none_or(|v| v != "0"),
++        }
++    }
++}
++
++impl Groups {
++    pub(super) fn resize(&mut self, len: usize) {
++        self.owners.resize(len, NONE);
++        self.shapes.resize(len, 0);
++        self.members.resize(len.div_ceil(64), 0);
++        self.skipped.resize(len.div_ceil(64), 0);
++    }
++    pub(super) fn reset_shape(&mut self, id: usize) {
++        self.shapes[id] = 0;
++    }
++}
++
++impl SceneRuntime {
++    pub(crate) fn has_groups(&self) -> bool {
++        self.groups.count != 0
++    }
++
++    #[inline]
++    pub(super) fn group_cursor(&self, id: usize) -> Option<Cursor> {
++        if self.groups.count == 0 {
++            return None;
++        }
++        let slot = self.groups.owners[id];
++        if slot == NONE {
++            return None;
++        }
++        let group = self.groups.slots[slot].as_ref().unwrap();
++        Some(if self.groups.cursor.is_some_and(|cursor| id >= cursor) { group.before } else { group.after })
++    }
++
++    pub(crate) fn group_skip_mask(&self) -> &[u64] {
++        &self.groups.skipped
++    }
++
++    pub(crate) fn set_group_cursor(&mut self, id: usize) {
++        self.groups.cursor = Some(id);
++    }
++
++    pub(crate) fn drain_group_wakes(&mut self, out: &mut Vec<usize>) {
++        out.append(&mut self.groups.woken);
++    }
++
++    /// Also used before explicit public ticks, which advance independently of
++    /// the outer snapshot and must not silently reuse its already-computed tick.
++    #[inline]
++    pub(crate) fn detach_group(&mut self, id: usize) {
++        if let Some(cursor) = self.group_cursor(id) {
++            self.detach_group_cached(id, cursor);
++        }
++    }
++
++    #[inline(never)]
++    fn detach_group_cached(&mut self, id: usize, cursor: Cursor) {
++        self.cursors[id].set(cursor);
++        let slot = self.groups.owners[id];
++        self.groups.owners[id] = NONE;
++        let word = id / 64;
++        let mask = !(1 << (id % 64));
++        self.groups.members[word] &= mask;
++        self.groups.skipped[word] &= mask;
++        let group = self.groups.slots[slot].as_mut().unwrap();
++        let block = group.blocks.binary_search_by_key(&word, |&(word, _)| word).unwrap();
++        group.blocks[block].1 &= mask;
++        group.count -= 1;
++        self.groups.count -= 1;
++        if group.count == 0 {
++            self.groups.slots[slot] = None;
++        }
++        self.groups.woken.push(id);
++    }
++
++    fn dissolve_group(&mut self, slot: usize) {
++        let Some(group) = self.groups.slots[slot].take() else { return };
++        for (word, mut bits) in group.blocks {
++            self.groups.members[word] &= !bits;
++            self.groups.skipped[word] &= !bits;
++            while bits != 0 {
++                let id = word * 64 + bits.trailing_zeros() as usize;
++                bits &= bits - 1;
++                let cursor =
++                    if self.groups.cursor.is_some_and(|cursor| id >= cursor) { group.before } else { group.after };
++                self.cursors[id].set(cursor);
++                self.groups.owners[id] = NONE;
++                self.groups.woken.push(id);
++            }
++        }
++        self.groups.count -= group.count;
++    }
++
++    pub(crate) fn dissolve_groups(&mut self) {
++        if self.groups.count == 0 {
++            return;
++        }
++        for slot in 0..self.groups.slots.len() {
++            self.dissolve_group(slot);
++        }
++    }
++
++    fn detach_removed_groups(&mut self, members: &[u64]) {
++        if self.groups.count == 0 {
++            return;
++        }
++        for word in 0..self.groups.members.len() {
++            let mut bits = self.groups.members[word] & !members.get(word).copied().unwrap_or(0);
++            while bits != 0 {
++                let id = word * 64 + bits.trailing_zeros() as usize;
++                bits &= bits - 1;
++                self.detach_group(id);
++            }
++        }
++    }
++
++    pub(crate) fn finish_groups(&mut self, members: &[u64]) {
++        self.groups.cursor = None;
++        self.detach_removed_groups(members);
++        self.groups.woken.clear();
++    }
++
++    pub(crate) fn begin_groups(
++        &mut self,
++        members: &[u64],
++        characters: &[EffectCharacter],
++        playback: &mut PlaybackScheduler,
++        allow: bool,
++    ) {
++        debug_assert!(self.groups.cursor.is_none());
++        self.detach_removed_groups(members);
++        if !allow || !self.enabled || !self.groups.enabled {
++            self.dissolve_groups();
++            self.groups.woken.clear();
++            return;
++        }
++        // Admission scans are amortized; established groups tick every update.
++        if self.groups.generation % 4 == 0 {
++            self.form_groups(members, characters, playback);
++        }
++        self.groups.generation = self.groups.generation.wrapping_add(1);
++        for slot in 0..self.groups.slots.len() {
++            let Some(group) = self.groups.slots[slot].as_mut() else { continue };
++            let before = group.after;
++            let mut after = before;
++            if after.ticks + 1 == after.duration && (group.eased.is_some() || after.head + 1 == after.end) {
++                // Leave completion and its callbacks to the normal engine.
++                self.dissolve_group(slot);
++                continue;
++            }
++            after.shown = group.eased.as_ref().map_or(after.head, |plan| plan.runs[after.ticks as usize].frame);
++            after.ticks += 1;
++            if group.eased.is_none() && after.ticks == after.duration {
++                after.ticks = 0;
++                after.head += 1;
++                after.played = after.head;
++            }
++            group.before = before;
++            group.after = after;
++            for &(word, bits) in &group.blocks {
++                if before.shown == after.shown {
++                    self.groups.skipped[word] |= bits;
++                } else {
++                    self.groups.skipped[word] &= !bits;
++                }
++            }
++        }
++        self.groups.cursor = Some(0);
++        self.groups.woken.clear();
++    }
++
++    fn form_groups(&mut self, members: &[u64], characters: &[EffectCharacter], playback: &mut PlaybackScheduler) {
++        if self.stationary_count - self.groups.count < MIN_GROUP {
++            return;
++        }
++        // Pointer identity is only a key while the immutable program's Rc stays
++        // alive. It is never dereferenced or retained after this admission scan.
++        let mut candidates: HashMap<(Cursor, usize), Vec<usize>, FxBuildHasher> = HashMap::default();
++        for (word, &active) in members.iter().enumerate() {
++            let mut bits = active
++                & self.stationary_members.get(word).copied().unwrap_or(0)
++                & !self.groups.members.get(word).copied().unwrap_or(0);
++            while bits != 0 {
++                let id = word * 64 + bits.trailing_zeros() as usize;
++                bits &= bits - 1;
++                let program = self.programs[id].as_ref().unwrap();
++                if program.looping || self.groups.shapes[id] < 0 {
++                    continue;
++                }
++                playback.materialize(id, characters, self);
++                let mut cursor = self.cursors[id].get();
++                if cursor.ticks + 1 == cursor.duration && (program.eased.is_some() || cursor.head + 1 == cursor.end) {
++                    continue;
++                }
++                let plan = if let Some(plan) = &program.eased {
++                    Rc::as_ptr(plan) as usize
++                } else {
++                    if self.groups.shapes[id] == 0 {
++                        // Scene's duration hint is public-mutation-sensitive.
++                        // Validate the actual immutable remaining frame slice.
++                        self.groups.shapes[id] = if program.frames[cursor.head as usize..cursor.end as usize]
++                            .iter()
++                            .all(|frame| frame.duration == cursor.duration)
++                        {
++                            1
++                        } else {
++                            -1
++                        };
++                    }
++                    if self.groups.shapes[id] < 0 {
++                        continue;
++                    }
++                    0
++                };
++                cursor.shown = u32::MAX;
++                candidates.entry((cursor, plan)).or_default().push(id);
++            }
++        }
++        for ((cursor, _), ids) in candidates {
++            if ids.len() < MIN_GROUP {
++                continue;
++            }
++            let slot = if let Some(slot) = self.groups.slots.iter().position(Option::is_none) {
++                slot
++            } else if self.groups.slots.len() < MAX_GROUPS {
++                self.groups.slots.push(None);
++                self.groups.slots.len() - 1
++            } else {
++                break;
++            };
++            let mut blocks: Vec<(usize, u64)> = Vec::new();
++            for &id in &ids {
++                playback.wake(id, characters, self);
++                self.groups.owners[id] = slot;
++                let word = id / 64;
++                let bit = 1 << (id % 64);
++                self.groups.members[word] |= bit;
++                if let Some((_, bits)) = blocks.last_mut().filter(|(last, _)| *last == word) {
++                    *bits |= bit;
++                } else {
++                    blocks.push((word, bit));
++                }
++            }
++            self.groups.count += ids.len();
++            self.groups.slots[slot] = Some(Group {
++                before: cursor,
++                after: cursor,
++                eased: self.programs[ids[0]].as_ref().unwrap().eased.clone(),
++                blocks,
++                count: ids.len(),
++            });
++        }
++    }
++
++    /// Called only from the ordered update loop. Counter work is shared, but
++    /// visual changes still occur at the character's original snapshot position.
++    #[inline]
++    pub(crate) fn group_tick(&self, id: usize, characters: &mut [EffectCharacter]) -> Option<bool> {
++        if self.groups.count == 0 {
++            return None;
++        }
++        let slot = self.groups.owners[id];
++        if slot == NONE {
++            return None;
++        }
++        let group = self.groups.slots[slot].as_ref().unwrap();
++        let frame = group.after.shown;
++        let program = self.programs[id].as_ref().unwrap();
++        let next = &program.frames[frame as usize].character_visual;
++        let current = &mut characters[id].animation.current_character_visual;
++        let changed = !Rc::ptr_eq(current, next);
++        if changed {
++            *current = Rc::clone(next);
++        }
++        Some(changed)
++    }
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++    use crate::engine::animation::{EasedTicksCache, FrameStorage, VisualParams};
++    use crate::engine::motion_runtime::MotionRuntime;
++    use crate::utils::easing::Easing;
++
++    fn prepared(ease: Option<Easing>) -> (Vec<EffectCharacter>, SceneRuntime, PlaybackScheduler) {
++        let mut characters = Vec::new();
++        for id in 0..64 {
++            let mut ch = EffectCharacter::new(id, "X", id as i64, 1);
++            ch.motion.previous_coord = ch.motion.current_coord;
++            ch.animation.new_scene(false, None, ease, "scene", false);
++            let scene = ch.animation.scenes.get_mut("scene").unwrap();
++            for letter in ["A", "B", "C", "D"] {
++                scene.add_frame(&format!("{letter}{id}"), 3, VisualParams::default()).unwrap();
++            }
++            ch.animation.current_character_visual = scene.activate().unwrap();
++            ch.animation.active_scene = ch.animation.scenes.handle("scene");
++            characters.push(ch);
++        }
++        let mut runtime = SceneRuntime::default();
++        runtime.enabled = true;
++        runtime.groups.enabled = true;
++        runtime.resize(characters.len());
++        for _ in 0..8 {
++            for id in 0..characters.len() {
++                runtime.prepare(id, &characters, true);
++            }
++        }
++        let mut playback = PlaybackScheduler::default();
++        playback.resize(characters.len());
++        (characters, runtime, playback)
++    }
++
++    #[test]
++    fn groups_share_progress_but_preserve_each_visual_and_exact_easing() {
++        for ease in [None, Some(Easing::OutElastic), Some(Easing::InOutBack)] {
++            let (mut characters, mut runtime, mut playback) = prepared(ease);
++            let mut references: Vec<_> =
++                characters.iter().map(|c| c.animation.scenes.get("scene").unwrap().clone()).collect();
++            let mut cache = EasedTicksCache::default();
++            for _ in 0..11 {
++                playback.begin(&[u64::MAX], &characters, &runtime);
++                runtime.begin_groups(&[u64::MAX], &characters, &mut playback, true);
++                assert_eq!(runtime.groups.count, 64, "test must exercise grouped playback");
++                assert_eq!(runtime.groups.slots.iter().flatten().count(), 1);
++                for id in 0..64 {
++                    runtime.set_group_cursor(id);
++                    assert!(runtime.group_tick(id, &mut characters).is_some());
++                }
++                runtime.finish_groups(&[u64::MAX]);
++                playback.finish(&[u64::MAX], &characters, &runtime);
++                for id in 0..64 {
++                    let reference = &mut references[id];
++                    let frame = if let Some(ease) = ease {
++                        reference.step_eased(ease, &mut cache, false).0
++                    } else {
++                        reference.step_frame()
++                    };
++                    runtime.materialize(id, &characters);
++                    let actual = characters[id].animation.scenes.get("scene").unwrap();
++                    assert_eq!(actual.frames(), reference.frames());
++                    assert_eq!(actual.played_frames(), reference.played_frames());
++                    assert_eq!(actual.ticks_elapsed(), reference.ticks_elapsed());
++                    assert_eq!(actual.easing_current_step(), reference.easing_current_step());
++                    assert_eq!(
++                        characters[id].animation.current_character_visual,
++                        reference.all_frames[frame].character_visual
++                    );
++                }
++            }
++            playback.begin(&[u64::MAX], &characters, &runtime);
++            runtime.begin_groups(&[u64::MAX], &characters, &mut playback, true);
++            assert_eq!(runtime.groups.count, 0, "completion must return to the ordinary engine");
++            assert!(runtime.tick(0, &mut characters, &MotionRuntime::default(), true).is_none());
++        }
++    }
++
++    #[test]
++    fn grouped_holds_materialize_and_detach_on_both_sides_of_callbacks() {
++        let (mut characters, mut runtime, mut playback) = prepared(None);
++        playback.begin(&[u64::MAX], &characters, &runtime);
++        runtime.begin_groups(&[u64::MAX], &characters, &mut playback, true);
++        for id in 0..64 {
++            runtime.set_group_cursor(id);
++            runtime.group_tick(id, &mut characters).unwrap();
++        }
++        runtime.finish_groups(&[u64::MAX]);
++        playback.finish(&[u64::MAX], &characters, &runtime);
++        playback.begin(&[u64::MAX], &characters, &runtime);
++        runtime.begin_groups(&[u64::MAX], &characters, &mut playback, true);
++        assert_eq!(runtime.group_skip_mask(), &[u64::MAX]);
++        runtime.set_group_cursor(32);
++        for (id, expected) in [(16, 2), (48, 1)] {
++            runtime.materialize(id, &characters);
++            assert_eq!(characters[id].animation.scenes.get("scene").unwrap().ticks_elapsed(), expected);
++        }
++        let mut cloned = runtime.clone();
++        cloned.detach_group(16);
++        assert_eq!(cloned.cursors[16].get().ticks, 2);
++        assert_eq!(runtime.groups.count, 64, "clone edits must be independent");
++        runtime.invalidate(48, &characters);
++        assert_eq!(runtime.groups.count, 63);
++        assert_eq!(runtime.groups.woken, [48]);
++        assert_eq!(runtime.group_skip_mask()[0] & (1 << 48), 0);
++        assert_eq!(characters[48].animation.scenes.get("scene").unwrap().ticks_elapsed(), 1);
++        // Explicit tick of an earlier member starts after its implicit tick.
++        runtime.detach_group(16);
++        assert!(runtime.tick(16, &mut characters, &MotionRuntime::default(), true).is_some());
++        runtime.materialize(16, &characters);
++        assert_eq!(characters[16].animation.scenes.get("scene").unwrap().frames().start, 1);
++        runtime.finish_groups(&[u64::MAX]);
++        runtime.materialize(60, &characters);
++        assert_eq!(characters[60].animation.scenes.get("scene").unwrap().ticks_elapsed(), 2);
++    }
++
++    #[test]
++    fn grouping_validates_real_durations_after_public_frame_replacement() {
++        let (mut characters, mut runtime, mut playback) = prepared(None);
++        for id in 0..64 {
++            runtime.invalidate(id, &characters);
++            let scene = characters[id].animation.scenes.get_mut("scene").unwrap();
++            assert_eq!(scene.uniform_frame_duration(), Some(3));
++            let FrameStorage::Shared(frames) = &mut scene.all_frames else { panic!("prepared frames") };
++            Rc::make_mut(frames)[1].duration = 7;
++            // Public replacement bypasses the construction-time duration hint.
++            assert_eq!(scene.uniform_frame_duration(), Some(3));
++            runtime.prepare(id, &characters, true);
++        }
++        playback.begin(&[u64::MAX], &characters, &runtime);
++        runtime.begin_groups(&[u64::MAX], &characters, &mut playback, true);
++        assert_eq!(runtime.groups.count, 0);
++        assert_eq!(runtime.group_skip_mask(), &[0]);
++    }
++}

@@ -1,0 +1,10 @@
+binarypath {'goal_start': 215.56640625, 'checkpoint': 214.65234375, 'candidate': 214.71484375}
+rings {'goal_start': 181.19921875, 'checkpoint': 181.21875, 'candidate': 180.42578125}
+colorshift {'goal_start': 58.55078125, 'checkpoint': 54.62109375, 'candidate': 54.72265625}
+burn {'goal_start': 42.0078125, 'checkpoint': 41.8984375, 'candidate': 42.609375}
+laseretch {'goal_start': 30.51171875, 'checkpoint': 30.66796875, 'candidate': 30.69921875}
+errorcorrect {'goal_start': 33.52734375, 'checkpoint': 34.1953125, 'candidate': 34.26171875}
+bouncyballs {'goal_start': 39.43359375, 'checkpoint': 39.47265625, 'candidate': 39.64453125}
+matrix {'goal_start': 28.46484375, 'checkpoint': 24.8828125, 'candidate': 25.06640625}
+spotlights {'goal_start': 19.2578125, 'checkpoint': 19.2578125, 'candidate': 19.2578125}
+overflow {'goal_start': 41.90625, 'checkpoint': 35.00390625, 'candidate': 35.1328125}

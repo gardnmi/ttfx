@@ -4,3 +4,5 @@ docs/benchmarks/rust-fallback/pr/** linguist-generated=true
 docs/benchmarks/rust-fallback/round12/** linguist-generated=true
 docs/benchmarks/rust-fallback/round13/** linguist-generated=true
 docs/benchmarks/rust-fallback/round13/*.patch -whitespace
+docs/benchmarks/rust-fallback/round15/** linguist-generated=true
+docs/benchmarks/rust-fallback/round15/*.patch -whitespace

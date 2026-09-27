@@ -296,10 +296,11 @@ pub struct Terminal {
     render_cells: Vec<u32>,
     render_visual_ids: Vec<u64>,
     previous_visual_ids: Vec<u64>,
-    rendered_rows: Vec<Vec<u8>>,
+    rendered_rows: Vec<crate::engine::render::CachedRow>,
+    row_scratch: Vec<u8>,
     rendered_width: usize,
     rendered_revision: Option<u64>,
-    rows_equal: fn(&[u64], &[u64]) -> bool,
+    row_changes: fn(&[u64], &[u64]) -> u64,
     pub terminal_state: Vec<String>,
     output_buffer: String,
     move_cursor_to_top: String,
@@ -409,9 +410,10 @@ impl Terminal {
             render_visual_ids: Vec::new(),
             previous_visual_ids: Vec::new(),
             rendered_rows: Vec::new(),
+            row_scratch: Vec::new(),
             rendered_width: 0,
             rendered_revision: None,
-            rows_equal: crate::engine::render::select_row_comparison(),
+            row_changes: crate::engine::render::select_row_comparison(),
             terminal_state: Vec::new(),
             output_buffer: String::new(),
             move_cursor_to_top,
@@ -783,7 +785,7 @@ impl Terminal {
             self.previous_visual_ids.clear();
             self.previous_visual_ids.resize(width * height, u64::MAX);
             self.rendered_rows.clear();
-            self.rendered_rows.resize_with(height, Vec::new);
+            self.rendered_rows.resize_with(height, crate::engine::render::CachedRow::default);
             self.rendered_width = width;
         }
         let arena = &self.arena;
@@ -796,19 +798,14 @@ impl Terminal {
             let ids = &self.render_visual_ids[start..start + width];
             let previous = &mut self.previous_visual_ids[start..start + width];
             let row = &mut self.rendered_rows[row_index];
-            if !(self.rows_equal)(ids, previous) {
-                row.clear();
-                for &cell in &self.render_cells[start..start + width] {
-                    if cell == EMPTY_RENDER_CELL {
-                        row.push(b' ');
-                    } else {
-                        arena.render_slice()[cell as usize]
-                            .animation
-                            .current_character_visual
-                            .formatted_symbol
-                            .append_to(row);
-                    }
-                }
+            let changes = (self.row_changes)(ids, previous);
+            if changes != 0 {
+                row.rebuild(
+                    &self.render_cells[start..start + width],
+                    changes,
+                    arena.render_slice(),
+                    &mut self.row_scratch,
+                );
                 previous.copy_from_slice(ids);
             }
         }
@@ -852,7 +849,8 @@ impl Terminal {
         match frame {
             FrameOutput::Contiguous(output) => output.len(),
             FrameOutput::CachedRows => {
-                self.rendered_rows.iter().map(Vec::len).sum::<usize>() + self.rendered_rows.len().saturating_sub(1)
+                self.rendered_rows.iter().map(|row| row.len()).sum::<usize>()
+                    + self.rendered_rows.len().saturating_sub(1)
             }
         }
     }

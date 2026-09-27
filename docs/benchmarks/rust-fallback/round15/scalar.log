@@ -1,0 +1,10 @@
+200x50, 9 repetitions, seed 1, virtual clock, pacing off
+effect               before ms    after ms   speedup
+burn                    181.08      111.46    1.625x
+laseretch               248.10      173.35    1.431x
+errorcorrect            102.51       61.74    1.661x
+bouncyballs             113.97      118.17    0.964x
+binarypath              584.31      594.01    0.984x
+waves                    77.09       77.63    0.993x
+matrix                   90.35       74.12    1.219x
+Median effect speedup: 1.219x

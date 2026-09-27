@@ -1,0 +1,35 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 548  of event 'cycles:u'
+# Event count (approx.): 2542321162
+#
+# Overhead  Shared Object         Symbol                                                                                                                                                                                                                                                      IPC   [IPC Coverage]
+# ........  ....................  ..........................................................................................................................................................................................................................................................  ....................
+#
+    18.25%  ttfx                  [.] <ttfx::engine::terminal::Terminal>::update_render_cells                                                                                                                                                                                                 -      -
+    16.37%  ttfx                  [.] <ttfx::engine::animation::Animation>::set_appearance_with_palette                                                                                                                                                                                       -      -
+    10.97%  ttfx                  [.] <ttfx::engine::character::CharacterArena as core::ops::index::IndexMut<usize>>::index_mut                                                                                                                                                               -      -
+    10.33%  ttfx                  [.] <ttfx::effects::overflow::Overflow as ttfx::engine::effect::Effect>::next_frame                                                                                                                                                                         -      -
+     8.41%  ttfx                  [.] <ttfx::engine::animation::CharacterVisual>::with_symbol                                                                                                                                                                                                 -      -
+     5.62%  ttfx                  [.] <ttfx::utils::graphics::ColorPair as core::hash::Hash>::hash::<rustc_hash::FxHasher>                                                                                                                                                                    -      -
+     3.80%  ttfx                  [.] <ttfx::engine::terminal::Terminal>::prepare_frame_output                                                                                                                                                                                                -      -
+     2.46%  ttfx                  [.] <ttfx::effects::overflow::Overflow as ttfx::engine::effect::Effect>::build                                                                                                                                                                              -      -
+     2.27%  libc.so.6             [.] cfree                                                                                                                                                                                                                                                   -      -
+     2.11%  ttfx                  [.] <core::hash::sip::Hasher<core::hash::sip::Sip13Rounds> as core::hash::Hasher>::write                                                                                                                                                                    -      -
+     1.63%  ttfx                  [.] <ttfx::engine::animation::CharacterVisual>::shared                                                                                                                                                                                                      -      -
+     1.22%  ttfx                  [.] <ttfx::utils::graphics::ColorPair as core::cmp::PartialEq>::eq                                                                                                                                                                                          -      -
+     1.22%  ttfx                  [.] <std::hash::random::RandomState as core::hash::BuildHasher>::hash_one::<&ttfx::utils::geometry::Coord>                                                                                                                                                  -      -
+     0.96%  ttfx                  [.] <ttfx::engine::animation::AppearancePalette>::visual::{closure#1}                                                                                                                                                                                       -      -
+     0.80%  ttfx                  [.] <alloc::rc::Rc<ttfx::engine::animation::CharacterVisual>>::drop_slow                                                                                                                                                                                    -      -
+     0.72%  ttfx                  [.] <dyn ttfx::engine::animation::VisualLookup as core::hash::Hash>::hash::<std::hash::random::DefaultHasher>                                                                                                                                               -      -
+     0.71%  ttfx                  [.] ttfx::utils::ansi::sgr_color                                                                                                                                                                                                                            -      -
+     0.62%  ttfx                  [.] ttfx::engine::render::equal_avx2_inner                                                                                                                                                                                                                  -      -
+     0.59%  libc.so.6             [.] 0x000000000018f4f0                                                                                                                                                                                                                                      -      -
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

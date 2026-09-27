@@ -1,0 +1,24 @@
+{
+  "goal": {
+    "effects": 37,
+    "geomean_speedup": 1.1820382676990258,
+    "median_speedup": 1.1265813537078937,
+    "summed_median_speedup": 1.1769052357182397,
+    "faster_effects": 34
+  },
+  "checkpoint": {
+    "effects": 37,
+    "geomean_speedup": 1.0876681649124458,
+    "median_speedup": 1.0292285780624508,
+    "summed_median_speedup": 1.0826651381859143,
+    "faster_effects": 35
+  },
+  "scalar": {
+    "effects": 7,
+    "geomean_speedup": 1.2370860325701087,
+    "median_speedup": 1.219016354673731,
+    "summed_median_speedup": 1.154435588868493,
+    "faster_effects": 4
+  },
+  "assembly_lead": 3.2507016592365705
+}

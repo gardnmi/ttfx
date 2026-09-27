@@ -1,0 +1,234 @@
+diff --git i/src/engine/render.rs w/src/engine/render.rs
+index 21fb44c..de010c9 100644
+--- i/src/engine/render.rs
++++ w/src/engine/render.rs
+@@ -287,6 +287,162 @@ impl CellGrid {
+     }
+ }
+ 
++/// Cached UTF-8 row bytes with cell boundaries. A small changed span can be
++/// replaced in place, preserving the prefix and moving the suffix just once.
++/// Fully changing rows keep the ordinary sequential serialization path.
++const ROW_BLOCK: usize = 16;
++
++#[derive(Default)]
++pub(crate) struct CachedRow {
++    bytes: Vec<u8>,
++    offsets: Vec<usize>,
++    #[cfg(test)]
++    partial_updates: usize,
++}
++
++impl std::ops::Deref for CachedRow {
++    type Target = [u8];
++    fn deref(&self) -> &[u8] {
++        &self.bytes
++    }
++}
++
++impl CachedRow {
++    pub(crate) fn rebuild(
++        &mut self,
++        cells: &[u32],
++        ids: &[u64],
++        previous: &[u64],
++        characters: &[crate::engine::character::EffectCharacter],
++        scratch: &mut Vec<u8>,
++    ) {
++        let mut first = 0;
++        let mut end = cells.len();
++        if self.offsets.len() == cells.len().div_ceil(ROW_BLOCK) + 1 && cells.len() >= ROW_BLOCK {
++            first = ids.iter().zip(previous).position(|(a, b)| a != b).unwrap_or(cells.len());
++            if first == cells.len() {
++                return;
++            }
++            end = ids.iter().zip(previous).rposition(|(a, b)| a != b).unwrap() + 1;
++            first = first / ROW_BLOCK * ROW_BLOCK;
++            end = end.div_ceil(ROW_BLOCK).saturating_mul(ROW_BLOCK).min(cells.len());
++            if end - first > cells.len() / 2 {
++                first = 0;
++                end = cells.len();
++            }
++        }
++        if first == 0 && end == cells.len() {
++            self.bytes.clear();
++            self.offsets.resize(cells.len().div_ceil(ROW_BLOCK) + 1, 0);
++            for (block, cells) in cells.chunks(ROW_BLOCK).enumerate() {
++                self.offsets[block] = self.bytes.len();
++                for &cell in cells {
++                    append_cell(&mut self.bytes, cell, characters);
++                }
++            }
++            *self.offsets.last_mut().unwrap() = self.bytes.len();
++            return;
++        }
++        let first_block = first / ROW_BLOCK;
++        let end_block = end.div_ceil(ROW_BLOCK);
++        let start_byte = self.offsets[first_block];
++        #[cfg(test)]
++        {
++            self.partial_updates += 1;
++        }
++        let old_end = self.offsets[end_block];
++        scratch.clear();
++        for (block, cells) in cells[first..end].chunks(ROW_BLOCK).enumerate() {
++            self.offsets[first_block + block] = start_byte + scratch.len();
++            for &cell in cells {
++                append_cell(scratch, cell, characters);
++            }
++        }
++        let new_end = start_byte + scratch.len();
++        self.offsets[end_block] = new_end;
++        let old_len = self.bytes.len();
++        if new_end > old_end {
++            let growth = new_end - old_end;
++            self.bytes.resize(old_len + growth, 0);
++            self.bytes.copy_within(old_end..old_len, new_end);
++            for offset in &mut self.offsets[end_block + 1..] {
++                *offset += growth;
++            }
++        } else if new_end < old_end {
++            let shrink = old_end - new_end;
++            self.bytes.copy_within(old_end..old_len, new_end);
++            self.bytes.truncate(old_len - shrink);
++            for offset in &mut self.offsets[end_block + 1..] {
++                *offset -= shrink;
++            }
++        }
++        self.bytes[start_byte..new_end].copy_from_slice(scratch);
++    }
++}
++
++#[inline]
++fn append_cell(out: &mut Vec<u8>, cell: u32, characters: &[crate::engine::character::EffectCharacter]) {
++    if cell == NONE {
++        out.push(b' ');
++    } else {
++        characters[cell as usize].animation.current_character_visual.formatted_symbol.append_to(out);
++    }
++}
++
++#[cfg(test)]
++mod cached_row_tests {
++    use super::*;
++    use crate::engine::character::EffectCharacter;
++
++    #[test]
++    fn partial_rows_match_fresh_utf8_output_through_growth_shrink_and_resize() {
++        let symbols = ["", "A", "λ", "界", "🙂", "\x1b[38;2;255;1;32mZ\x1b[0m", &"🦀".repeat(50)];
++        let characters: Vec<_> =
++            symbols.iter().enumerate().map(|(id, symbol)| EffectCharacter::new(id as u32, symbol, 1, 1)).collect();
++        let mut row = CachedRow::default();
++        let mut scratch = Vec::new();
++        let mut state = 125u64;
++        for width in [0, 1, 15, 16, 65, 200, 31, 0] {
++            let mut cells = vec![NONE; width];
++            let mut previous = vec![u64::MAX; width];
++            for step in 0..400 {
++                state = state.wrapping_mul(6364136223846793005).wrapping_add(1);
++                if width != 0 {
++                    let col = step % width;
++                    cells[col] = if step % 8 == 0 { NONE } else { (step % symbols.len()) as u32 };
++                    if step % 31 == 0 {
++                        for (col, cell) in cells.iter_mut().enumerate() {
++                            *cell = ((state as usize + col) % symbols.len()) as u32;
++                        }
++                    }
++                }
++                let ids: Vec<_> = cells.iter().map(|&cell| if cell == NONE { 0 } else { cell as u64 + 1 }).collect();
++                row.rebuild(&cells, &ids, &previous, &characters, &mut scratch);
++                let mut expected = Vec::new();
++                for (col, &cell) in cells.iter().enumerate() {
++                    if col % ROW_BLOCK == 0 {
++                        assert_eq!(
++                            row.offsets[col / ROW_BLOCK],
++                            expected.len(),
++                            "width {width}, step {step}, column {col}"
++                        );
++                    }
++                    let text = if cell == NONE {
++                        " "
++                    } else {
++                        characters[cell as usize].animation.current_character_visual.formatted_symbol.as_str()
++                    };
++                    expected.extend_from_slice(text.as_bytes());
++                }
++                assert_eq!(row.bytes, expected, "width {width}, step {step}");
++                assert_eq!(row.offsets.last(), Some(&expected.len()));
++                previous = ids;
++            }
++        }
++        assert!(row.partial_updates > 500, "test must exercise actual in-place replacements");
++    }
++}
++
+ pub(crate) fn write_all_vectored(
+     out: &mut impl std::io::Write,
+     mut slices: &mut [std::io::IoSlice<'_>],
+diff --git i/src/engine/terminal.rs w/src/engine/terminal.rs
+index 3da2ec9..9f677a4 100644
+--- i/src/engine/terminal.rs
++++ w/src/engine/terminal.rs
+@@ -296,7 +296,8 @@ pub struct Terminal {
+     render_cells: Vec<u32>,
+     render_visual_ids: Vec<u64>,
+     previous_visual_ids: Vec<u64>,
+-    rendered_rows: Vec<Vec<u8>>,
++    rendered_rows: Vec<crate::engine::render::CachedRow>,
++    row_scratch: Vec<u8>,
+     rendered_width: usize,
+     rendered_revision: Option<u64>,
+     rows_equal: fn(&[u64], &[u64]) -> bool,
+@@ -409,6 +410,7 @@ impl Terminal {
+             render_visual_ids: Vec::new(),
+             previous_visual_ids: Vec::new(),
+             rendered_rows: Vec::new(),
++            row_scratch: Vec::new(),
+             rendered_width: 0,
+             rendered_revision: None,
+             rows_equal: crate::engine::render::select_row_comparison(),
+@@ -783,7 +785,7 @@ impl Terminal {
+             self.previous_visual_ids.clear();
+             self.previous_visual_ids.resize(width * height, u64::MAX);
+             self.rendered_rows.clear();
+-            self.rendered_rows.resize_with(height, Vec::new);
++            self.rendered_rows.resize_with(height, crate::engine::render::CachedRow::default);
+             self.rendered_width = width;
+         }
+         let arena = &self.arena;
+@@ -797,18 +799,13 @@ impl Terminal {
+             let previous = &mut self.previous_visual_ids[start..start + width];
+             let row = &mut self.rendered_rows[row_index];
+             if !(self.rows_equal)(ids, previous) {
+-                row.clear();
+-                for &cell in &self.render_cells[start..start + width] {
+-                    if cell == EMPTY_RENDER_CELL {
+-                        row.push(b' ');
+-                    } else {
+-                        arena.render_slice()[cell as usize]
+-                            .animation
+-                            .current_character_visual
+-                            .formatted_symbol
+-                            .append_to(row);
+-                    }
+-                }
++                row.rebuild(
++                    &self.render_cells[start..start + width],
++                    ids,
++                    previous,
++                    arena.render_slice(),
++                    &mut self.row_scratch,
++                );
+                 previous.copy_from_slice(ids);
+             }
+         }
+@@ -852,7 +849,8 @@ impl Terminal {
+         match frame {
+             FrameOutput::Contiguous(output) => output.len(),
+             FrameOutput::CachedRows => {
+-                self.rendered_rows.iter().map(Vec::len).sum::<usize>() + self.rendered_rows.len().saturating_sub(1)
++                self.rendered_rows.iter().map(|row| row.len()).sum::<usize>()
++                    + self.rendered_rows.len().saturating_sub(1)
+             }
+         }
+     }

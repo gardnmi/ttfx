@@ -95,7 +95,11 @@ mechanically in CI against a pinned upstream checkout (v0.15.0), not by eyeballi
 | `tools/tests/*_behavior.py` | pty | what only a real terminal shows: resize restarts, signal teardown |
 | `cargo test` | goldens + traces | easing/geometry/gradient values and engine state machines |
 
-`./bin/test` runs the lot, which is all CI does.
+`./bin/test` runs these suites. Linux CI runs them with `--no-default-features`
+and `TTFX_ASM=0` to exercise the Rust-only build explicitly. A separate assembly
+job installs pinned NASM 3.01 and runs `./bin/test-asm`: assembly component tests
+must be present, and all 37 assembly effects are compared with Rust using two
+inputs and two seeds (148 complete-output comparisons).
 
 Making that possible meant reproducing upstream's quirks deliberately, not "fixing" them:
 Python's banker's rounding, gradients built from integer floor division rather than float
@@ -132,12 +136,22 @@ cargo build --release
 cargo build --release --target x86_64-unknown-linux-musl   # static, ~3.3 MB
 ```
 
-`./bin/test` runs every suite. It needs python3, and the parity half needs a copy of
+`./bin/test` runs the Rust/reference suites. It needs python3, and the parity half needs a copy of
 upstream, which it clones at the pinned commit on first run:
 
 ```sh
 ./tools/parity/fetch_reference.sh   # what bin/test calls; safe to run by hand
+
+TTFX_ASM=0 ./bin/test --no-default-features   # explicit Rust-only coverage
+./bin/test-asm                              # requires NASM >= 3.0, x86-64 Linux
 ```
+
+`bin/test-asm` requires an audited assembly build and defaults to CPU tier 1, the
+x86-64 baseline supported by hosted runners. Set `NASM=/path/to/nasm` if needed.
+`TTFX_ASM_TIER=2|3|4` can exercise another tier on a machine that supports it;
+unavailable tiers fail this test command. Missing assembly is an error here,
+while ordinary `cargo build` retains its automatic Rust fallback. The broader
+`tools/asm/oracle.sh` option corpus remains available for deeper comparisons.
 
 Upstream is not vendored here — the harness fetches it, because it's their code.
 

@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
-# Everything CI runs, in one command. Nothing here is optional: if it passes
-# locally it passes on the runner, and the workflow is just a call to this.
+# Rust/reference suites shared by local development and CI. Common Cargo
+# build/test options, such as --no-default-features, are forwarded to both.
+# bin/test-asm separately requires assembly coverage.
 set -eu
 
 ROOT="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
@@ -14,8 +15,8 @@ done
 
 cd "$ROOT"
 
-cargo test --release
-"$ROOT/bin/build"
+cargo test --release "$@"
+"$ROOT/bin/build" "$@"
 ./tools/tests/cli_corpus.sh
 python3 tools/tests/sigterm_behavior.py
 python3 tools/tests/terminal_close_behavior.py

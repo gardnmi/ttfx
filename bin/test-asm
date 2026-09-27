@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+# Assembly is required here; ordinary builds may still fall back to Rust.
+set -eu
+ROOT="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
+cd "$ROOT"
+
+if [ "${TTFX_ASM_UNCHECKED_TIERS:-}" = 1 ]; then
+  echo "Assembly CI requires audited CPU tiers; unset TTFX_ASM_UNCHECKED_TIERS." >&2
+  exit 1
+fi
+
+# The baseline runs on every x86-64 runner, independently of its newer features.
+export TTFX_ASM_TIER="${TTFX_ASM_TIER:-1}"
+listing=$(mktemp)
+trap 'rm -f "$listing"' EXIT
+trap 'exit 1' HUP INT TERM
+cargo test --release --test asm_diff -- --list > "$listing"
+cat "$listing"
+if ! grep -q ': test$' "$listing"; then
+  echo "Assembly tests are missing. Install NASM >= 3.0 and build with the asm feature on x86-64 Linux." >&2
+  exit 1
+fi
+
+cargo test --release --test asm_diff -- --include-ignored
+"$ROOT/bin/build"
+python3 tools/asm/compare-complete.py

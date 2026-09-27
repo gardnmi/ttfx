@@ -7,7 +7,7 @@ on:
 
 jobs:
   test:
-    name: Tests + parity suite
+    name: Rust-only tests + parity suite
     # Parity CI is pinned to one platform/toolchain pair (plan.md §5.20):
     # cross-platform builds are release targets, not parity targets.
     runs-on: ubuntu-latest
@@ -17,7 +17,36 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: ./bin/test
+      - run: ./bin/test --no-default-features
+        env:
+          TTFX_ASM: "0"
+
+  test-asm:
+    name: Assembly tests + parity (x86-64 baseline)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build pinned NASM
+        # Ubuntu's packaged NASM may predate the CPU-level support we need.
+        # Source/build instructions: https://www.nasm.us/docs/3.01/nasmad.html
+        run: |
+          curl --fail --location --retry 3 --connect-timeout 20 --max-time 120 \
+            https://www.nasm.us/pub/nasm/releasebuilds/3.01/nasm-3.01.tar.xz \
+            --output "$RUNNER_TEMP/nasm-3.01.tar.xz"
+          echo "b7324cbe86e767b65f26f467ed8b12ad80e124e3ccb89076855c98e43a9eddd4  $RUNNER_TEMP/nasm-3.01.tar.xz" | sha256sum --check
+          tar -xf "$RUNNER_TEMP/nasm-3.01.tar.xz" -C "$RUNNER_TEMP"
+          cd "$RUNNER_TEMP/nasm-3.01"
+          ./configure --prefix="$RUNNER_TEMP/nasm-install"
+          make -j2
+          make install
+          echo "$RUNNER_TEMP/nasm-install/bin" >> "$GITHUB_PATH"
+      - run: nasm --version
+      - run: ./bin/test-asm
 
   test-macos:
     name: Tests (macOS)

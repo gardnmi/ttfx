@@ -235,7 +235,7 @@ impl CharacterArena {
             &ch.input_symbol,
             ch.uses_input_preexisting_colors,
             symbol,
-            colors,
+            &colors,
             palette,
         );
         if ch.animation.current_character_visual.formatted_symbol.id() != before {

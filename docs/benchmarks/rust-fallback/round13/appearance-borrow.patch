@@ -1,0 +1,317 @@
+diff --git i/src/effects/colorshift.rs w/src/effects/colorshift.rs
+index 5a1ce01..438cc74 100644
+--- i/src/effects/colorshift.rs
++++ w/src/effects/colorshift.rs
+@@ -6,7 +6,7 @@ use clap::Args;
+ 
+ use crate::cli::parse_color;
+ use crate::effects::common::{parse_gradient_direction, parse_gradient_steps, parse_positive_int};
+-use crate::engine::animation::{ExistingColorHandling, VisualParams};
++use crate::engine::animation::{ExistingColorHandling, Scene, VisualParams};
+ use crate::engine::character::CharId;
+ use crate::engine::ctx::{EffectHooks, EngineCtx};
+ use crate::engine::effect::Effect;
+@@ -130,6 +130,11 @@ impl Effect for ColorShift {
+             let filter = CharacterFilter::default();
+             ctx.terminal.get_characters(&mut ctx.rng, filter, CharacterSort::TopToBottomLeftToRight)
+         };
++        // Repeated symbols with the same gradient rotation can share immutable
++        // frames. Scene clones retain independent playback counters and events.
++        let mut programs: HashMap<_, HashMap<String, Scene>> = HashMap::new();
++        let mut program_count = 0;
++        let cache_programs = std::env::var_os("TTFX_COLORSHIFT_PROGRAM_CACHE").is_none_or(|value| value != "0");
+         for id in characters {
+             ctx.terminal.set_character_visibility(id, true);
+             let (input_fg, input_bg, input_coord, input_symbol, uses_pre) = {
+@@ -142,8 +147,8 @@ impl Effect for ColorShift {
+                     ch.uses_input_preexisting_colors,
+                 )
+             };
+-            let colors: Vec<Color> = if self.config.no_travel {
+-                gradient.spectrum.clone()
++            let rotation = if self.config.no_travel {
++                0
+             } else {
+                 let direction_index = match self.config.travel_direction {
+                     GradientDirection::Horizontal => {
+@@ -175,29 +180,34 @@ impl Effect for ColorShift {
+                 } else {
+                     shift_distance.min(len) as usize
+                 };
+-                let mut rotated = gradient.spectrum[k..].to_vec();
+-                rotated.extend_from_slice(&gradient.spectrum[..k]);
+-                rotated
++                k
+             };
+             {
+                 let ch = &mut ctx.terminal.arena[id.0 as usize];
+                 ch.animation.new_scene(false, None, None, "gradient", uses_pre);
+                 let scene = ch.animation.scenes.get_mut("gradient").unwrap();
+-                for color in &colors {
+-                    scene
+-                        .add_frame(
+-                            &input_symbol,
+-                            self.config.gradient_frames,
+-                            VisualParams {
+-                                colors: Some(ColorPair::new(Some(color.clone()), None)),
+-                                ..Default::default()
+-                            },
+-                        )
+-                        .map_err(EngineError::Other)?;
++                let key = (rotation, scene.preexisting_colors, scene.preexisting_bold, scene.no_color, scene.use_xterm_colors);
++                if let Some(program) = programs.get(&key).and_then(|symbols| symbols.get(input_symbol.as_str())) {
++                    *scene = program.clone();
++                } else {
++                    for color in gradient.spectrum[rotation..].iter().chain(&gradient.spectrum[..rotation]) {
++                        scene
++                            .add_frame(
++                                &input_symbol,
++                                self.config.gradient_frames,
++                                VisualParams { colors: Some(ColorPair::new(Some(*color), None)), ..Default::default() },
++                            )
++                            .map_err(EngineError::Other)?;
++                    }
++                    if cache_programs && program_count < 4096 {
++                        scene.prepare();
++                        programs.entry(key).or_default().insert(input_symbol.clone(), scene.clone());
++                        program_count += 1;
++                    }
+                 }
+                 ch.animation.new_scene(false, None, None, "final_gradient", uses_pre);
+             }
+-            let last_color = colors.last().unwrap().clone();
++            let last_color = gradient.spectrum[if rotation == 0 { gradient.spectrum.len() - 1 } else { rotation - 1 }];
+             if dynamic {
+                 let fg_gradient = match &input_fg {
+                     Some(c) => Some(
+diff --git i/src/effects/overflow.rs w/src/effects/overflow.rs
+index 8f8ed43..9a360b1 100644
+--- i/src/effects/overflow.rs
++++ w/src/effects/overflow.rs
+@@ -82,6 +82,7 @@ impl Row {
+         bg_color: Option<Color>,
+         palette: &mut AppearancePalette,
+     ) {
++        let colors = ColorPair::new(fg_color, bg_color);
+         for &id in &self.characters {
+             let ch = &mut ctx.terminal.arena[id.0 as usize];
+             let uses_pre = ch.uses_input_preexisting_colors;
+@@ -89,7 +90,7 @@ impl Row {
+                 &ch.input_symbol,
+                 uses_pre,
+                 None,
+-                ColorPair::new(fg_color, bg_color),
++                &colors,
+                 palette,
+             );
+         }
+diff --git i/src/engine/animation.rs w/src/engine/animation.rs
+index b8b7933..511721e 100644
+--- i/src/engine/animation.rs
++++ w/src/engine/animation.rs
+@@ -376,7 +376,7 @@ impl AppearancePalette {
+     fn visual(
+         &mut self,
+         symbol: &str,
+-        colors: ColorPair,
++        colors: &ColorPair,
+         bold: bool,
+         no_color: bool,
+         xterm: bool,
+@@ -389,14 +389,10 @@ impl AppearancePalette {
+         if chars.next().is_some() {
+             return None;
+         }
+-        let key = SceneVisualKey {
+-            symbol: single,
+-            styles: bold as u16 | (no_color as u16) << 8 | (xterm as u16) << 9,
+-            colors: Some(colors),
+-        };
++        let styles = bold as u16 | (no_color as u16) << 8 | (xterm as u16) << 9;
+         use std::hash::{Hash, Hasher};
+         let mut hash = rustc_hash::FxHasher::default();
+-        key.hash(&mut hash);
++        (single, styles, Some(colors)).hash(&mut hash);
+         let slot = hash.finish() as usize & (Self::CAPACITY - 1);
+         if self.slots.is_empty() {
+             self.slots.resize_with(Self::CAPACITY, || None);
+@@ -405,15 +401,17 @@ impl AppearancePalette {
+             // Color equality intentionally compares only its constructor
+             // argument. RGB/xterm fields remain publicly mutable, and formatting
+             // reads those fields, so a palette hit must compare them as well.
+-            let same_codes = |left: Option<Color>, right: Option<Color>| match (left, right) {
++            let same_codes = |left: Option<&Color>, right: Option<&Color>| match (left, right) {
+                 (Some(left), Some(right)) => left.rgb_color == right.rgb_color && left.xterm_color == right.xterm_color,
+                 (None, None) => true,
+                 _ => false,
+             };
+-            let old_colors = previous.colors.unwrap();
+-            if *previous == key
+-                && same_codes(old_colors.fg_color, colors.fg_color)
+-                && same_codes(old_colors.bg_color, colors.bg_color)
++            let old_colors = previous.colors.as_ref().unwrap();
++            if previous.symbol == single
++                && previous.styles == styles
++                && old_colors == colors
++                && same_codes(old_colors.fg_color.as_ref(), colors.fg_color.as_ref())
++                && same_codes(old_colors.bg_color.as_ref(), colors.bg_color.as_ref())
+             {
+                 return Some(Rc::clone(visual));
+             }
+@@ -422,12 +420,13 @@ impl AppearancePalette {
+             symbol,
+             VisualParams {
+                 bold,
+-                colors: Some(colors),
++                colors: Some(*colors),
+                 fg_color_code: resolve_color_code(colors.fg_color.as_ref(), no_color, xterm, None),
+                 bg_color_code: resolve_color_code(colors.bg_color.as_ref(), no_color, xterm, None),
+                 ..Default::default()
+             },
+         ));
++        let key = SceneVisualKey { symbol: single, styles, colors: Some(*colors) };
+         self.slots[slot] = Some((key, Rc::clone(&visual)));
+         Some(visual)
+     }
+@@ -1146,12 +1145,14 @@ impl Animation {
+         input_symbol: &str,
+         uses_input_preexisting_colors: bool,
+         symbol: Option<&str>,
+-        colors: ColorPair,
++        colors: &ColorPair,
+         palette: &mut AppearancePalette,
+     ) {
++        let input_colors;
+         let (resolved, bold) =
+             if self.existing_color_handling == ExistingColorHandling::Always && uses_input_preexisting_colors {
+-                (ColorPair::new(self.input_fg_color, self.input_bg_color), self.input_bold)
++                input_colors = ColorPair::new(self.input_fg_color, self.input_bg_color);
++                (&input_colors, self.input_bold)
+             } else {
+                 (colors, false)
+             };
+@@ -1160,7 +1161,7 @@ impl Animation {
+         {
+             self.current_character_visual = visual;
+         } else {
+-            self.set_appearance(input_symbol, uses_input_preexisting_colors, symbol, Some(colors));
++            self.set_appearance(input_symbol, uses_input_preexisting_colors, symbol, Some(*colors));
+         }
+     }
+ 
+@@ -1173,18 +1174,24 @@ impl Animation {
+         colors: Option<ColorPair>,
+     ) {
+         let symbol = symbol.unwrap_or(input_symbol);
+-        let mut colors = colors.unwrap_or_default();
++        let replacement;
+         let mut bold = false;
+-        if self.existing_color_handling == ExistingColorHandling::Always && uses_input_preexisting_colors {
+-            colors = ColorPair::new(self.input_fg_color.clone(), self.input_bg_color.clone());
++        let colors = if self.existing_color_handling == ExistingColorHandling::Always && uses_input_preexisting_colors {
++            replacement = ColorPair::new(self.input_fg_color, self.input_bg_color);
+             bold = self.input_bold;
+-        }
++            &replacement
++        } else if let Some(colors) = &colors {
++            colors
++        } else {
++            replacement = ColorPair::default();
++            &replacement
++        };
+         // Repeated lighting/appearance updates often resolve to exactly the
+         // current visual. Test the resolved modes too: callers may change
+         // no_color or xterm between updates without changing the ColorPair.
+         let current = &self.current_character_visual;
+         if current.symbol == symbol
+-            && current.colors == Some(colors)
++            && current.colors.as_ref() == Some(colors)
+             && current.bold == bold
+             && !(current.dim
+                 || current.italic
+@@ -1226,7 +1233,7 @@ impl Animation {
+             symbol_buffer,
+             VisualParams {
+                 bold,
+-                colors: Some(colors),
++                colors: Some(*colors),
+                 fg_color_code: fg_code,
+                 bg_color_code: bg_code,
+                 ..Default::default()
+@@ -1394,7 +1401,7 @@ mod appearance_palette_tests {
+                 background.xterm_color = Some(200 + step);
+                 let colors = ColorPair::new(Some(foreground), Some(background));
+                 ordinary.set_appearance("x", false, None, Some(colors));
+-                cached.set_appearance_with_palette("x", false, None, colors, &mut palette);
++                cached.set_appearance_with_palette("x", false, None, &colors, &mut palette);
+                 assert_eq!(ordinary.current_character_visual, cached.current_character_visual);
+                 assert_eq!(
+                     ordinary.current_character_visual.formatted_symbol.as_str(),
+@@ -1427,11 +1434,11 @@ mod appearance_palette_tests {
+             let (input, replacement) =
+                 if iteration % 2 == 0 { ("original input", Some(symbol)) } else { (symbol, None) };
+             ordinary.set_appearance(input, true, replacement, Some(colors));
+-            cached.set_appearance_with_palette(input, true, replacement, colors, &mut palette);
++            cached.set_appearance_with_palette(input, true, replacement, &colors, &mut palette);
+             assert_eq!(ordinary.current_character_visual, cached.current_character_visual);
+             if iteration % 11 == 0 {
+                 Rc::make_mut(&mut cached.current_character_visual).symbol = "independently changed".into();
+-                cached.set_appearance_with_palette(input, true, replacement, colors, &mut palette);
++                cached.set_appearance_with_palette(input, true, replacement, &colors, &mut palette);
+                 assert_eq!(ordinary.current_character_visual, cached.current_character_visual);
+             }
+         }
+diff --git i/src/engine/character.rs w/src/engine/character.rs
+index 6537664..87d5646 100644
+--- i/src/engine/character.rs
++++ w/src/engine/character.rs
+@@ -235,7 +235,7 @@ impl CharacterArena {
+             &ch.input_symbol,
+             ch.uses_input_preexisting_colors,
+             symbol,
+-            colors,
++            &colors,
+             palette,
+         );
+         if ch.animation.current_character_visual.formatted_symbol.id() != before {
+diff --git i/src/utils/graphics.rs w/src/utils/graphics.rs
+index b1bbe9c..bf54e21 100644
+--- i/src/utils/graphics.rs
++++ w/src/utils/graphics.rs
+@@ -39,7 +39,10 @@ impl Deref for RgbString {
+     type Target = str;
+ 
+     fn deref(&self) -> &Self::Target {
+-        std::str::from_utf8(&self.bytes[..self.len as usize]).unwrap()
++        // SAFETY: private construction either copies a complete &str in `new`
++        // or writes six ASCII hex digits in `Color::from_rgb`. Neither the
++        // bytes nor their length can be mutated after construction.
++        unsafe { std::str::from_utf8_unchecked(&self.bytes[..self.len as usize]) }
+     }
+ }
+ 
+@@ -557,6 +560,24 @@ mod tests {
+         assert_eq!(colors.get("12AbEf7"), Some(&1));
+     }
+ 
++    #[test]
++    fn rgb_string_constructors_preserve_complete_utf8_and_borrowed_hashing() {
++        use super::RgbString;
++        // Exercise every byte length, including multibyte boundaries. Storage
++        // must copy the complete string rather than truncate a code point.
++        for value in ["", "a", "λ", "界", "🥟", "🥟a", "界界", "🥟界"] {
++            let stored = RgbString::new(value);
++            assert_eq!(std::str::from_utf8(&stored.bytes[..stored.len as usize]).unwrap(), value);
++            assert_eq!(&*stored, value);
++            assert_eq!(HashMap::from([(stored, 1)]).get(value), Some(&1));
++        }
++        for code in 0..=255 {
++            let color = Color::from_xterm(code);
++            assert_eq!(&*color.rgb_color, crate::utils::hexterm::xterm_to_hex(code));
++        }
++        assert!(std::panic::catch_unwind(|| RgbString::new("🥟🥟")).is_err());
++    }
++
+     #[test]
+     fn color_debug_hides_the_cached_representation() {
+         let color = Color::from_hex("12AbEf7").unwrap();

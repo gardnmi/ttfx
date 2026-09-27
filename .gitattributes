@@ -2,3 +2,5 @@ tools/parity/cases.txt merge=union
 docs/ordering-inventory.md merge=union
 docs/benchmarks/rust-fallback/pr/** linguist-generated=true
 docs/benchmarks/rust-fallback/round12/** linguist-generated=true
+docs/benchmarks/rust-fallback/round13/** linguist-generated=true
+docs/benchmarks/rust-fallback/round13/*.patch -whitespace

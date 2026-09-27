@@ -1,0 +1,64 @@
+diff --git i/src/engine/character.rs w/src/engine/character.rs
+index 6537664..c19a891 100644
+--- i/src/engine/character.rs
++++ w/src/engine/character.rs
+@@ -160,6 +160,35 @@ impl CharacterArena {
+         self.scene_runtime.contains(id)
+     }
+ 
++    /// Consume a consecutive run of ticks that cannot emit events. Stop at the
++    /// first ordinary tick, preserving ascending callback order. The returned
++    /// flag says whether movement already advanced and only animation remains.
++    #[inline(never)]
++    pub(crate) fn tick_prepared_run(
++        &mut self,
++        word: usize,
++        pending: &mut u64,
++        allow_idle: bool,
++        untraced: bool,
++    ) -> Option<(usize, bool)> {
++        while *pending != 0 {
++            let id = word * 64 + pending.trailing_zeros() as usize;
++            *pending &= *pending - 1;
++            self.playback.set_cursor(id);
++            if self.scene_tick(id, allow_idle, false, untraced) {
++                continue;
++            }
++            if untraced && self.motion_tick(id) {
++                if self.scene_tick(id, false, true, true) || !self.has_scene(id) {
++                    continue;
++                }
++                return Some((id, true));
++            }
++            return Some((id, false));
++        }
++        None
++    }
++
+     #[inline]
+     pub(crate) fn scene_tick(&mut self, id: usize, allow_idle: bool, motion_done: bool, allow_loop: bool) -> bool {
+         let prepared =
+diff --git i/src/engine/ctx.rs w/src/engine/ctx.rs
+index b0d575e..267c18e 100644
+--- i/src/engine/ctx.rs
++++ w/src/engine/ctx.rs
+@@ -797,11 +797,14 @@ impl EngineCtx {
+         );
+         for word in 0..snapshot.len() {
+             while snapshot[word] != 0 {
+-                let bit = snapshot[word].trailing_zeros() as usize;
+-                snapshot[word] &= snapshot[word] - 1;
+-                let id = word * 64 + bit;
+-                self.terminal.arena.playback.set_cursor(id);
+-                self.tick(hooks, CharId(id as u32));
++                let Some((id, motion_done)) = self.terminal.arena.tick_prepared_run(
++                    word, &mut snapshot[word], self.idle_scheduling && self.nested_updates == 0, self.event_log.is_none(),
++                ) else { break };
++                if motion_done {
++                    self.step_animation(hooks, CharId(id as u32));
++                } else {
++                    self.tick(hooks, CharId(id as u32));
++                }
+                 // A callback may wake a higher slot after snapshot filtering.
+                 // Reinsert only original members which have not ticked yet.
+                 for awakened in self.terminal.arena.playback.woken.drain(..) {

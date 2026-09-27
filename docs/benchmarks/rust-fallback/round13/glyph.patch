@@ -1,0 +1,119 @@
+diff --git i/src/engine/render.rs w/src/engine/render.rs
+index 21fb44c..48117a5 100644
+--- i/src/engine/render.rs
++++ w/src/engine/render.rs
+@@ -98,6 +98,8 @@ pub(crate) struct CellGrid {
+     last_geometry: Option<[i64; 6]>,
+     stable_layout: usize,
+     pub(crate) dirty_rows: Vec<bool>,
++    /// A row can reuse byte values without retaining a character's visual.
++    pub(crate) symbols: Vec<Option<super::animation::FormattedSymbol>>,
+     geometry: Option<[i64; 6]>,
+     heads: Vec<u32>,
+     members: Vec<CellMember>,
+@@ -133,11 +135,13 @@ impl CellGrid {
+         if layout_unchanged && self.geometry == Some(geometry) {
+             let changed = arena.take_dirty();
+             for &id in &changed {
+-                let visual = arena.render_slice()[id].animation.current_character_visual.formatted_symbol.id();
++                let symbol = &arena.render_slice()[id].animation.current_character_visual.formatted_symbol;
++                let visual = symbol.id();
+                 self.members[id].visual = visual;
+                 let cell = self.members[id].cell;
+                 if cell != OFFSCREEN && winners[cell] == id as u32 && visual_ids[cell] != visual {
+                     visual_ids[cell] = visual;
++                    self.symbols[cell] = Some(symbol.clone());
+                     self.dirty_rows[cell / width] = true;
+                 }
+             }
+@@ -186,6 +190,8 @@ impl CellGrid {
+             winners.resize(count, NONE);
+             visual_ids.clear();
+             visual_ids.resize(count, 0);
++            self.symbols.clear();
++            self.symbols.resize_with(count, || None);
+             arena.mark_all();
+         }
+         self.members.resize(arena.len(), CellMember::default());
+@@ -249,6 +255,7 @@ impl CellGrid {
+                 }
+                 if winners[cell] == id as u32 && visual_ids[cell] != visual {
+                     visual_ids[cell] = visual;
++                    self.symbols[cell] = Some(ch.animation.current_character_visual.formatted_symbol.clone());
+                     self.dirty_rows[cell / width] = true;
+                 }
+             }
+@@ -271,6 +278,11 @@ impl CellGrid {
+             let visual = if winner == NONE { 0 } else { self.members[winner as usize].visual };
+             if visual_ids[cell] != visual {
+                 self.dirty_rows[cell / width] = true;
++                self.symbols[cell] = if winner == NONE {
++                    None
++                } else {
++                    Some(arena.render_slice()[winner as usize].animation.current_character_visual.formatted_symbol.clone())
++                };
+             }
+             visual_ids[cell] = visual;
+             self.marked[cell] = false;
+diff --git i/src/engine/terminal.rs w/src/engine/terminal.rs
+index 3da2ec9..38081fc 100644
+--- i/src/engine/terminal.rs
++++ w/src/engine/terminal.rs
+@@ -786,7 +786,6 @@ impl Terminal {
+             self.rendered_rows.resize_with(height, Vec::new);
+             self.rendered_width = width;
+         }
+-        let arena = &self.arena;
+         for row_index in (0..height).rev() {
+             if !self.render_grid.dirty_rows[row_index] {
+                 continue;
+@@ -798,15 +797,10 @@ impl Terminal {
+             let row = &mut self.rendered_rows[row_index];
+             if !(self.rows_equal)(ids, previous) {
+                 row.clear();
+-                for &cell in &self.render_cells[start..start + width] {
+-                    if cell == EMPTY_RENDER_CELL {
+-                        row.push(b' ');
+-                    } else {
+-                        arena.render_slice()[cell as usize]
+-                            .animation
+-                            .current_character_visual
+-                            .formatted_symbol
+-                            .append_to(row);
++                for symbol in &self.render_grid.symbols[start..start + width] {
++                    match symbol {
++                        Some(symbol) => symbol.append_to(row),
++                        None => row.push(b' '),
+                     }
+                 }
+                 previous.copy_from_slice(ids);
+diff --git i/tests/render_incremental.rs w/tests/render_incremental.rs
+index f0e0a70..8bbcad5 100644
+--- i/tests/render_incremental.rs
++++ w/tests/render_incremental.rs
+@@ -32,6 +32,25 @@ fn reference(t: &Terminal) -> String {
+         .join("\n")
+ }
+ 
++#[test]
++fn cached_symbol_bytes_do_not_retain_visual_owners_and_follow_heap_symbol_changes() {
++    let mut t = Terminal::new(
++        "AB",
++        TerminalConfig { canvas_width: 12, canvas_height: 3, ignore_terminal_dimensions: true, ..Default::default() },
++    ).unwrap();
++    for id in t.input_characters.clone() { t.set_character_visibility(id, true); }
++    assert_eq!(t.get_formatted_output_string(), reference(&t));
++    for symbol in ["界".repeat(80), "x".into(), "λ".repeat(90), "".into()] {
++        let old = Rc::downgrade(&t.arena[0].animation.current_character_visual);
++        t.arena[0].animation.set_appearance("A", false, Some(&symbol), None);
++        assert!(old.upgrade().is_none());
++        assert_eq!(t.get_formatted_output_string(), reference(&t));
++        t.arena[0].motion.current_coord = Coord::new(2, 1);
++        t.arena[0].layer += 1;
++        assert_eq!(t.get_formatted_output_string(), reference(&t));
++    }
++}
++
+ #[test]
+ fn cached_frames_match_full_repaint_through_mutation_overlap_and_geometry_changes() {
+     let mut t = Terminal::new(

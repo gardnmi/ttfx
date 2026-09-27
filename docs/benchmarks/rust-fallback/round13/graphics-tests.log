@@ -1,0 +1,14 @@
+   Compiling ttfx v0.4.0 (/home/gardnmi/Worktrees/ttfx/perf-rust-engine)
+    Finished `release` profile [optimized] target(s) in 29.97s
+     Running unittests src/lib.rs (target/release/deps/ttfx-828b9cd7131fac88)
+
+running 7 tests
+test utils::graphics::tests::color_debug_hides_the_cached_representation ... ok
+test utils::graphics::tests::coordinate_mapping_keeps_bounds_and_public_iteration_order ... ok
+test utils::graphics::tests::rgb_string_borrowed_lookup_matches_str_hash ... ok
+test utils::graphics::tests::extrapolated_colors_keep_hex_validation_behavior ... ok
+test utils::graphics::tests::rgb_string_constructors_preserve_complete_utf8_and_borrowed_hashing ... ok
+test utils::graphics::tests::fraction_lookup_preserves_division_boundaries ... ok
+test utils::graphics::tests::generated_rgb_preserves_hex_identity_and_channels ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 42 filtered out; finished in 0.01s

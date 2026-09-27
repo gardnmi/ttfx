@@ -1,0 +1,9 @@
+   Compiling ttfx v0.4.0 (/home/gardnmi/Worktrees/ttfx/perf-rust-engine)
+    Finished `release` profile [optimized] target(s) in 28.51s
+     Running unittests src/lib.rs (target/release/deps/ttfx-828b9cd7131fac88)
+
+running 2 tests
+test engine::animation::appearance_palette_tests::palette_observes_color_code_edits_even_when_constructor_arguments_match ... ok
+test engine::animation::appearance_palette_tests::palette_matches_ordinary_appearance_across_modes_eviction_and_mutation ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 46 filtered out; finished in 0.00s

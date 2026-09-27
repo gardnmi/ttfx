@@ -1,0 +1,12 @@
+   Compiling ttfx v0.4.0 (/home/gardnmi/Worktrees/ttfx/perf-rust-engine)
+    Finished `release` profile [optimized] target(s) in 32.72s
+     Running tests/render_incremental.rs (target/release/deps/render_incremental-521dc92dae4bfff9)
+
+running 5 tests
+test vectored_frame_output_handles_interrupts_and_partial_writes ... ok
+test dense_repaint_clips_boundaries_and_resolves_overlaps_like_checked_reference ... ok
+test switching_between_dense_and_sparse_updates_keeps_cached_rows_current ... ok
+test cached_frames_match_full_repaint_through_mutation_overlap_and_geometry_changes ... ok
+test stationary_playback_reuses_layout_until_geometry_or_painter_state_changes ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s

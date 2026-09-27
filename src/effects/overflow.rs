@@ -82,16 +82,11 @@ impl Row {
         bg_color: Option<Color>,
         palette: &mut AppearancePalette,
     ) {
+        let colors = ColorPair::new(fg_color, bg_color);
         for &id in &self.characters {
             let ch = &mut ctx.terminal.arena[id.0 as usize];
             let uses_pre = ch.uses_input_preexisting_colors;
-            ch.animation.set_appearance_with_palette(
-                &ch.input_symbol,
-                uses_pre,
-                None,
-                ColorPair::new(fg_color, bg_color),
-                palette,
-            );
+            ch.animation.set_appearance_with_palette(&ch.input_symbol, uses_pre, None, &colors, palette);
         }
     }
 }

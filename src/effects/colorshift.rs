@@ -6,7 +6,7 @@ use clap::Args;
 
 use crate::cli::parse_color;
 use crate::effects::common::{parse_gradient_direction, parse_gradient_steps, parse_positive_int};
-use crate::engine::animation::{ExistingColorHandling, VisualParams};
+use crate::engine::animation::{ExistingColorHandling, Scene, VisualParams};
 use crate::engine::character::CharId;
 use crate::engine::ctx::{EffectHooks, EngineCtx};
 use crate::engine::effect::Effect;
@@ -75,11 +75,17 @@ pub struct ColorShift {
     config: ColorShiftConfig,
     character_final_color_map: HashMap<CharId, Color>,
     loop_tracker_map: HashMap<CharId, i64>,
+    cache_programs: bool,
 }
 
 impl ColorShift {
     pub fn new(config: ColorShiftConfig) -> Self {
-        ColorShift { config, character_final_color_map: HashMap::new(), loop_tracker_map: HashMap::new() }
+        ColorShift {
+            config,
+            character_final_color_map: HashMap::new(),
+            loop_tracker_map: HashMap::new(),
+            cache_programs: std::env::var_os("TTFX_COLORSHIFT_PROGRAM_CACHE").is_none_or(|value| value != "0"),
+        }
     }
 }
 
@@ -119,8 +125,7 @@ impl Effect for ColorShift {
         };
         for &id in &characters {
             let input_coord = ctx.terminal.arena[id.0 as usize].input_coord;
-            self.character_final_color_map
-                .insert(id, final_gradient_mapping.get(&input_coord).unwrap().clone());
+            self.character_final_color_map.insert(id, final_gradient_mapping.get(&input_coord).unwrap().clone());
         }
         let gradient =
             Gradient::new(&self.config.gradient_stops, &self.config.gradient_steps, false, !self.config.no_loop)
@@ -130,6 +135,10 @@ impl Effect for ColorShift {
             let filter = CharacterFilter::default();
             ctx.terminal.get_characters(&mut ctx.rng, filter, CharacterSort::TopToBottomLeftToRight)
         };
+        // Repeated symbols with the same gradient rotation can share immutable
+        // frames. Scene clones retain independent playback counters and events.
+        let mut programs: HashMap<_, HashMap<String, Scene>> = HashMap::new();
+        let mut program_count = 0;
         for id in characters {
             ctx.terminal.set_character_visibility(id, true);
             let (input_fg, input_bg, input_coord, input_symbol, uses_pre) = {
@@ -142,13 +151,11 @@ impl Effect for ColorShift {
                     ch.uses_input_preexisting_colors,
                 )
             };
-            let colors: Vec<Color> = if self.config.no_travel {
-                gradient.spectrum.clone()
+            let rotation = if self.config.no_travel {
+                0
             } else {
                 let direction_index = match self.config.travel_direction {
-                    GradientDirection::Horizontal => {
-                        input_coord.column as f64 / ctx.terminal.canvas.right as f64
-                    }
+                    GradientDirection::Horizontal => input_coord.column as f64 / ctx.terminal.canvas.right as f64,
                     GradientDirection::Vertical => input_coord.row as f64 / ctx.terminal.canvas.top as f64,
                     GradientDirection::Diagonal => {
                         (input_coord.row + input_coord.column) as f64
@@ -175,41 +182,51 @@ impl Effect for ColorShift {
                 } else {
                     shift_distance.min(len) as usize
                 };
-                let mut rotated = gradient.spectrum[k..].to_vec();
-                rotated.extend_from_slice(&gradient.spectrum[..k]);
-                rotated
+                k
             };
             {
                 let ch = &mut ctx.terminal.arena[id.0 as usize];
                 ch.animation.new_scene(false, None, None, "gradient", uses_pre);
                 let scene = ch.animation.scenes.get_mut("gradient").unwrap();
-                for color in &colors {
-                    scene
-                        .add_frame(
-                            &input_symbol,
-                            self.config.gradient_frames,
-                            VisualParams {
-                                colors: Some(ColorPair::new(Some(color.clone()), None)),
-                                ..Default::default()
-                            },
-                        )
-                        .map_err(EngineError::Other)?;
+                // Color equality uses the constructor argument only. Include
+                // the public code fields and channel values for caller edits.
+                let color_key = |color: Option<Color>| {
+                    color.map(|color| (color.color_arg, color.rgb_color, color.xterm_color, color.rgb_ints()))
+                };
+                let input_colors =
+                    scene.preexisting_colors.map(|colors| (color_key(colors.fg_color), color_key(colors.bg_color)));
+                let key = (rotation, input_colors, scene.preexisting_bold, scene.no_color, scene.use_xterm_colors);
+                if let Some(program) = programs.get(&key).and_then(|symbols| symbols.get(input_symbol.as_str())) {
+                    *scene = program.clone();
+                } else {
+                    for color in gradient.spectrum[rotation..].iter().chain(&gradient.spectrum[..rotation]) {
+                        scene
+                            .add_frame(
+                                &input_symbol,
+                                self.config.gradient_frames,
+                                VisualParams { colors: Some(ColorPair::new(Some(*color), None)), ..Default::default() },
+                            )
+                            .map_err(EngineError::Other)?;
+                    }
+                    if self.cache_programs && program_count < 4096 {
+                        scene.prepare();
+                        programs.entry(key).or_default().insert(input_symbol.clone(), scene.clone());
+                        program_count += 1;
+                    }
                 }
                 ch.animation.new_scene(false, None, None, "final_gradient", uses_pre);
             }
-            let last_color = colors.last().unwrap().clone();
+            let last_color = gradient.spectrum[if rotation == 0 { gradient.spectrum.len() - 1 } else { rotation - 1 }];
             if dynamic {
                 let fg_gradient = match &input_fg {
                     Some(c) => Some(
-                        Gradient::with_steps(&[last_color.clone(), c.clone()], 8, false)
-                            .map_err(EngineError::Other)?,
+                        Gradient::with_steps(&[last_color.clone(), c.clone()], 8, false).map_err(EngineError::Other)?,
                     ),
                     None => None,
                 };
                 let bg_gradient = match &input_bg {
                     Some(c) => Some(
-                        Gradient::with_steps(&[last_color.clone(), c.clone()], 8, false)
-                            .map_err(EngineError::Other)?,
+                        Gradient::with_steps(&[last_color.clone(), c.clone()], 8, false).map_err(EngineError::Other)?,
                     ),
                     None => None,
                 };
@@ -271,5 +288,63 @@ impl Effect for ColorShift {
             return Some(ctx.frame());
         }
         None
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::cli::Cli;
+    use crate::effects::EffectCommand;
+    use crate::engine::animation::FrameStorage;
+    use crate::engine::ctx::Clock;
+    use crate::engine::terminal::TerminalConfig;
+    use crate::utils::rng::Rng;
+    use clap::Parser;
+    use std::rc::Rc;
+
+    #[test]
+    fn shared_gradient_frames_keep_playback_and_public_edits_independent() {
+        let cli = Cli::try_parse_from(["ttfx", "colorshift", "--no-travel"]).unwrap();
+        let Some(EffectCommand::Colorshift(config)) = cli.effect else { panic!("wrong effect") };
+        let mut effect = ColorShift::new(config);
+        effect.cache_programs = true;
+        let mut ctx = EngineCtx::new(
+            "AAB",
+            TerminalConfig {
+                canvas_width: 3,
+                canvas_height: 1,
+                ignore_terminal_dimensions: true,
+                ..Default::default()
+            },
+            Rng::seeded(5),
+            Clock::virtual_with_frame_rate(60),
+        )
+        .unwrap();
+        effect.build(&mut ctx).unwrap();
+        let ids = ctx.terminal.input_characters.clone();
+        let shared = {
+            let a = ctx.terminal.arena[ids[0].0 as usize].animation.scenes.get("gradient").unwrap();
+            let b = ctx.terminal.arena[ids[1].0 as usize].animation.scenes.get("gradient").unwrap();
+            let other = ctx.terminal.arena[ids[2].0 as usize].animation.scenes.get("gradient").unwrap();
+            let (FrameStorage::Shared(a), FrameStorage::Shared(b), FrameStorage::Shared(other)) =
+                (&a.all_frames, &b.all_frames, &other.all_frames)
+            else {
+                panic!("programs were not prepared")
+            };
+            assert!(Rc::ptr_eq(a, b));
+            assert!(!Rc::ptr_eq(a, other));
+            a.clone()
+        };
+        let a = ctx.terminal.arena[ids[0].0 as usize].animation.scenes.get_mut("gradient").unwrap();
+        a.get_next_visual();
+        assert_eq!(a.ticks_elapsed(), 1);
+        a.all_frames.make_mut()[0].character_visual = Rc::new(crate::engine::animation::CharacterVisual::plain("!"));
+        a.add_frame("!", 3, VisualParams::default()).unwrap();
+        let b = ctx.terminal.arena[ids[1].0 as usize].animation.scenes.get("gradient").unwrap();
+        assert_eq!(b.ticks_elapsed(), 0);
+        assert_eq!(b.frames().start, 0);
+        assert_eq!(b.all_frames.len(), shared.len());
+        assert_eq!(b.all_frames[0].character_visual.symbol, "A");
     }
 }

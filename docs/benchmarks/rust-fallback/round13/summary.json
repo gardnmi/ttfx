@@ -1,0 +1,57 @@
+{
+  "prepared": {
+    "effects": 8,
+    "geometric_mean_speedup": 1.0141572266919197,
+    "median_effect_speedup": 1.0210612184492067
+  },
+  "glyph": {
+    "effects": 10,
+    "geometric_mean_speedup": 0.9758192305762672,
+    "median_effect_speedup": 0.9899024121530791
+  },
+  "utf8": {
+    "effects": 6,
+    "geometric_mean_speedup": 1.0265292452533645,
+    "median_effect_speedup": 1.0126449479250512
+  },
+  "palette-borrow": {
+    "effects": 5,
+    "geometric_mean_speedup": 1.021020822137497,
+    "median_effect_speedup": 0.9955526396599363
+  },
+  "colorshift-program": {
+    "effects": 6,
+    "geometric_mean_speedup": 1.046946020235673,
+    "median_effect_speedup": 1.0081211702746304
+  },
+  "appearance-borrow": {
+    "effects": 6,
+    "geometric_mean_speedup": 1.0125389853820546,
+    "median_effect_speedup": 1.0077545091470363
+  },
+  "motion-factor": {
+    "effects": 9,
+    "geometric_mean_speedup": 1.0070902591938615,
+    "median_effect_speedup": 0.9974148433986884
+  },
+  "reserved": {
+    "effects": 11,
+    "geometric_mean_speedup": 1.0099625033406243,
+    "median_effect_speedup": 1.0133003985069087
+  },
+  "final": {
+    "effects": 37,
+    "geometric_mean_speedup": 1.0870410114130074,
+    "median_effect_speedup": 1.0404146739819675
+  },
+  "checkpoint": {
+    "effects": 37,
+    "geometric_mean_speedup": 1.0162179084755614,
+    "median_effect_speedup": 1.0041758358930915
+  },
+  "recheck": {
+    "effects": 6,
+    "geometric_mean_speedup": 1.2076734553904824,
+    "median_effect_speedup": 1.1114197199379592
+  }
+}

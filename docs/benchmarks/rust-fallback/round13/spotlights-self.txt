@@ -1,0 +1,33 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 1K of event 'cycles:u'
+# Event count (approx.): 5203863558
+#
+# Overhead  Shared Object     Symbol                                                                                                                                                                                                                     IPC   [IPC Coverage]
+# ........  ................  .........................................................................................................................................................................................................................  ....................
+#
+    29.87%  ttfx              [.] <ttfx::effects::spotlights::Spotlights as ttfx::engine::effect::Effect>::next_frame                                                                                                                                    -      -
+    16.11%  ttfx              [.] <ttfx::engine::animation::Animation>::set_appearance                                                                                                                                                                   -      -
+    13.76%  ttfx              [.] <ttfx::engine::animation::CharacterVisual>::with_symbol                                                                                                                                                                -      -
+    12.35%  ttfx              [.] <ttfx::engine::terminal::Terminal>::prepare_frame_output                                                                                                                                                               -      -
+     5.22%  ttfx              [.] <ttfx::engine::animation::Animation>::adjust_color_brightness                                                                                                                                                          -      -
+     1.50%  ttfx              [.] <ttfx::engine::active_characters::ActiveCharacters>::insert                                                                                                                                                            -      -
+     1.49%  ttfx              [.] <ttfx::engine::terminal::Terminal>::update_render_cells                                                                                                                                                                -      -
+     1.42%  ttfx              [.] <ttfx::engine::character::CharacterArena>::set_appearance                                                                                                                                                              -      -
+     1.40%  libc.so.6         [.] 0x000000000018f51d                                                                                                                                                                                                     -      -
+     1.26%  libc.so.6         [.] 0x0000000000185de5                                                                                                                                                                                                     -      -
+     1.09%  libc.so.6         [.] 0x0000000000185dc4                                                                                                                                                                                                     -      -
+     1.00%  ttfx              [.] rint                                                                                                                                                                                                                   -      -
+     0.84%  ttfx              [.] <std::hash::random::RandomState as core::hash::BuildHasher>::hash_one::<&ttfx::utils::geometry::Coord>                                                                                                                 -      -
+     0.68%  ttfx              [.] core::str::converts::from_utf8                                                                                                                                                                                         -      -
+     0.68%  libc.so.6         [.] 0x000000000018f400                                                                                                                                                                                                     -      -
+     0.62%  ttfx              [.] ttfx::engine::animation::color_code_matches                                                                                                                                                                            -      -
+     0.61%  libc.so.6         [.] 0x000000000018f404                                                                                                                                                                                                     -      -
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

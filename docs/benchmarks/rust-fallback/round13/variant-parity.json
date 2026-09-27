@@ -1,0 +1,8749 @@
+{
+  "binary_sha256": {
+    "/home/gardnmi/Worktrees/ttfx/perf-rust-engine/target/round13/ttfx-before": "9907d47633e9053658b9efd37b2c50632ee18e29a0d15ba1dd790ce3890d1511",
+    "/home/gardnmi/Worktrees/ttfx/perf-rust-engine/target/round13/ttfx-final": "a20a54c13e9a07c244c617055490ba737366ff0c444b5bdba00a8d8bd6e871e2"
+  },
+  "cases": [
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        14397,
+        "bd9e2f74d2b2939280edf4a09162980745b586f659693d5c39647117c5f491d0"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        14645,
+        "752484566a4bbda49bcef4c06382ed5ae7052c21dde2aee6a73420a5238279ed"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        14297,
+        "c77023b2f5e5e890f634356376751a12b1032a2f0d7e63e88cc1da4c4b5c937e"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        14497,
+        "0d8823f9b1ff7fdc7d0a67065acec28e9ca25e4906ecfeb5ee684cb7a4a32d66"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        14191,
+        "2c138d80b3985144eb14334902fdde8de71ac49a332958621f1f904fdc3d091b"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        14274,
+        "5e801847f7c8495daae43f2e7f0d66480f43370aee34764708752a9f297ffbb6"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        14161,
+        "0277c0785637c6f9964250f5aa56dc22df09c8a167b50e2b6b233faddb823c7e"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        14179,
+        "8a9c00fc92e884ad45b81f53b7885671debe5f227ab83e4604507da56e537454"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        6133,
+        "ad83f81851e2a128c59f0a657766560da5a8a3682472b8f376a9305a6833294a"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        6133,
+        "ad83f81851e2a128c59f0a657766560da5a8a3682472b8f376a9305a6833294a"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        6133,
+        "ad83f81851e2a128c59f0a657766560da5a8a3682472b8f376a9305a6833294a"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        6133,
+        "ad83f81851e2a128c59f0a657766560da5a8a3682472b8f376a9305a6833294a"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        6133,
+        "ad83f81851e2a128c59f0a657766560da5a8a3682472b8f376a9305a6833294a"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        6133,
+        "ad83f81851e2a128c59f0a657766560da5a8a3682472b8f376a9305a6833294a"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        6133,
+        "ad83f81851e2a128c59f0a657766560da5a8a3682472b8f376a9305a6833294a"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        6133,
+        "ad83f81851e2a128c59f0a657766560da5a8a3682472b8f376a9305a6833294a"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        12150,
+        "b19c8c7828afde68aba322bb7e7c9c8d0f12a2b47ce6b527382d1f7c005d2d30"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        12197,
+        "929b0edae8e77bbf7e04a145767b37fb0a36a00f570ad19f82c185fce87ea638"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        12124,
+        "c6b71a448ecbfb5c34620e6103a3a1f3413a72f7c9438a12e58e76e7a197c68e"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        12176,
+        "bdc9562920b2631e94a31e976ba288b631e8d462d5670b2a3e12bfc2ebb31463"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        12112,
+        "44689fa83a886aea8b1eea36210141de947ffe8b7dabc5d3db11c3f0cf672347"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        12120,
+        "2ed8176d51070027c2722b69057a3ab6e338725da110c4c8c5cea2cdc3bbc9ad"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        12116,
+        "af654f194481805b01e3be865f227268c4d7f0322a40a4c4b20935b572818d04"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        12116,
+        "af654f194481805b01e3be865f227268c4d7f0322a40a4c4b20935b572818d04"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        6133,
+        "ad83f81851e2a128c59f0a657766560da5a8a3682472b8f376a9305a6833294a"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        6133,
+        "ad83f81851e2a128c59f0a657766560da5a8a3682472b8f376a9305a6833294a"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        6133,
+        "ad83f81851e2a128c59f0a657766560da5a8a3682472b8f376a9305a6833294a"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        6133,
+        "ad83f81851e2a128c59f0a657766560da5a8a3682472b8f376a9305a6833294a"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        6133,
+        "ad83f81851e2a128c59f0a657766560da5a8a3682472b8f376a9305a6833294a"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        6133,
+        "ad83f81851e2a128c59f0a657766560da5a8a3682472b8f376a9305a6833294a"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        6133,
+        "ad83f81851e2a128c59f0a657766560da5a8a3682472b8f376a9305a6833294a"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        6133,
+        "ad83f81851e2a128c59f0a657766560da5a8a3682472b8f376a9305a6833294a"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        13166,
+        "146b301944521415ab6e9c34fedf996b10a85ca44286db5fbfdf9292b41ce1b4"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        13367,
+        "b24792c193b6a0f48125a79798752812d8707b6ac281228a518a1ebc7943ba21"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        13133,
+        "b265aa5849d5c8cfd9c8055024f42d59ffd7ee38040339afcfa32fa9fec92055"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        13262,
+        "c36ff0f774d6047a84bb5f0121409bda915105d4aa155c987cc95032cb32b737"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        13133,
+        "f9c25afeeeefd7efe5ae29f760f640cf05295694bd890e3a2f4dc3cbce18b618"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        13133,
+        "f7dc15abff277fd4b127255558b2220c27d3e55c6b75fa794e2fef6fa4ee474b"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        13133,
+        "f9c25afeeeefd7efe5ae29f760f640cf05295694bd890e3a2f4dc3cbce18b618"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        13133,
+        "f7676fb34ae7a617eed2d475c0c01dcfcbc8fb6b739508dd3466730500e990b1"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        11361,
+        "bcb44fa9e30a9b826748844603039fcfe61aee93deb5ac540e03aed2a5498ccd"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        11227,
+        "c69eb0bc7a38a02383bafa1eac764d1a449b3b9d712f9c72a10feb2071b9e232"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        11383,
+        "da0e78027bad239fbb9d905e66abdcd437046687e01c431376fa15069da71142"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        11303,
+        "97cc8223475b36f94054cefc78b45155bc357d605338c49494542b92c7128cd6"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        11383,
+        "a8ed46bbef17d20ee41df591f432fda513fddbd104cae6442f6dd51d7a80b403"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        11383,
+        "f556027418d47fdcbe6eef2a5b5afce9e94a0c72eee9dfda2abef1d521c6718e"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        11383,
+        "a8ed46bbef17d20ee41df591f432fda513fddbd104cae6442f6dd51d7a80b403"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        11383,
+        "a8ed46bbef17d20ee41df591f432fda513fddbd104cae6442f6dd51d7a80b403"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        17620,
+        "8a0a0e37b3e1c23804633264242946987d7848cf16941da161b4eb2b092803b4"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        17932,
+        "ae1cff1f6b72b63cfe518e6e2a8767861f7cd088376f54d97000453efaab65ce"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        17472,
+        "b28b3b8a350f1eb0438f06f5526e2ef1e72db7bf096c08f8a74f508936e19943"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        17734,
+        "c0da1b7f7ab540f9a54e84360680660ba60a8e84c658b1877c4f931526131abd"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        17214,
+        "df8a44f3ffa04dd02a1d2f3589f7c79c6ba8a5bf09df8d5a9930c649d746de89"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        17349,
+        "ae3c7fa7e01a5d11fc37ab0c9bf2c30d1b4965fa45ba96877e789a99641f5aea"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        17107,
+        "d5bcb7a3075ddd39666d733fcfbf7d80aa170dc5fd842a761ee1e571689de726"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        17155,
+        "c385763286344cc5cc339e93590a4e749eb9f3dbe602004166f1df32bfe47345"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        6303,
+        "d819611e958713506f7ad107b7762e2a340c466ef5329673f9386ddb382c190e"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        6303,
+        "d819611e958713506f7ad107b7762e2a340c466ef5329673f9386ddb382c190e"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        6303,
+        "d819611e958713506f7ad107b7762e2a340c466ef5329673f9386ddb382c190e"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        6303,
+        "d819611e958713506f7ad107b7762e2a340c466ef5329673f9386ddb382c190e"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        6303,
+        "d819611e958713506f7ad107b7762e2a340c466ef5329673f9386ddb382c190e"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        6303,
+        "d819611e958713506f7ad107b7762e2a340c466ef5329673f9386ddb382c190e"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        6303,
+        "d819611e958713506f7ad107b7762e2a340c466ef5329673f9386ddb382c190e"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        6303,
+        "d819611e958713506f7ad107b7762e2a340c466ef5329673f9386ddb382c190e"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        14426,
+        "90fd053533da9aaa5ddd2c69753071ff29e4c27b37041ab3c325722a651dda50"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        14432,
+        "9995c3e88b49d7330fb2127a723c81a069e6af1d4b630126cab92534ee848a57"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        14413,
+        "d4b1ccf61ca57a95f296eb1bd0ae0a4c2b9ad98c167e9940b387ae8da45c4fb9"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        14399,
+        "c1d26abe3d35a5411eb183e0d864b44b783591aa311c02e81d13c387c1c4180e"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        14354,
+        "55a1ea6069fd7fb32b4a8ef1e5013ebb0e7d9b0d951cd1b4ff2ed1a53091bb89"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        14339,
+        "b5149bc6c254e9b474d99a85bfa10941e5c1a554146af8361fd410d58d5cafba"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        14348,
+        "894b0faea153ee7fd528cfef6dcaeb9c5c9974f86472e95f6be07b80ca004aec"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        14349,
+        "1c6e631d63b0d1e20c177eafab7fb793d7220098d7eaea2cf3e555b8f100bc43"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        9669,
+        "1f4aa8048d2a661c59f773d613a2d3ce18140d8bdb6bcaae9d808159e498e24d"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        9669,
+        "1f4aa8048d2a661c59f773d613a2d3ce18140d8bdb6bcaae9d808159e498e24d"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        9669,
+        "1f4aa8048d2a661c59f773d613a2d3ce18140d8bdb6bcaae9d808159e498e24d"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        9669,
+        "1f4aa8048d2a661c59f773d613a2d3ce18140d8bdb6bcaae9d808159e498e24d"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        9669,
+        "1f4aa8048d2a661c59f773d613a2d3ce18140d8bdb6bcaae9d808159e498e24d"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        9669,
+        "1f4aa8048d2a661c59f773d613a2d3ce18140d8bdb6bcaae9d808159e498e24d"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        9669,
+        "1f4aa8048d2a661c59f773d613a2d3ce18140d8bdb6bcaae9d808159e498e24d"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        9669,
+        "1f4aa8048d2a661c59f773d613a2d3ce18140d8bdb6bcaae9d808159e498e24d"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        16555,
+        "a7f121585a88bdf5d94b485856dc0b41efcbf354245d0d3d46c3b134669f49f2"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        16851,
+        "2db4b282162cb4b95620fb78950b8e091783855583009be8a3aa9e3d3f7e69b8"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        16472,
+        "727deef97ddac73262515c40ba233c9c1dfafe5684259275b51ecebe28306dad"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        16727,
+        "53cdea844e710ef9ab32be70f45ff7191cb6f435e3685ee42bdfab1a8ae5159f"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        16361,
+        "caaba6f6e964178bdd03377d0051a465c523aa53fe63b58ad693e7e417ef1bf6"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        16388,
+        "41e4deadd0b939c79e8a805d68455d9a73eceb1b2b5a8d4420f7cab7eaf560dd"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        16361,
+        "d5da6272c3953b105028b6a4e44b3e381ba5cc4b860f9bc1a376c234f6537a83"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        16361,
+        "59164445c38dbfcc1eaf951f1baa33ab79c67fc5ec206424094a3eb286b86127"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        13648,
+        "2d56f5151ff8f0dc6fdf4f1458b2538175d94545bdcbd6903ab2d0688c3466f1"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        13454,
+        "d41791ccd8abb730a5193141f8650a827b90549f5710137ff27e34569c0296cc"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        13705,
+        "76eb86fa8b4a08983a913e0aeb912fa4e6d5d17ea97ed3f2d67e1e849e5341ef"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "0.3",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        13557,
+        "841ed730ab9e0f0fa16b7eabe16a1a5916c5273be97513b9a47c2ff4c264cdb9"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        13769,
+        "a7e7a46fc05fa6db69fa9a0b8a95ad7bcf47ea441d7d104148b0c2505974f9ba"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "1",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        13737,
+        "9ed6c85301e9c5e20d2af66c0d5e7ddbf8632464900e95ade09714e241d48aa2"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        13768,
+        "5f357cf91f74220dad341451c5288420a9ff51f43d2ff5c4946ace34a51ee478"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "spotlights",
+        "--search-duration",
+        "12",
+        "--beam-falloff",
+        "2",
+        "--spotlight-count",
+        "5"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        13768,
+        "de2ee75b0e013a5e12e9e83f62aaa14e51ea9d6e516c58949215644f2f89a793"
+      ],
+      "candidate_modes": [
+        "default",
+        "lighting off",
+        "SIMD and motion runtime off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "beams"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        336645,
+        "282bdbe40828835a6fadfbe782138de11f352a92dfd13aab1d53b69f87094f8b"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "binarypath"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        202351,
+        "492c8afcc9143555d878ebf972e3784c9a1278942c933885f439be48e8769e2c"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "blackhole"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        237275,
+        "8aaeea82f38fc084a02e98fb49878bbe7f6567a963283855b4aeccff4cbceeb9"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "bouncyballs"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        57929,
+        "d407dacb7d969baeb142ec56f6373eced0f7991594d54e18aa0e148ba020f41d"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "bubbles"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        63426,
+        "5c30dec25efa5c5f99fb89beda7d77a5d165db69349cfb220f76b7c73cf896d0"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "burn"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        138062,
+        "7a1faa0fe76499dfbb0318de234a58d7d7904c46a4bf07535f95a81787b7d11e"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        255209,
+        "2d91d1448b2c8e66ecdb6516ea828c4b10f93efb2f488520656cd64c6118e7ce"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "crumble"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        118785,
+        "07b8c171806ecd75b98cfa498938cab0edac43cbbda853d0ff3c39994c84b2c0"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "decrypt"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        261522,
+        "442d574a7da1a0b987fb98cef4eec8fa8469185149c734d39a6e47b0260fa1ac"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "errorcorrect"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        69359,
+        "552e06a09f234ed892d862dc2b05c6ec4fe77ac444863660393eeaf309e20bd7"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "expand"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        11895,
+        "48712aeb82b053e69d2709c82e59b52ad80ec79436ffae84d291e9fb7652727f"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "fireworks"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        397067,
+        "f4647dc73994f0889c5a344463c5ba030306fbb8215aea695374ad3668dcc3b1"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "highlight"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        61313,
+        "ac56cd516819d99d73cae14d4d077076c0b858726ade7c54a77d843de35ad9f2"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "laseretch"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        94673,
+        "85b7e386a6ca49276f00cffc466c55afa78c1ed991f151d433b583c495a76a39"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "matrix"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        1685975,
+        "8698d61495140c1dee7d00611cea2bf99e4600c19f4f010f02e9fbd94b872bb0"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "middleout"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        35109,
+        "c9154fc2fa1cf4811cd19fd0e1a95e1fb4710e8d9d8a30d6a79fc3d2f0314fc4"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "orbittingvolley"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        69044,
+        "2cccc9df0a25d05d9423613e45b6da90a0618d49ca5ada95a06ee7847ef4698c"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "overflow"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        23072,
+        "10e6107f98ac7d140d29e0a53826ba1df7c8061c98e58471656d31f1efe8896f"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "pour"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        43525,
+        "d99a2a75fed740b430db31b0bc8ee785aa56f3e1638c98028574d46659a25c45"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "print"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        22149,
+        "6819a64ca0a4bb871cadd0b433e6081e83c506eb405256b6d4b6afa4030e1e7b"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "rain"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        30658,
+        "546c52d7d0387405e7889c36616cf16a3d13f4109a6436084ac8f89a6c730be7"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "randomsequence"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        37169,
+        "b33b3f2ee9ecb17d484225d285bb0c5f0480b7b55c46e27271c63daff19690b6"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "rings"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        616522,
+        "d88281e6f08a54401c50e651abf4454d69eb383733e6e3f80f51f965eb091ecf"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "scattered"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        28395,
+        "73409dd80648c58fffc2acf2193883b0b61d9480d6bfb431449ee85628fe3658"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "slice"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        26131,
+        "18e7f2f10b10f80d39a5103f414532bdeadc84e69af586d72919f85ecdba90a7"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "slide"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        36180,
+        "935f0fe849102eec8822f1d35b3344f9ba4889886d6f36ed3a0fd6b9a1d8de66"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "smoke"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        360689,
+        "eefb264724c0862e2217d304f64b823639a09998126f0e158192ffce5492aefe"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "spotlights"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        281684,
+        "6a30fa64b51f40bdb0491b0e7f4a345bf75e97e1d2bbbede7ff7933fe108dce3"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "spray"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        82955,
+        "a0accc8337e049d178c9fde6150bdb5cdc0e629aed9b78067850c9b0cdcbb5f4"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "swarm"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        494162,
+        "57c1d2a4b09950865ba7f62d5081b91af7dbf02ebfc71a06caa5fff14e06138f"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "sweep"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        411455,
+        "963428b9cd89eebc0b730c7d963aef712dc2755032fca7806dc1489799289470"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "synthgrid"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        655174,
+        "7af845941ba129b28839fcb66d7ae4745993eabd052ef6a522d072b64d1b73f6"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "thunderstorm"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        669872,
+        "c0801fe69eb79265cc9f0220a0a319c69bd2be49ee92548d7797dd1c468b311c"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "unstable"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        105509,
+        "b49c41d08ca61b99a8836099438f633a80f6a119fa0d01263b8315fb9e15a4a3"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "vhstape"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        281004,
+        "c933c046f98ea217923f93afe999ba91225816cc0534b6593ed95ab5cc6b6dc4"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "waves"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        252829,
+        "a3ccea8fe56eff90207b13722475c85d882fddb4d14375b8f521611a2094b4cd"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "wipe"
+      ],
+      "input": "\u001b[1;38;2;200;32;90m\u03bbRust \u754c\u001b[0m 123\nSmall output\n",
+      "output": [
+        0,
+        "",
+        50521,
+        "c291841804ef7a7a01395dd568930df3d513ce4b679f6c384b6d3dda563821f8"
+      ],
+      "candidate_modes": [
+        "default",
+        "motion SIMD off",
+        "motion runtime off",
+        "all runtimes off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "matrix"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        2342967,
+        "a148d8d4bb25a10bdaa4ee2c52b0dcb4bc251b704038502b2c32a8c1b295dcb3"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "matrix"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        326681,
+        "a6002242a8fe79c72d7e922666ff7f438dac3d4cf89e8c463e0fab51594b5f22"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "matrix"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        1679137,
+        "48162cea787e76ae1694802e1f547aaca8ef23897cf844b1b60127901196b5e5"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "matrix"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        2281002,
+        "ffe21af51e0ad7ac73eaff9a0bdf26ef9e00a1f1c50c6efaaea97c34c400e00c"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "matrix"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        2326165,
+        "c16ac1399d00c6ad4b85a6b6d07bd725a975be528b17a19f27777baeb15c40d2"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "matrix"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        1666716,
+        "704c1b427d93b55f7de68dff53993fddb329eb4a7f39cd23a8cdc1766076758e"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "matrix"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        2347929,
+        "65ae781f8e4edda67816dd91dc0c98fa25b0238fd93b2eac45ee4fcae138bb49"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "matrix"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        326935,
+        "c271a8b3d431af9b522a9bb340120b250339e60fc126c4f9e47c0a868e91aeb1"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "matrix"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        1682506,
+        "bf5a56c7fcc7570d0b16eb0793a4203b07ac0c5b936b9c737deb5e1d1386b9f7"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "matrix"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        1907358,
+        "4b91b6d7b29db24677127740988aae2da08c9e7d9eedaf9ff3931a5c5901ec2a"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "matrix"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        2335589,
+        "461ebe65948fe40377ea613a271eea3efa33ad4c6e04038e3e9cbacaea8c1248"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "matrix"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        1674450,
+        "6c21d38e25dbfd5c772f76cfe4feff2aefffce6d357fcec1477c84774e20ca78"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "overflow"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        39812,
+        "17dd00097afd70acd5f9e26f1ac6ce4bff64a4cd1006e7a0f36ee8f830eb1a9f"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "overflow"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        4908,
+        "6ecec1c74fdfe403ad1bcdf0cab567806cbe4bf4a3a6b67d28df67eded1b0aea"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "overflow"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        30164,
+        "fea56312804343d89e891656b67f87c357da7f33dcc6dc28a3c9e1655dda52ae"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "overflow"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        27416,
+        "1183410c32cb06756c46d211140f8c7034cbe6e96f8bea488419b0231d04fdcf"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "overflow"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        16040,
+        "84de8199c24a103547caa16bd9ee0781908faf06665620c9c610b637781205df"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "overflow"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        12168,
+        "341ac21bd0f8c82af5ed09a37fb29cc522db4e45d4c69d24e67b7ae6e710a593"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "overflow"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        38097,
+        "6290342b72eeab142c2181993bf469a4e049334dac8e1b407db00d3d786037b8"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "overflow"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        5664,
+        "13364cb08324bdd38017c45f7b2db64c4630c93b079e4b6d3e3203a8ffd32098"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "overflow"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        28477,
+        "8d84d6141acdd0c119f880a8eded11e3af73b35950b2a736f50bf93c8da74ff9"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "overflow"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        26400,
+        "5e06955ee59f4d138eb14378c861f6159c20944eed02b4c591152328fb818780"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "overflow"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        20575,
+        "ea9ff8a0ce6b8c1dc5ce407e85b78825ae7595c77065de06a3341b39f3998ec2"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "overflow"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        15391,
+        "efab7b87217473cf8c7c5ff15e734b0baf052032a512f77bb45ac0a1710084ab"
+      ],
+      "candidate_modes": [
+        "default",
+        "appearance palette off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        229185,
+        "37e2e14d5620adc933179e5fc6fb62c05a7d1c3a8ece9e79b2aed6dc74bf888c"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift",
+        "--no-travel"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        229071,
+        "18cf14313c01ba68070bc4e34d821843c4f9515575f4d87c238786a29a768180"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        229153,
+        "755532dddfc3412f3d01da9d1e1cf411bfe779b4f43d3aa0a8716fcd27af62d1"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift",
+        "--no-loop"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        198129,
+        "51f00dc494cc72b2fab16a80102ee5cd22a359b85232baccf3ea1e6cf052a660"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift",
+        "--skip-final-gradient"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        221265,
+        "af116e12bcf961ef64a95eccef75064098b51696837e02b7aceef12371059f9a"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift",
+        "--travel-direction",
+        "horizontal"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        229141,
+        "dc9b8af099f57a0ed2d2909aee0e80c863465b347b903756d26afcd2f39b989a"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift",
+        "--travel-direction",
+        "vertical",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        229079,
+        "972f81b5d6b94e3a8b69d56027b0480275f009dbbe7f485e32ee2e11767bdf0c"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift",
+        "--travel-direction",
+        "diagonal",
+        "--gradient-steps",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        28781,
+        "d547d927b7e70e125de7f8203a75893375434a407c0d0f1292cdaf44767b6b41"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift",
+        "--gradient-frames",
+        "5",
+        "--cycles",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        204218,
+        "8059e9de29386a45a12b5b490435c9fa853fef4a818e54d71f6ce267eb4a7d30"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift",
+        "--gradient-stops",
+        "AabbCC7",
+        "123456",
+        "--final-gradient-stops",
+        "ffeedd",
+        "001122"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        73805,
+        "617703567314a845761979e7270d9f6aa23d9eea3d717d03e314a9f8b1835c27"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        92583,
+        "dc504225fc640811bdb38f47b67ebd73dc0115b8e749084760b3184cd3fbd2a9"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift",
+        "--no-travel"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        92583,
+        "dc504225fc640811bdb38f47b67ebd73dc0115b8e749084760b3184cd3fbd2a9"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        92583,
+        "dc504225fc640811bdb38f47b67ebd73dc0115b8e749084760b3184cd3fbd2a9"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift",
+        "--no-loop"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        79983,
+        "abc473798fad8dcb7ad7d4a56dae8202ae1d59b384dd4430087e10d53aa8f29b"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift",
+        "--skip-final-gradient"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        89433,
+        "e56b8c1d37e29d2e9f93a9fd55f8558551929137dd75aa60057ca71748cf779e"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift",
+        "--travel-direction",
+        "horizontal"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        92583,
+        "dc504225fc640811bdb38f47b67ebd73dc0115b8e749084760b3184cd3fbd2a9"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift",
+        "--travel-direction",
+        "vertical",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        92583,
+        "dc504225fc640811bdb38f47b67ebd73dc0115b8e749084760b3184cd3fbd2a9"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift",
+        "--travel-direction",
+        "diagonal",
+        "--gradient-steps",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        11733,
+        "aec734f7fcfebb4e2f2149456475f6065307231d9aa9cb50e50a59fd072c718d"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift",
+        "--gradient-frames",
+        "5",
+        "--cycles",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        82433,
+        "3472a206ecae358d9f8c8db3dc0b4c791dfaf0408b9396fab5005fb486d5e777"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift",
+        "--gradient-stops",
+        "AabbCC7",
+        "123456",
+        "--final-gradient-stops",
+        "ffeedd",
+        "001122"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        29583,
+        "ca502181fe7ba686601438cec81aafa5bfb561c768595a7438d21a0f13b67d20"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        184631,
+        "1b5c96412014777278f16568e7e14a76b6a7a38705f0fb8f7476f64184f2c941"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift",
+        "--no-travel"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        184663,
+        "5188d9b13387d1a7260c960337a90dd30d2952c5f4f507254df8904ff388a760"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        184637,
+        "8c795057782f6ab0f3f980bd298960d424c3cf8e8e79a5e914e35fe3045a5994"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift",
+        "--no-loop"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        159435,
+        "6665f07d78f69d3bdced99256ef8729b4d13952db91db08f56af7a5abddca6cb"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift",
+        "--skip-final-gradient"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        178353,
+        "e9efa2f348d046a4539c440d702afb32a38ffcb97c3d60578b1978895b8fa137"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift",
+        "--travel-direction",
+        "horizontal"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        184687,
+        "e89b74054d2108b4636180ce09646804cc15f0f6d6c4fd6fa56c986b9655c944"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift",
+        "--travel-direction",
+        "vertical",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        184575,
+        "f6af8e732e77d388655556fce26a80e9b3334615dcdc425e385fab6ff21fcad8"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift",
+        "--travel-direction",
+        "diagonal",
+        "--gradient-steps",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        23321,
+        "91b914e6ce31afe5adf7c17b2faead6f0f54accfd86bb64f2b2e205e1a28ed93"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift",
+        "--gradient-frames",
+        "5",
+        "--cycles",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        164353,
+        "1cb8137c166dfd93dbffccaafdb777483f445b531db4dcf41215940bd84e726c"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift",
+        "--gradient-stops",
+        "AabbCC7",
+        "123456",
+        "--final-gradient-stops",
+        "ffeedd",
+        "001122"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        58885,
+        "439ac279b19edf24d5d5d0f948b324250633ba395770e9b7597b21c35ed61442"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        92583,
+        "dc504225fc640811bdb38f47b67ebd73dc0115b8e749084760b3184cd3fbd2a9"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift",
+        "--no-travel"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        92583,
+        "dc504225fc640811bdb38f47b67ebd73dc0115b8e749084760b3184cd3fbd2a9"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        92583,
+        "dc504225fc640811bdb38f47b67ebd73dc0115b8e749084760b3184cd3fbd2a9"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift",
+        "--no-loop"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        79983,
+        "abc473798fad8dcb7ad7d4a56dae8202ae1d59b384dd4430087e10d53aa8f29b"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift",
+        "--skip-final-gradient"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        89433,
+        "e56b8c1d37e29d2e9f93a9fd55f8558551929137dd75aa60057ca71748cf779e"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift",
+        "--travel-direction",
+        "horizontal"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        92583,
+        "dc504225fc640811bdb38f47b67ebd73dc0115b8e749084760b3184cd3fbd2a9"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift",
+        "--travel-direction",
+        "vertical",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        92583,
+        "dc504225fc640811bdb38f47b67ebd73dc0115b8e749084760b3184cd3fbd2a9"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift",
+        "--travel-direction",
+        "diagonal",
+        "--gradient-steps",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        11733,
+        "aec734f7fcfebb4e2f2149456475f6065307231d9aa9cb50e50a59fd072c718d"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift",
+        "--gradient-frames",
+        "5",
+        "--cycles",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        82433,
+        "3472a206ecae358d9f8c8db3dc0b4c791dfaf0408b9396fab5005fb486d5e777"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift",
+        "--gradient-stops",
+        "AabbCC7",
+        "123456",
+        "--final-gradient-stops",
+        "ffeedd",
+        "001122"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        29583,
+        "ca502181fe7ba686601438cec81aafa5bfb561c768595a7438d21a0f13b67d20"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        221352,
+        "406587ddb0d65cf20d7283d9f89ba720d6b9bc37ceaed895bb13aca0563f7b48"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift",
+        "--no-travel"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        221363,
+        "1907ed0c326aefee39c0ed2aeb902b6677860d9f392bd171fa421f3da4ae43f8"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        221359,
+        "0df381b14ffc2a14c44b24412366051c14b4b60e20871bcc31afd353b49187f6"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift",
+        "--no-loop"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        190320,
+        "0986ba1da13a050a7caa98f980d8433e327c295a828c5d2596f83d839ace3115"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift",
+        "--skip-final-gradient"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        221265,
+        "af116e12bcf961ef64a95eccef75064098b51696837e02b7aceef12371059f9a"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift",
+        "--travel-direction",
+        "horizontal"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        221360,
+        "553dede827f1efffee1bbcd3e786eb7b718e68a28b1eeb253b66ee2505257cd9"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift",
+        "--travel-direction",
+        "vertical",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        221359,
+        "340bb7d9bd8acdb1f4ed5dbeffe860364dd30a54c6b9f1934227c0aeb7875e3d"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift",
+        "--travel-direction",
+        "diagonal",
+        "--gradient-steps",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        21067,
+        "69e41c2996a00b744726d9fdfafb8ebc0550b27eae2e68e083ab77ef2dec2755"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift",
+        "--gradient-frames",
+        "5",
+        "--cycles",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        185030,
+        "2f84f53bf65bc4b08cabebf548dcc6aa806683f41b8e3d34bbe0b6e20c12f33c"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift",
+        "--gradient-stops",
+        "AabbCC7",
+        "123456",
+        "--final-gradient-stops",
+        "ffeedd",
+        "001122"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        66115,
+        "c31764c99cd7abc1481534c1895c3dea86b9da23991ffa423133d961b20dc687"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        178528,
+        "25c18849eddbaba45ed9b4616ca521a3ecee722b17051b89ede20e444bc8e1b2"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift",
+        "--no-travel"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        178523,
+        "8053c750fd5327fcf4c2edb5ec29e1736191a62efcaa425942f5f6b2cd9039b3"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        178529,
+        "dd8b2a24ee287b8b4c8067f47dd3661e6684c8b22cae7ff68c15511dd4f8ec92"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift",
+        "--no-loop"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        153331,
+        "d51178c62cb57c2ef0335dbc94b92bdefacd96eaf0d3949e9850eebc472a8219"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift",
+        "--skip-final-gradient"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        178353,
+        "e9efa2f348d046a4539c440d702afb32a38ffcb97c3d60578b1978895b8fa137"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift",
+        "--travel-direction",
+        "horizontal"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        178523,
+        "7958eb39c2d9ffaabf9d7752e4118b5a3fe0be31044b3fb452c1ddb46ea9e2c6"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift",
+        "--travel-direction",
+        "vertical",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        178527,
+        "93ef22ff9749a08267d48b9b8748d0e155c8d60fa7d223706c11ffe94628c5ef"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift",
+        "--travel-direction",
+        "diagonal",
+        "--gradient-steps",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        17177,
+        "23d66b43c2c98016d2bcad1cfd0ab3772325299ed640389bb7d64700d3f12a22"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift",
+        "--gradient-frames",
+        "5",
+        "--cycles",
+        "1"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        149358,
+        "f9022f1c699070603b0b3f0a4cf80c602dddf3b86b82f37974b1f90a31812b7a"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift",
+        "--gradient-stops",
+        "AabbCC7",
+        "123456",
+        "--final-gradient-stops",
+        "ffeedd",
+        "001122"
+      ],
+      "input_index": 0,
+      "output": [
+        0,
+        "",
+        52760,
+        "9c876ef5447f9f5d6a9b7de23e1c13d4e9253810b7796d4c29915e8240775116"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        277293,
+        "7038f9e973524e514b802ac1871085afdad024ad7fa41d6f4b3b93ed8fcc96fc"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift",
+        "--no-travel"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        277189,
+        "77f76da8991310b69c0c5218111f08295f09f437cbffad1b92248d374da40530"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        277293,
+        "b9f73e67c2f39f2ef78962f9e3f4ff00a8b7a0955ce6e27ae8c34644fdfa7e05"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift",
+        "--no-loop"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        239755,
+        "bbeb7a3acca8e20e3e33b67a5f3bae9da72ee98aea40b5bdd6cbb3175d9bffa3"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift",
+        "--skip-final-gradient"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        267759,
+        "ff61e0f134f1644ffd85f4bc5baec5849426bc8c732c97b432e77710c54489b1"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift",
+        "--travel-direction",
+        "horizontal"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        277269,
+        "f0f24665a7ae5c7d77393a2635698e8a41715f97388bc55df3295f9a7cb75e3e"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift",
+        "--travel-direction",
+        "vertical",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        277233,
+        "2a22526d16e8f6a17592b9220b929d359a53b3f910bd0232cb2711a14cf619e0"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift",
+        "--travel-direction",
+        "diagonal",
+        "--gradient-steps",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        34793,
+        "a6fe8863195c4cdf203b23036ded1c002651e0c28288036f7d69773d4dc7c160"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift",
+        "--gradient-frames",
+        "5",
+        "--cycles",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        246998,
+        "793afda2fb9edf702aa1a0e8f40fbfe7b4177facac81d0ec91185c6bd7f4239b"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "colorshift",
+        "--gradient-stops",
+        "AabbCC7",
+        "123456",
+        "--final-gradient-stops",
+        "ffeedd",
+        "001122"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        89423,
+        "5fc2e7fa45fc90c3652016e1f77ba6878fa8bd7283743a88ffc4631da700d9c3"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        95223,
+        "1c0697bf26d1883857d308871b70178f7f0753d71934b6801503e92a94883b12"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift",
+        "--no-travel"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        95223,
+        "1c0697bf26d1883857d308871b70178f7f0753d71934b6801503e92a94883b12"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        95223,
+        "1c0697bf26d1883857d308871b70178f7f0753d71934b6801503e92a94883b12"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift",
+        "--no-loop"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        82263,
+        "18e80631214a3712a3d24c73aa51838ff733112f960fde70367c4af66df781f4"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift",
+        "--skip-final-gradient"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        91983,
+        "7e9077ea5f3f541a41b1e44b732bf3d28fbc4269780caafb1a295868aa353ce0"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift",
+        "--travel-direction",
+        "horizontal"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        95223,
+        "1c0697bf26d1883857d308871b70178f7f0753d71934b6801503e92a94883b12"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift",
+        "--travel-direction",
+        "vertical",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        95223,
+        "1c0697bf26d1883857d308871b70178f7f0753d71934b6801503e92a94883b12"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift",
+        "--travel-direction",
+        "diagonal",
+        "--gradient-steps",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        12063,
+        "00a693c63d6c5b8e1fb579bce03e15bfda836e1da541a51335f6b7c735132a9f"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift",
+        "--gradient-frames",
+        "5",
+        "--cycles",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        84783,
+        "14bbceb993aafb3c627eafcd96d166fe3c82bbc306ce3f50d216404b55f1c2e6"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--no-color",
+        "colorshift",
+        "--gradient-stops",
+        "AabbCC7",
+        "123456",
+        "--final-gradient-stops",
+        "ffeedd",
+        "001122"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        30423,
+        "72fae10c6954526eada65326800e1771a8092d18d56cb3cce732e1e2cb569bfe"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        217945,
+        "e2637835ae2e953d52814d4c2c3520c0a8e5ed695ae18fd90c1905ac073949a2"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift",
+        "--no-travel"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        218043,
+        "9e062ffbe37b2dbfae9a3ba5b0eb739dd455fee4339dcd3d02474a57267735e0"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        217967,
+        "38725715b945e3f30742371e0a245bf2614e3e63b68498902aecb1f4c3c6c09c"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift",
+        "--no-loop"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        188197,
+        "4d7036fa97dc65191bebc6f9f7a37798d3bdc67beb41c7f7af002f542540d764"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift",
+        "--skip-final-gradient"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        210541,
+        "d91b780a843c655724ae98b2febb8364520edc7a07ad95843e94f8c9e212e036"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift",
+        "--travel-direction",
+        "horizontal"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        218053,
+        "bfdda827a0af47732fd9fa3ed0580e4ccf94a9e5fcd12d4a10dddd063b8036ca"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift",
+        "--travel-direction",
+        "vertical",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        217871,
+        "6d142631611113c3b38d5f2b2a575a1d522ae8043ec3e8905b60dba85cc419f1"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift",
+        "--travel-direction",
+        "diagonal",
+        "--gradient-steps",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        27563,
+        "fd8aa20e903b028b884f74bd8d02f99ecf41cd3410769a1f13151754fd46bebf"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift",
+        "--gradient-frames",
+        "5",
+        "--cycles",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        193993,
+        "4755d9eb2ad86a00eb6ad7a8970e734f6aebe521a0314489920e76d72e35c83c"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--xterm-colors",
+        "colorshift",
+        "--gradient-stops",
+        "AabbCC7",
+        "123456",
+        "--final-gradient-stops",
+        "ffeedd",
+        "001122"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        69477,
+        "a255794a0ed9002f284341749415325c6b4a5f9a7d4989e13022fdd3c4a42749"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        147495,
+        "42f6d2611d68a829ca0b6e79cadbaf8a7fcb3415ce597beb1ba90e4edc02d2b7"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift",
+        "--no-travel"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        147495,
+        "42f6d2611d68a829ca0b6e79cadbaf8a7fcb3415ce597beb1ba90e4edc02d2b7"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        147495,
+        "42f6d2611d68a829ca0b6e79cadbaf8a7fcb3415ce597beb1ba90e4edc02d2b7"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift",
+        "--no-loop"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        127407,
+        "9d2156c0040aa8c8cbd82aa12fb97f006e67f5ea7a40c75f8877183e7320ce43"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift",
+        "--skip-final-gradient"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        142473,
+        "a52abe74353bed5035d6af0f488767724ed37b7bc505a8e5e504957941e6be1f"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift",
+        "--travel-direction",
+        "horizontal"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        147495,
+        "42f6d2611d68a829ca0b6e79cadbaf8a7fcb3415ce597beb1ba90e4edc02d2b7"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift",
+        "--travel-direction",
+        "vertical",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        147495,
+        "42f6d2611d68a829ca0b6e79cadbaf8a7fcb3415ce597beb1ba90e4edc02d2b7"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift",
+        "--travel-direction",
+        "diagonal",
+        "--gradient-steps",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        18597,
+        "ea03640cffeb7cc22ff67d209959b1cd3961490ee50671617403e1230e612b85"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift",
+        "--gradient-frames",
+        "5",
+        "--cycles",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        131313,
+        "e3b084dd0559a2042e2f44edb5fd4766d2e50982ba46894edeed39c5bccb34f1"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "always",
+        "colorshift",
+        "--gradient-stops",
+        "AabbCC7",
+        "123456",
+        "--final-gradient-stops",
+        "ffeedd",
+        "001122"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        47055,
+        "e0795a6465d2f1b7c780d4f08f687969b5b86b5607f242c8fc22c85cdc6e8851"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        272678,
+        "29faa80381ba78637ec10ce0717d700885170459721836cd11e07ed69c7b26f7"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift",
+        "--no-travel"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        272616,
+        "485a3b841ed9d27bde0ec6438c837faf885dab5a4d7883189e56025f7d0490ec"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        272663,
+        "e244675efd53c9ad455cda7aad7cf68377753c97d176404c0c7db3ad02f48190"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift",
+        "--no-loop"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        235137,
+        "77dc733d14324e2fd86a043f651ece9e989cde2c3f7fed049846ef933a6a446d"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift",
+        "--skip-final-gradient"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        267759,
+        "ff61e0f134f1644ffd85f4bc5baec5849426bc8c732c97b432e77710c54489b1"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift",
+        "--travel-direction",
+        "horizontal"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        272623,
+        "2ab451f1a7d8c50f529c9ffcffc22d1bdd0377e5f780676139ac275b4e1cb3fd"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift",
+        "--travel-direction",
+        "vertical",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        272659,
+        "b8999eef87251e63f6578abb89f898a541a6df33df543e26db5a2be07165432c"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift",
+        "--travel-direction",
+        "diagonal",
+        "--gradient-steps",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        30203,
+        "3e5948a006bfc9056e0c0b83127ee6cbe9574d1143b22b4421f976fa40cf3623"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift",
+        "--gradient-frames",
+        "5",
+        "--cycles",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        235816,
+        "e6f8470872fa105a8f54e40aa92c501b498a63fa98a6d313b2af2c3e312433bf"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "colorshift",
+        "--gradient-stops",
+        "AabbCC7",
+        "123456",
+        "--final-gradient-stops",
+        "ffeedd",
+        "001122"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        84851,
+        "48f760e549973e8d6b53306013403d0c8d111797b9ab30a3c18dc79c712e9fd3"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        214893,
+        "848dba6067b05fc80bb3bd60e6af75df45a8ee6f9e62a365b514915bf149d56b"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift",
+        "--no-travel"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        214924,
+        "168fa6d22402a0c630bdee6818571e64fee1ca186fa24e98a3b68c94201b1188"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        214876,
+        "3f198cbd4f9f829a70419186962c6683dc3cc5d5a78f95ead516dbe4e3c1622c"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift",
+        "--no-loop"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        185140,
+        "e9fbd42d12a62cefa183f749ed2128182f2c5fde6084dcb0a13ae085a3a3afc4"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift",
+        "--skip-final-gradient"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        210541,
+        "d91b780a843c655724ae98b2febb8364520edc7a07ad95843e94f8c9e212e036"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift",
+        "--travel-direction",
+        "horizontal"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        214922,
+        "1a45adb69fb11022f6950987a3579b3c756e49ad72fcdcbb8db8bd3ca64392e4"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift",
+        "--travel-direction",
+        "vertical",
+        "--reverse-travel-direction"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        214867,
+        "3cd2f884d42055133bd4b95c95e6b4778a261a8b714ee431d55b80d45d4e3be1"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift",
+        "--travel-direction",
+        "diagonal",
+        "--gradient-steps",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        24436,
+        "1724acb0b613dac345c7405bd82541df0a718fe6e437529d5d14bf4c67499d23"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift",
+        "--gradient-frames",
+        "5",
+        "--cycles",
+        "1"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        186600,
+        "7858b388cb8c09247df606f39d8da9964096460490e21a84b58c6c7d21771edc"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    },
+    {
+      "args": [
+        "--seed",
+        "23",
+        "--frame-rate",
+        "0",
+        "--virtual-clock",
+        "--canvas-width",
+        "20",
+        "--canvas-height",
+        "8",
+        "--ignore-terminal-dimensions",
+        "--existing-color-handling",
+        "dynamic",
+        "--xterm-colors",
+        "colorshift",
+        "--gradient-stops",
+        "AabbCC7",
+        "123456",
+        "--final-gradient-stops",
+        "ffeedd",
+        "001122"
+      ],
+      "input_index": 1,
+      "output": [
+        0,
+        "",
+        66378,
+        "ef67696ced0f6a2e02b3b663764a96067c0f1a538f34be8a6fb3c196d5e81e32"
+      ],
+      "candidate_modes": [
+        "default",
+        "program cache off",
+        "scene runtime and scheduler off"
+      ]
+    }
+  ]
+}

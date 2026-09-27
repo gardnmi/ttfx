@@ -39,7 +39,10 @@ impl Deref for RgbString {
     type Target = str;
 
     fn deref(&self) -> &Self::Target {
-        std::str::from_utf8(&self.bytes[..self.len as usize]).unwrap()
+        // SAFETY: private construction either copies a complete &str in `new`
+        // or writes six ASCII hex digits in `Color::from_rgb`. Neither the
+        // bytes nor their length can be mutated after construction.
+        unsafe { std::str::from_utf8_unchecked(&self.bytes[..self.len as usize]) }
     }
 }
 
@@ -555,6 +558,24 @@ mod tests {
         let mut colors = HashMap::new();
         colors.insert(rgb, 1);
         assert_eq!(colors.get("12AbEf7"), Some(&1));
+    }
+
+    #[test]
+    fn rgb_string_constructors_preserve_complete_utf8_and_borrowed_hashing() {
+        use super::RgbString;
+        // Exercise every byte length, including multibyte boundaries. Storage
+        // must copy the complete string rather than truncate a code point.
+        for value in ["", "a", "λ", "界", "🥟", "🥟a", "界界", "🥟界"] {
+            let stored = RgbString::new(value);
+            assert_eq!(std::str::from_utf8(&stored.bytes[..stored.len as usize]).unwrap(), value);
+            assert_eq!(&*stored, value);
+            assert_eq!(HashMap::from([(stored, 1)]).get(value), Some(&1));
+        }
+        for code in 0..=255 {
+            let color = Color::from_xterm(code);
+            assert_eq!(&*color.rgb_color, crate::utils::hexterm::xterm_to_hex(code));
+        }
+        assert!(std::panic::catch_unwind(|| RgbString::new("🥟🥟")).is_err());
     }
 
     #[test]

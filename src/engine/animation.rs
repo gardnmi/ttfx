@@ -376,7 +376,7 @@ impl AppearancePalette {
     fn visual(
         &mut self,
         symbol: &str,
-        colors: ColorPair,
+        colors: &ColorPair,
         bold: bool,
         no_color: bool,
         xterm: bool,
@@ -389,14 +389,10 @@ impl AppearancePalette {
         if chars.next().is_some() {
             return None;
         }
-        let key = SceneVisualKey {
-            symbol: single,
-            styles: bold as u16 | (no_color as u16) << 8 | (xterm as u16) << 9,
-            colors: Some(colors),
-        };
+        let styles = bold as u16 | (no_color as u16) << 8 | (xterm as u16) << 9;
         use std::hash::{Hash, Hasher};
         let mut hash = rustc_hash::FxHasher::default();
-        key.hash(&mut hash);
+        (single, styles, Some(colors)).hash(&mut hash);
         let slot = hash.finish() as usize & (Self::CAPACITY - 1);
         if self.slots.is_empty() {
             self.slots.resize_with(Self::CAPACITY, || None);
@@ -405,15 +401,17 @@ impl AppearancePalette {
             // Color equality intentionally compares only its constructor
             // argument. RGB/xterm fields remain publicly mutable, and formatting
             // reads those fields, so a palette hit must compare them as well.
-            let same_codes = |left: Option<Color>, right: Option<Color>| match (left, right) {
+            let same_codes = |left: Option<&Color>, right: Option<&Color>| match (left, right) {
                 (Some(left), Some(right)) => left.rgb_color == right.rgb_color && left.xterm_color == right.xterm_color,
                 (None, None) => true,
                 _ => false,
             };
-            let old_colors = previous.colors.unwrap();
-            if *previous == key
-                && same_codes(old_colors.fg_color, colors.fg_color)
-                && same_codes(old_colors.bg_color, colors.bg_color)
+            let old_colors = previous.colors.as_ref().unwrap();
+            if previous.symbol == single
+                && previous.styles == styles
+                && old_colors == colors
+                && same_codes(old_colors.fg_color.as_ref(), colors.fg_color.as_ref())
+                && same_codes(old_colors.bg_color.as_ref(), colors.bg_color.as_ref())
             {
                 return Some(Rc::clone(visual));
             }
@@ -422,12 +420,13 @@ impl AppearancePalette {
             symbol,
             VisualParams {
                 bold,
-                colors: Some(colors),
+                colors: Some(*colors),
                 fg_color_code: resolve_color_code(colors.fg_color.as_ref(), no_color, xterm, None),
                 bg_color_code: resolve_color_code(colors.bg_color.as_ref(), no_color, xterm, None),
                 ..Default::default()
             },
         ));
+        let key = SceneVisualKey { symbol: single, styles, colors: Some(*colors) };
         self.slots[slot] = Some((key, Rc::clone(&visual)));
         Some(visual)
     }
@@ -1146,12 +1145,14 @@ impl Animation {
         input_symbol: &str,
         uses_input_preexisting_colors: bool,
         symbol: Option<&str>,
-        colors: ColorPair,
+        colors: &ColorPair,
         palette: &mut AppearancePalette,
     ) {
+        let input_colors;
         let (resolved, bold) =
             if self.existing_color_handling == ExistingColorHandling::Always && uses_input_preexisting_colors {
-                (ColorPair::new(self.input_fg_color, self.input_bg_color), self.input_bold)
+                input_colors = ColorPair::new(self.input_fg_color, self.input_bg_color);
+                (&input_colors, self.input_bold)
             } else {
                 (colors, false)
             };
@@ -1160,7 +1161,7 @@ impl Animation {
         {
             self.current_character_visual = visual;
         } else {
-            self.set_appearance(input_symbol, uses_input_preexisting_colors, symbol, Some(colors));
+            self.set_appearance(input_symbol, uses_input_preexisting_colors, symbol, Some(*colors));
         }
     }
 
@@ -1173,18 +1174,24 @@ impl Animation {
         colors: Option<ColorPair>,
     ) {
         let symbol = symbol.unwrap_or(input_symbol);
-        let mut colors = colors.unwrap_or_default();
+        let replacement;
         let mut bold = false;
-        if self.existing_color_handling == ExistingColorHandling::Always && uses_input_preexisting_colors {
-            colors = ColorPair::new(self.input_fg_color.clone(), self.input_bg_color.clone());
+        let colors = if self.existing_color_handling == ExistingColorHandling::Always && uses_input_preexisting_colors {
+            replacement = ColorPair::new(self.input_fg_color, self.input_bg_color);
             bold = self.input_bold;
-        }
+            &replacement
+        } else if let Some(colors) = &colors {
+            colors
+        } else {
+            replacement = ColorPair::default();
+            &replacement
+        };
         // Repeated lighting/appearance updates often resolve to exactly the
         // current visual. Test the resolved modes too: callers may change
         // no_color or xterm between updates without changing the ColorPair.
         let current = &self.current_character_visual;
         if current.symbol == symbol
-            && current.colors == Some(colors)
+            && current.colors.as_ref() == Some(colors)
             && current.bold == bold
             && !(current.dim
                 || current.italic
@@ -1226,7 +1233,7 @@ impl Animation {
             symbol_buffer,
             VisualParams {
                 bold,
-                colors: Some(colors),
+                colors: Some(*colors),
                 fg_color_code: fg_code,
                 bg_color_code: bg_code,
                 ..Default::default()
@@ -1394,7 +1401,7 @@ mod appearance_palette_tests {
                 background.xterm_color = Some(200 + step);
                 let colors = ColorPair::new(Some(foreground), Some(background));
                 ordinary.set_appearance("x", false, None, Some(colors));
-                cached.set_appearance_with_palette("x", false, None, colors, &mut palette);
+                cached.set_appearance_with_palette("x", false, None, &colors, &mut palette);
                 assert_eq!(ordinary.current_character_visual, cached.current_character_visual);
                 assert_eq!(
                     ordinary.current_character_visual.formatted_symbol.as_str(),
@@ -1427,11 +1434,11 @@ mod appearance_palette_tests {
             let (input, replacement) =
                 if iteration % 2 == 0 { ("original input", Some(symbol)) } else { (symbol, None) };
             ordinary.set_appearance(input, true, replacement, Some(colors));
-            cached.set_appearance_with_palette(input, true, replacement, colors, &mut palette);
+            cached.set_appearance_with_palette(input, true, replacement, &colors, &mut palette);
             assert_eq!(ordinary.current_character_visual, cached.current_character_visual);
             if iteration % 11 == 0 {
                 Rc::make_mut(&mut cached.current_character_visual).symbol = "independently changed".into();
-                cached.set_appearance_with_palette(input, true, replacement, colors, &mut palette);
+                cached.set_appearance_with_palette(input, true, replacement, &colors, &mut palette);
                 assert_eq!(ordinary.current_character_visual, cached.current_character_visual);
             }
         }

@@ -1,0 +1,35 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 4K of event 'cycles:u'
+# Event count (approx.): 21537792010
+#
+# Overhead  Shared Object     Symbol                                                                                                                                                                                                                                                                    IPC   [IPC Coverage]
+# ........  ................  ........................................................................................................................................................................................................................................................................  ....................
+#
+    25.21%  ttfx              [.] <ttfx::engine::terminal::Terminal>::update_render_cells                                                                                                                                                                                                               -      -
+    10.96%  ttfx              [.] <ttfx::engine::character::CharacterArena>::motion_tick                                                                                                                                                                                                                -      -
+    10.59%  ttfx              [.] <ttfx::engine::terminal::Terminal>::prepare_frame_output                                                                                                                                                                                                              -      -
+    10.50%  ttfx              [.] <ttfx::engine::ctx::EngineCtx>::motion_move                                                                                                                                                                                                                           -      -
+     6.45%  ttfx              [.] <ttfx::engine::character::CharacterArena>::scene_tick                                                                                                                                                                                                                 -      -
+     4.60%  ttfx              [.] <ttfx::engine::ctx::EngineCtx>::step_animation                                                                                                                                                                                                                        -      -
+     4.08%  ttfx              [.] <ttfx::engine::ctx::EngineCtx>::tick                                                                                                                                                                                                                                  -      -
+     3.38%  ttfx              [.] <ttfx::engine::ctx::EngineCtx>::update                                                                                                                                                                                                                                -      -
+     2.92%  ttfx              [.] <ttfx::engine::motion_runtime::MotionRuntime>::materialize_cached                                                                                                                                                                                                     -      -
+     2.44%  ttfx              [.] ttfx::engine::motion_runtime::point_sse41_inner                                                                                                                                                                                                                       -      -
+     1.02%  ttfx              [.] <ttfx::engine::animation::Scene>::add_frame                                                                                                                                                                                                                           -      -
+     0.90%  ttfx              [.] <ttfx::engine::character::CharacterArena>::animation_edit                                                                                                                                                                                                             -      -
+     0.82%  ttfx              [.] <ttfx::effects::binarypath::BinaryPath as ttfx::engine::effect::Effect>::build                                                                                                                                                                                        -      -
+     0.71%  ttfx              [.] <ttfx::engine::character::CharacterArena as core::ops::index::Index<usize>>::index                                                                                                                                                                                    -      -
+     0.67%  ttfx              [.] <ttfx::effects::binarypath::BinaryPath as ttfx::engine::effect::Effect>::next_frame                                                                                                                                                                                   -      -
+     0.66%  ttfx              [.] <ttfx::engine::playback::PlaybackScheduler>::wake_removed                                                                                                                                                                                                             -      -
+     0.64%  ttfx              [.] <ttfx::engine::animation::Scene>::prepare                                                                                                                                                                                                                             -      -
+     0.63%  libc.so.6         [.] 0x000000000018f63d                                                                                                                                                                                                                                                    -      -
+     0.61%  ttfx              [.] <ttfx::engine::motion::Motion>::new_path                                                                                                                                                                                                                              -      -
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#

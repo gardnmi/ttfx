@@ -1,0 +1,48 @@
+{
+  "base_commit": "702b630512e76dc8edcbba47cf948e857bed8d77",
+  "effects": 37,
+  "repetitions": 7,
+  "geometric_mean_speedup": 1.7650049913937387,
+  "median_effect_speedup": 1.6581918999794782,
+  "candidate_over_assembly_geometric_mean": 3.8145198799703244,
+  "regressions": {
+    "overflow": {
+      "speedup": 0.914236919152687,
+      "elapsed_time_increase_percent": 9.38083761994626
+    }
+  },
+  "overflow_recheck": {
+    "repetitions": 21,
+    "upstream_ms": 123.350776,
+    "candidate_ms": 135.251064,
+    "speedup": 0.9120133502239952,
+    "elapsed_time_increase_percent": 9.647517742409683
+  },
+  "memory_mib": {
+    "binarypath": {
+      "upstream_rust": 276.9375,
+      "candidate_rust": 217.59375,
+      "assembly": 222.5703125
+    },
+    "rings": {
+      "upstream_rust": 354.16015625,
+      "candidate_rust": 181.69921875,
+      "assembly": 56.734375
+    },
+    "colorshift": {
+      "upstream_rust": 103.484375,
+      "candidate_rust": 58.0703125,
+      "assembly": 27.5234375
+    },
+    "waves": {
+      "upstream_rust": 115.12890625,
+      "candidate_rust": 37.4296875,
+      "assembly": 33.859375
+    },
+    "spotlights": {
+      "upstream_rust": 19.99609375,
+      "candidate_rust": 19.99609375,
+      "assembly": 41.66015625
+    }
+  }
+}

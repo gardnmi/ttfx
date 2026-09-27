@@ -1,0 +1,1190 @@
+{
+  "binary_sha256": "ac98794bfb26dc921de8d6342db556d65f1e2ff0fcae2c7b0985d9af68c5bdf4",
+  "engine": "rust",
+  "cases": [
+    {
+      "effect": "beams",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "binarypath",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "blackhole",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "bouncyballs",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "bubbles",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "burn",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "colorshift",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "crumble",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "decrypt",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "errorcorrect",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "expand",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "fireworks",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "highlight",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "laseretch",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "matrix",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "middleout",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "orbittingvolley",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "overflow",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "pour",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "print",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "rain",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "randomsequence",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "rings",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "scattered",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "slice",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "slide",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "smoke",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "spotlights",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "spray",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "swarm",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "sweep",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "synthgrid",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "thunderstorm",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "unstable",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "vhstape",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "waves",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "wipe",
+      "width": 120,
+      "height": 32,
+      "seed": 41,
+      "input_sha256": "d734749f14e4d3c3b1ef196328d7226cd96038aab922ad98ee2ceb6ca11595e3",
+      "input_bytes": 3146,
+      "terminal_options": []
+    },
+    {
+      "effect": "beams",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "binarypath",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "blackhole",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "bouncyballs",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "bubbles",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "burn",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "colorshift",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "crumble",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "decrypt",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "errorcorrect",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "expand",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "fireworks",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "highlight",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "laseretch",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "matrix",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "middleout",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "orbittingvolley",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "overflow",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "pour",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "print",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "rain",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "randomsequence",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "rings",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "scattered",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "slice",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "slide",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "smoke",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "spotlights",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "spray",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "swarm",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "sweep",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "synthgrid",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "thunderstorm",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "unstable",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "vhstape",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "waves",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "wipe",
+      "width": 60,
+      "height": 20,
+      "seed": 73,
+      "input_sha256": "ba709019dac3cc163cab161d5ea5a103983a203153e99ffe5be32e73f20e0f15",
+      "input_bytes": 637,
+      "terminal_options": [
+        "--existing-color-handling",
+        "always"
+      ]
+    },
+    {
+      "effect": "beams",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "binarypath",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "blackhole",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "bouncyballs",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "bubbles",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "burn",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "colorshift",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "crumble",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "decrypt",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "errorcorrect",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "expand",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "fireworks",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "highlight",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "laseretch",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "matrix",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "middleout",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "orbittingvolley",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "overflow",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "pour",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "print",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "rain",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "randomsequence",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "rings",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "scattered",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "slice",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "slide",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "smoke",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "spotlights",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "spray",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "swarm",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "sweep",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "synthgrid",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "thunderstorm",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "unstable",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "vhstape",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "waves",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    },
+    {
+      "effect": "wipe",
+      "width": 40,
+      "height": 12,
+      "seed": 97,
+      "input_sha256": "54519e88ef02f48576f989669fa313823fccbbf561229d3198d102b3249ad8ce",
+      "input_bytes": 147,
+      "terminal_options": [
+        "--xterm-colors"
+      ]
+    }
+  ]
+}

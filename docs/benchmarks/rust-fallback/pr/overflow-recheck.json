@@ -1,0 +1,101 @@
+{
+  "platform": "Linux-7.2.5-3-omarchy-x86_64-with-glibc2.44",
+  "binaries": [
+    "/home/gardnmi/Worktrees/ttfx/perf-rust-engine/target/current-main/release/ttfx",
+    "/home/gardnmi/Worktrees/ttfx/perf-rust-engine/target/release/ttfx"
+  ],
+  "size": [
+    200,
+    50
+  ],
+  "engines": [
+    "baseline",
+    "candidate"
+  ],
+  "assembly_forced": false,
+  "rust_forced": true,
+  "engine_modes": [
+    "rust",
+    "rust"
+  ],
+  "cpu": 2,
+  "seed": 1,
+  "repeats": 21,
+  "warmups": 1,
+  "terminal_options": [
+    "--canvas-width",
+    "200",
+    "--canvas-height",
+    "50",
+    "--ignore-terminal-dimensions"
+  ],
+  "input_sha256": "5520772cb3e4a78263b258c2020280ce291135615cbc193e89added6c41d732b",
+  "input_bytes": 8785,
+  "results": {
+    "overflow": {
+      "times_ms": [
+        [
+          122.577838,
+          124.524012,
+          126.323057,
+          121.168233,
+          119.995527,
+          131.804762,
+          120.709843,
+          122.113967,
+          122.962679,
+          124.773586,
+          131.769405,
+          173.818871,
+          139.56358,
+          120.170228,
+          126.719039,
+          123.085602,
+          137.724088,
+          122.694079,
+          121.588802,
+          149.669712,
+          123.350776
+        ],
+        [
+          132.722494,
+          133.492075,
+          140.27532,
+          133.840036,
+          130.28658,
+          134.898584,
+          134.672606,
+          136.520383,
+          135.757806,
+          136.390196,
+          132.610562,
+          138.215781,
+          163.611095,
+          138.31535,
+          136.620473,
+          132.117095,
+          134.098155,
+          136.693742,
+          136.588161,
+          135.251064,
+          132.227434
+        ]
+      ],
+      "median_ms": [
+        123.350776,
+        135.251064
+      ],
+      "speedup": 0.9120133502239952,
+      "output_bytes": 54256001,
+      "output_sha256": "ebf64ef09e1c6450b126f68cd720bd46608c378631ff6fd1f97928ac56643b47"
+    }
+  },
+  "environment_overrides": [
+    {},
+    {}
+  ],
+  "binary_sha256": [
+    "797d90ee05319b3add5586eeac1ea4dba5bd026a2d8736dbe8ff608ede86687a",
+    "90508073407bc6b5ac83d9c685859b95573fbdfd313db17267c14eac17c27b24"
+  ]
+}

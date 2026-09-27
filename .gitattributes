@@ -1,2 +1,3 @@
 tools/parity/cases.txt merge=union
 docs/ordering-inventory.md merge=union
+docs/benchmarks/rust-fallback/pr/** linguist-generated=true

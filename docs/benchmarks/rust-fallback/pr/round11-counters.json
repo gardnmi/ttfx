@@ -1,0 +1,1528 @@
+{
+  "cpu": 2,
+  "input_sha256": "5520772cb3e4a78263b258c2020280ce291135615cbc193e89added6c41d732b",
+  "repetitions": 5,
+  "binary_sha256": {
+    "previous_rust": "d08efe046c516cb29caf0e3fa1d4d841b28b8db8b82606d27b3dbe566fe25881",
+    "candidate_rust": "90508073407bc6b5ac83d9c685859b95573fbdfd313db17267c14eac17c27b24",
+    "assembly": "797d90ee05319b3add5586eeac1ea4dba5bd026a2d8736dbe8ff608ede86687a"
+  },
+  "events": [
+    "cycles:u",
+    "instructions:u",
+    "branches:u",
+    "branch-misses:u"
+  ],
+  "results": {
+    "binarypath": {
+      "previous_rust": {
+        "samples": [
+          {
+            "cycles:u": {
+              "count": 3460044236,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 6340800097,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 1207654192,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 20636633,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 3402051472,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 6340803948,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 1207655024,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 20808832,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 3374968340,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 6340796338,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 1207653339,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 20613556,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 3370483061,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 6340798315,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 1207653854,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 20647740,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 3462849948,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 6340798021,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 1207653372,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 20906176,
+              "running_percent": 100.0
+            }
+          }
+        ],
+        "median_counts": {
+          "cycles:u": 3402051472,
+          "instructions:u": 6340798315,
+          "branches:u": 1207653854,
+          "branch-misses:u": 20647740
+        }
+      },
+      "candidate_rust": {
+        "samples": [
+          {
+            "cycles:u": {
+              "count": 2829789638,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 5570290346,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 1067182402,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 20158633,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 2821968581,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 5570291070,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 1067182393,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 20539463,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 2757293252,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 5570293557,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 1067183153,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 20105018,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 2776996017,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 5570294952,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 1067183364,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 20276293,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 2799192213,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 5570300887,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 1067184237,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 19956417,
+              "running_percent": 100.0
+            }
+          }
+        ],
+        "median_counts": {
+          "cycles:u": 2799192213,
+          "instructions:u": 5570293557,
+          "branches:u": 1067183153,
+          "branch-misses:u": 20158633
+        }
+      },
+      "assembly": {
+        "samples": [
+          {
+            "cycles:u": {
+              "count": 1151631852,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 2198289558,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 450852462,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 10619455,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 1137605449,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 2198288920,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 450852275,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 10562657,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 1117992874,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 2198288914,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 450852374,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 10491896,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 1127860916,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 2198289143,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 450852358,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 10542559,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 1137737539,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 2198288865,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 450852265,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 10543276,
+              "running_percent": 100.0
+            }
+          }
+        ],
+        "median_counts": {
+          "cycles:u": 1137605449,
+          "instructions:u": 2198288920,
+          "branches:u": 450852358,
+          "branch-misses:u": 10543276
+        }
+      }
+    },
+    "rings": {
+      "previous_rust": {
+        "samples": [
+          {
+            "cycles:u": {
+              "count": 2186272906,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 3637845957,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 655264453,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 8244690,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 2139420507,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 3637469632,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 655179903,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 8265269,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 2249841444,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 3637721653,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 655237022,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 8404221,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 2230976643,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 3637845277,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 655260955,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 8450171,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 2252900363,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 3637855947,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 655264431,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 8257172,
+              "running_percent": 100.0
+            }
+          }
+        ],
+        "median_counts": {
+          "cycles:u": 2230976643,
+          "instructions:u": 3637845277,
+          "branches:u": 655260955,
+          "branch-misses:u": 8265269
+        }
+      },
+      "candidate_rust": {
+        "samples": [
+          {
+            "cycles:u": {
+              "count": 2060601855,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 3452910778,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 627757921,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 9533700,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 2062082240,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 3452904106,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 627756566,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 9541044,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 2102428880,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 3453048179,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 627788167,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 9593277,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 2048624061,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 3452890741,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 627754789,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 9577107,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 1986697745,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 3452850881,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 627747327,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 9547114,
+              "running_percent": 100.0
+            }
+          }
+        ],
+        "median_counts": {
+          "cycles:u": 2060601855,
+          "instructions:u": 3452904106,
+          "branches:u": 627756566,
+          "branch-misses:u": 9547114
+        }
+      },
+      "assembly": {
+        "samples": [
+          {
+            "cycles:u": {
+              "count": 686656073,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1094898082,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 214212784,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 6828433,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 674641740,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1094897981,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 214212770,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 6826097,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 674975920,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1094898567,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 214212938,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 6809461,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 665773119,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1094897994,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 214212818,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 6810356,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 661208615,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1094897780,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 214212807,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 6828219,
+              "running_percent": 100.0
+            }
+          }
+        ],
+        "median_counts": {
+          "cycles:u": 674641740,
+          "instructions:u": 1094897994,
+          "branches:u": 214212807,
+          "branch-misses:u": 6826097
+        }
+      }
+    },
+    "spotlights": {
+      "previous_rust": {
+        "samples": [
+          {
+            "cycles:u": {
+              "count": 1009733240,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 2607060734,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 416636572,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 814075,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 983136528,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 2607086323,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 416641614,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 832789,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 994081428,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 2607108983,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 416645368,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 847179,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 1016561670,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 2607244135,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 416673025,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 818675,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 986281285,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 2606977308,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 416622401,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 818122,
+              "running_percent": 100.0
+            }
+          }
+        ],
+        "median_counts": {
+          "cycles:u": 994081428,
+          "instructions:u": 2607086323,
+          "branches:u": 416641614,
+          "branch-misses:u": 818675
+        }
+      },
+      "candidate_rust": {
+        "samples": [
+          {
+            "cycles:u": {
+              "count": 869174237,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 2405533921,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 388198860,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 784249,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 884464507,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 2405417919,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 388179176,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 788870,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 896971235,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 2405456606,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 388186652,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 790369,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 870539191,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 2405342786,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 388165490,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 765694,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 877544575,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 2405383141,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 388172501,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 792246,
+              "running_percent": 100.0
+            }
+          }
+        ],
+        "median_counts": {
+          "cycles:u": 877544575,
+          "instructions:u": 2405417919,
+          "branches:u": 388179176,
+          "branch-misses:u": 788870
+        }
+      },
+      "assembly": {
+        "samples": [
+          {
+            "cycles:u": {
+              "count": 177136596,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 399580214,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 76284858,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 902991,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 172252942,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 399579939,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 76284733,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 906553,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 181510777,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 399579567,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 76284645,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 908229,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 179669660,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 399579374,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 76284799,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 908744,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 180254744,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 399580284,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 76284876,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 910519,
+              "running_percent": 100.0
+            }
+          }
+        ],
+        "median_counts": {
+          "cycles:u": 179669660,
+          "instructions:u": 399579939,
+          "branches:u": 76284799,
+          "branch-misses:u": 908229
+        }
+      }
+    },
+    "bouncyballs": {
+      "previous_rust": {
+        "samples": [
+          {
+            "cycles:u": {
+              "count": 593570303,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1742616483,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 392803954,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 3229149,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 579976895,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1742622527,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 392805474,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 3241427,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 578362634,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1742613478,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 392803474,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 3255268,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 594473444,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1742614462,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 392803794,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 3269514,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 587170246,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1742601350,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 392800856,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 3258631,
+              "running_percent": 100.0
+            }
+          }
+        ],
+        "median_counts": {
+          "cycles:u": 587170246,
+          "instructions:u": 1742614462,
+          "branches:u": 392803794,
+          "branch-misses:u": 3255268
+        }
+      },
+      "candidate_rust": {
+        "samples": [
+          {
+            "cycles:u": {
+              "count": 625525720,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1561338594,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 360965379,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 3392583,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 620056149,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1561330686,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 360963444,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 3395646,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 622232739,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1561335739,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 360964573,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 3397603,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 637602634,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1561335445,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 360964550,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 3404662,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 668733299,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1561336057,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 360964816,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 3402663,
+              "running_percent": 100.0
+            }
+          }
+        ],
+        "median_counts": {
+          "cycles:u": 625525720,
+          "instructions:u": 1561335739,
+          "branches:u": 360964573,
+          "branch-misses:u": 3397603
+        }
+      },
+      "assembly": {
+        "samples": [
+          {
+            "cycles:u": {
+              "count": 184818267,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 368226504,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 63505356,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 2091781,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 191083815,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 368226284,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 63505183,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 2096475,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 192241116,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 368226324,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 63505141,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 2088799,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 187171991,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 368226166,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 63505242,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 2088410,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 186486189,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 368226662,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 63505319,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 2096418,
+              "running_percent": 100.0
+            }
+          }
+        ],
+        "median_counts": {
+          "cycles:u": 187171991,
+          "instructions:u": 368226324,
+          "branches:u": 63505242,
+          "branch-misses:u": 2091781
+        }
+      }
+    },
+    "pour": {
+      "previous_rust": {
+        "samples": [
+          {
+            "cycles:u": {
+              "count": 392165685,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1242969030,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 283637987,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 1591805,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 377689824,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1242970068,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 283638841,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 1608593,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 384840366,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1242965479,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 283637703,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 1604947,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 385198137,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1242972496,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 283638906,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 1598927,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 375713178,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1242964731,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 283637247,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 1596039,
+              "running_percent": 100.0
+            }
+          }
+        ],
+        "median_counts": {
+          "cycles:u": 384840366,
+          "instructions:u": 1242969030,
+          "branches:u": 283637987,
+          "branch-misses:u": 1598927
+        }
+      },
+      "candidate_rust": {
+        "samples": [
+          {
+            "cycles:u": {
+              "count": 408860086,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1119398137,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 261105277,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 1697760,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 417871857,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1119405622,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 261106922,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 1687900,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 416338458,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1119395418,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 261104707,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 1688824,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 404528816,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1119407813,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 261107490,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 1675286,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 433648174,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 1119404002,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 261106318,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 1695331,
+              "running_percent": 100.0
+            }
+          }
+        ],
+        "median_counts": {
+          "cycles:u": 416338458,
+          "instructions:u": 1119404002,
+          "branches:u": 261106318,
+          "branch-misses:u": 1688824
+        }
+      },
+      "assembly": {
+        "samples": [
+          {
+            "cycles:u": {
+              "count": 109793312,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 230015024,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 44367940,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 979568,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 106421562,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 230014478,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 44367880,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 972366,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 103828280,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 230014621,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 44367797,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 975865,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 105975567,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 230015085,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 44368012,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 977303,
+              "running_percent": 100.0
+            }
+          },
+          {
+            "cycles:u": {
+              "count": 108672458,
+              "running_percent": 100.0
+            },
+            "instructions:u": {
+              "count": 230015626,
+              "running_percent": 100.0
+            },
+            "branches:u": {
+              "count": 44368295,
+              "running_percent": 100.0
+            },
+            "branch-misses:u": {
+              "count": 986541,
+              "running_percent": 100.0
+            }
+          }
+        ],
+        "median_counts": {
+          "cycles:u": 106421562,
+          "instructions:u": 230015024,
+          "branches:u": 44367940,
+          "branch-misses:u": 977303
+        }
+      }
+    }
+  }
+}

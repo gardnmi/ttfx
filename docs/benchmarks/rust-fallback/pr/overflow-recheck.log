@@ -1,0 +1,4 @@
+200x50, 21 repetitions, seed 1, virtual clock, pacing off
+effect               before ms    after ms   speedup
+overflow                123.35      135.25    0.912x
+Median effect speedup: 0.912x

@@ -1,0 +1,140 @@
+{
+  "platform": "Linux-7.2.5-3-omarchy-x86_64-with-glibc2.44",
+  "binaries": [
+    "/home/gardnmi/Worktrees/ttfx/perf-rust-engine/target/round5/ttfx-eased",
+    "/home/gardnmi/Worktrees/ttfx/perf-rust-engine/target/release/ttfx"
+  ],
+  "size": [
+    200,
+    50
+  ],
+  "engines": [
+    "baseline",
+    "candidate"
+  ],
+  "assembly_forced": false,
+  "rust_forced": true,
+  "engine_modes": [
+    "rust",
+    "rust"
+  ],
+  "cpu": 2,
+  "seed": 1,
+  "repeats": 5,
+  "warmups": 1,
+  "terminal_options": [
+    "--canvas-width",
+    "200",
+    "--canvas-height",
+    "50",
+    "--ignore-terminal-dimensions"
+  ],
+  "input_sha256": "5520772cb3e4a78263b258c2020280ce291135615cbc193e89added6c41d732b",
+  "input_bytes": 8785,
+  "results": {
+    "binarypath": {
+      "times_ms": [
+        [
+          766.776358,
+          751.359388,
+          762.632203,
+          763.718003,
+          770.939859
+        ],
+        [
+          915.810678,
+          907.495307,
+          906.725776,
+          918.394562,
+          931.221867
+        ]
+      ],
+      "median_ms": [
+        763.718003,
+        915.810678
+      ],
+      "speedup": 0.8339256369753748,
+      "output_bytes": 237327299,
+      "output_sha256": "6af9164c135b68ed1b62d997bc00aabb8d60aff2de3be73afb560641da450ea8"
+    },
+    "rings": {
+      "times_ms": [
+        [
+          588.244173,
+          584.242418,
+          594.175169,
+          603.777774,
+          583.692223
+        ],
+        [
+          634.025812,
+          615.342462,
+          593.798384,
+          597.842419,
+          593.088095
+        ]
+      ],
+      "median_ms": [
+        588.244173,
+        597.842419
+      ],
+      "speedup": 0.9839451907476644,
+      "output_bytes": 102633967,
+      "output_sha256": "81a95119a9f17cacf0eaedbfc5b61e3f90add92a81bd1bca9646558c4fa1485e"
+    },
+    "fireworks": {
+      "times_ms": [
+        [
+          278.455298,
+          279.488498,
+          277.726584,
+          274.479592,
+          273.679283
+        ],
+        [
+          279.343373,
+          285.912591,
+          278.712385,
+          277.853265,
+          275.805809
+        ]
+      ],
+      "median_ms": [
+        277.726584,
+        278.712385
+      ],
+      "speedup": 0.9964630168838748,
+      "output_bytes": 142771490,
+      "output_sha256": "64837d9eef28afabe5eeb9b13b9207eda3274c8e196d678c6dee0a1d3bfbdff1"
+    },
+    "waves": {
+      "times_ms": [
+        [
+          149.312609,
+          149.811115,
+          152.432921,
+          152.794567,
+          149.833808
+        ],
+        [
+          151.429426,
+          151.10451,
+          153.619362,
+          150.155518,
+          154.217989
+        ]
+      ],
+      "median_ms": [
+        149.833808,
+        151.429426
+      ],
+      "speedup": 0.9894629594646948,
+      "output_bytes": 100826178,
+      "output_sha256": "a71ae9b55ffbc5a86c69e7394f31805b951abdc3d73c3b51f57fadf6c8350e22"
+    }
+  },
+  "binary_sha256": [
+    "7af8f436ce20355c63d9db1e8e90611b7a50138b3851cc33b5e642e4cf6dce76",
+    "975267673811cf2abe2d0735065fb3dd4769aa7b8a5c513db8676fc509a0e78e"
+  ]
+}

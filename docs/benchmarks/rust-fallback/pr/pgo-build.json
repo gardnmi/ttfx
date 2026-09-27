@@ -1,0 +1,9 @@
+{
+  "compiler": "rustc 1.98.1 (48a229cea 2026-09-01) (Arch Linux rust 1:1.98.1-1)\nbinary: rustc\ncommit-hash: 48a229ceaefd4985c50990b14116b6d856af0985\ncommit-date: 2026-09-01\nhost: x86_64-unknown-linux-gnu\nrelease: 1.98.1\nLLVM version: 22.1.8\n",
+  "llvm_profdata": "LLVM (http://llvm.org/):\n  LLVM version 22.1.8\n  Optimized build.\n",
+  "profile": "/home/gardnmi/Worktrees/ttfx/perf-rust-engine/target/round11/run-q_0ma1qw/merged.profdata",
+  "control": "/home/gardnmi/Worktrees/ttfx/perf-rust-engine/target/round11/control/x86_64-unknown-linux-gnu/release/ttfx",
+  "binary": "/home/gardnmi/Worktrees/ttfx/perf-rust-engine/target/round11/pgo/x86_64-unknown-linux-gnu/release/ttfx",
+  "control_sha256": "230840fb23218a1bea3f415964d34a7e52bc2adfc1ec6980269b1cc1969db756",
+  "binary_sha256": "669d05f751d726d2928539db5901382d3c4e82a14e33b97713941afeb6283018"
+}

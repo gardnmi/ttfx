@@ -114,6 +114,66 @@ fn prepared_motion_matches_walker_for_curves_sync_holds_loops_and_large_coordina
 }
 
 #[test]
+fn prepared_synced_scenes_match_ordinary_playback_after_public_edits() {
+    for shape in 0..3 {
+        for ease in [None, Some(Easing::OutElastic), Some(Easing::InOutBack)] {
+            let mut fast = context(true, 10, ease, shape);
+            let mut ordinary = context(true, 10, ease, shape);
+            ordinary.set_scene_runtime(false);
+            for tick in 0..400 {
+                for ctx in [&mut fast, &mut ordinary] {
+                    match tick {
+                        37 => {
+                            let scene = ctx.terminal.arena[0].animation.scenes.get_mut("scene").unwrap();
+                            scene.sync = Some(SyncMetric::Distance);
+                            scene.ease = Some(Easing::InOutBack); // sync has priority over easing
+                        }
+                        59 => {
+                            ctx.terminal.arena[1]
+                                .animation
+                                .scenes
+                                .get_mut("scene")
+                                .unwrap()
+                                .add_frame("界", 3, VisualParams::default())
+                                .unwrap();
+                        }
+                        87 => {
+                            ctx.terminal.arena = ctx.terminal.arena.clone();
+                            ctx.terminal.arena[0].animation.scenes.get_mut("scene").unwrap().reset_scene();
+                        }
+                        111 => ctx.terminal.arena[1].animation.set_appearance("X", false, Some("!"), None),
+                        131 => {
+                            ctx.register_event(
+                                CharId(4),
+                                Event::SceneComplete,
+                                CallerKey::Scene("scene".into()),
+                                EventAction::SetLayer(7),
+                            )
+                            .unwrap();
+                        }
+                        177 => ctx.terminal.arena[0].animation.scenes.get_mut("scene").unwrap().is_looping = true,
+                        201 => {
+                            let scene = ctx.terminal.arena[0].animation.scenes.get_mut("scene").unwrap();
+                            scene.is_looping = false;
+                            scene.sync = None;
+                        }
+                        251 => {
+                            ctx.terminal.arena[1].motion.active_path = None;
+                            ctx.terminal.arena[9].motion.active_path = None;
+                        }
+                        271 => ctx.event_log = Some(Vec::new()),
+                        _ => {}
+                    }
+                }
+                fast.update(&mut NoopHooks);
+                ordinary.update(&mut NoopHooks);
+                assert_state(&mut fast, &mut ordinary);
+            }
+        }
+    }
+}
+
+#[test]
 fn public_edits_clone_growth_map_changes_and_tracing_retire_prepared_progress() {
     let mut fast = context(true, 5, Some(Easing::OutElastic), 0);
     let mut ordinary = context(false, 5, Some(Easing::OutElastic), 0);

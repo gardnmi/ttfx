@@ -1,5 +1,10 @@
 # Rust fallback optimization: review and measurements
 
+The tables below record the initial PR revision `6dce496`. The subsequent
+[round 12 report](rust-fallback-round12.md) measures further changes directly
+against that PR revision, with fresh validation. Use that report for the latest
+incremental results; the independently measured speedups should not be multiplied.
+
 This branch reduces repeated work in the Rust fallback while preserving complete
 terminal output and callback ordering. It is based on current upstream master
 `702b630512e76dc8edcbba47cf948e857bed8d77` (v0.4.0). The primary comparison below
@@ -10,7 +15,7 @@ The assembly engine, bridge, dispatcher, default feature, and build script remai
 unchanged. `TTFX_ASM=0` selects the optimized Rust path; normal engine selection
 still applies. See [fallback examples](rust-fallback-dispatch.md).
 
-## Cumulative gain over current upstream Rust
+## Initial PR gain over upstream Rust (6dce496)
 
 Normal portable release builds, **without PGO or `target-cpu=native`**: the final
 Rust fallback is **1.765× faster** by geometric mean across all 37 effects;
@@ -65,8 +70,8 @@ These numbers measure engine throughput rather than physical-terminal frame rate
 | waves | 444.38 | 85.13 | 5.220× |
 | wipe | 50.90 | 30.69 | 1.658× |
 
-Overflow takes 122.11 → 133.56 ms in this sweep: **9.4% longer**. This remains
-a draft with a real per-effect regression, despite the broader gains.
+At `6dce496`, Overflow took 122.11 → 133.56 ms in this sweep: **9.4% longer**.
+This was a known per-effect regression in the initial draft.
 Assembly still leads the candidate Rust implementation by **3.815×** in geometric-mean
 elapsed time. Matching the assembly engine across the suite has not been achieved.
 
@@ -187,7 +192,7 @@ path-progress accessors, and `InputCoordinateMap` replace some prior return type
 public fields, and containers. Assigning an owned waypoint vector or input map
 requires `.into()`; counter mutation uses mutable setters to invalidate caches.
 
-Validation of the unchanged final sources:
+Validation at revision `6dce496`:
 
 - `TTFX_ASM=0 ./bin/test`: 98 release tests, 19 CLI cases, 354 Python-reference
   parity cases, 41 complete terminal-stream comparisons, and signal/close/resize

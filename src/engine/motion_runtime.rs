@@ -84,6 +84,12 @@ impl Default for MotionRuntime {
 }
 
 impl MotionRuntime {
+    /// Prepared cursors cannot be complete: completion and public mutations
+    /// retire them before the ordinary engine changes activity.
+    pub(crate) fn active_mask(&self) -> &[u64] {
+        &self.members
+    }
+
     #[inline]
     fn contains(&self, id: usize) -> bool {
         self.count != 0 && self.members.get(id / 64).is_some_and(|word| word & (1 << (id % 64)) != 0)

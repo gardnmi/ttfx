@@ -123,12 +123,99 @@ impl Default for CharacterFilter {
 #[derive(Debug, Clone, Default)]
 pub struct InputCoordinateMap {
     entries: HashMap<Coord, CharId>,
+    dense: std::cell::OnceCell<Option<DenseInputCoordinates>>,
     revision: super::revision::Revision,
 }
 
 impl From<HashMap<Coord, CharId>> for InputCoordinateMap {
     fn from(entries: HashMap<Coord, CharId>) -> Self {
-        Self { entries, revision: super::revision::Revision::default() }
+        Self { entries, dense: std::cell::OnceCell::new(), revision: super::revision::Revision::default() }
+    }
+}
+
+/// Dense input text permits direct coordinate lookup. Sparse or enormous
+/// coordinate domains keep the HashMap; storage is bounded independently of
+/// user-provided coordinates.
+#[derive(Debug, Clone)]
+struct DenseInputCoordinates {
+    left: i64,
+    bottom: i64,
+    width: usize,
+    height: usize,
+    cells: Vec<Option<CharId>>,
+}
+
+impl DenseInputCoordinates {
+    fn build(entries: &HashMap<Coord, CharId>) -> Option<Self> {
+        let left = entries.keys().map(|c| c.column).min()?;
+        let right = entries.keys().map(|c| c.column).max()?;
+        let bottom = entries.keys().map(|c| c.row).min()?;
+        let top = entries.keys().map(|c| c.row).max()?;
+        let width = usize::try_from(right.checked_sub(left)?.checked_add(1)?).ok()?;
+        let height = usize::try_from(top.checked_sub(bottom)?.checked_add(1)?).ok()?;
+        let len = width.checked_mul(height)?;
+        if len > 1_048_576 || len > entries.len().saturating_mul(4) {
+            return None;
+        }
+        let mut cells = vec![None; len];
+        for (coord, &id) in entries {
+            cells[(coord.column - left) as usize * height + (coord.row - bottom) as usize] = Some(id);
+        }
+        Some(Self { left, bottom, width, height, cells })
+    }
+
+    fn get(&self, coord: Coord) -> Option<CharId> {
+        let column = usize::try_from(coord.column.checked_sub(self.left)?).ok()?;
+        let row = usize::try_from(coord.row.checked_sub(self.bottom)?).ok()?;
+        if column >= self.width || row >= self.height {
+            return None;
+        }
+        self.cells[column * self.height + row]
+    }
+}
+
+impl InputCoordinateMap {
+    /// Visit only populated input cells inside the exact column-major ellipse.
+    /// The dense index lets beams skip empty off-canvas spans before walking
+    /// cells. Sparse maps retain the ordinary coordinate iterator.
+    pub(crate) fn for_each_in_circle(&self, center: Coord, diameter: i64, mut visit: impl FnMut(CharId)) {
+        let Some(dense) = self.dense.get_or_init(|| DenseInputCoordinates::build(&self.entries)) else {
+            for coord in crate::utils::geometry::coords_in_circle(center, diameter) {
+                if let Some(&id) = self.entries.get(&coord) {
+                    visit(id);
+                }
+            }
+            return;
+        };
+        if diameter <= 0 {
+            return;
+        }
+        let left = center.column.saturating_sub(diameter).max(dense.left);
+        let right = center.column.saturating_add(diameter).min(dense.left + (dense.width - 1) as i64);
+        let top = dense.bottom + (dense.height - 1) as i64;
+        let a_squared = (diameter as f64).powf(2.0);
+        let b_squared = (diameter as f64 / 2.0).powf(2.0);
+        for column in left..=right {
+            let rows =
+                crate::utils::geometry::circle_column_y_range(column, center.column, center.row, a_squared, b_squared);
+            let bottom = (*rows.start()).max(dense.bottom);
+            let top = (*rows.end()).min(top);
+            if bottom > top {
+                continue;
+            }
+            let start = (column - dense.left) as usize * dense.height + (bottom - dense.bottom) as usize;
+            let end = start + (top - bottom) as usize + 1;
+            for &id in dense.cells[start..end].iter().flatten() {
+                visit(id);
+            }
+        }
+    }
+
+    fn lookup(&self, coord: Coord) -> Option<CharId> {
+        match self.dense.get_or_init(|| DenseInputCoordinates::build(&self.entries)) {
+            Some(dense) => dense.get(coord),
+            None => self.entries.get(&coord).copied(),
+        }
     }
 }
 
@@ -142,6 +229,7 @@ impl std::ops::Deref for InputCoordinateMap {
 impl std::ops::DerefMut for InputCoordinateMap {
     fn deref_mut(&mut self) -> &mut Self::Target {
         self.revision = super::revision::Revision::default();
+        self.dense.take();
         &mut self.entries
     }
 }
@@ -159,6 +247,7 @@ impl<'a> IntoIterator for &'a mut InputCoordinateMap {
     type IntoIter = std::collections::hash_map::IterMut<'a, Coord, CharId>;
     fn into_iter(self) -> Self::IntoIter {
         self.revision = super::revision::Revision::default();
+        self.dense.take();
         self.entries.iter_mut()
     }
 }
@@ -397,7 +486,7 @@ impl Terminal {
     }
 
     pub fn get_character_by_input_coord(&self, coord: Coord) -> Option<CharId> {
-        self.character_by_input_coord.get(&coord).copied()
+        self.character_by_input_coord.lookup(coord)
     }
 
     /// Dirty edits invalidate immediately. A caller that renders those edits
@@ -1071,6 +1160,66 @@ fn setup_input_characters(
 #[cfg(test)]
 mod dense_output_cache_tests {
     use super::*;
+
+    #[test]
+    fn coordinate_index_and_clipped_ellipses_follow_map_mutations() {
+        let entries: HashMap<_, _> = (-3..=9)
+            .flat_map(|x| (-5..=6).map(move |y| (Coord::new(x, y), CharId(((x + 3) * 12 + y + 5) as u32))))
+            .collect();
+        let mut map = InputCoordinateMap::from(entries);
+        for round in 0..6 {
+            for x in -7..=14 {
+                for y in -8..=10 {
+                    let c = Coord::new(x, y);
+                    assert_eq!(map.lookup(c), map.entries.get(&c).copied());
+                }
+            }
+            for center in [Coord::new(-5, -8), Coord::new(0, 0), Coord::new(8, 9)] {
+                for diameter in 0..30 {
+                    let expected: Vec<_> = crate::utils::geometry::coords_in_circle(center, diameter)
+                        .filter_map(|c| map.entries.get(&c).copied())
+                        .collect();
+                    let mut actual = Vec::new();
+                    map.for_each_in_circle(center, diameter, |id| actual.push(id));
+                    assert_eq!(actual, expected);
+                }
+            }
+            match round {
+                0 => {
+                    map.remove(&Coord::new(0, 0));
+                }
+                1 => {
+                    map.insert(Coord::new(10, 7), CharId(u32::MAX));
+                }
+                2 => {
+                    for (_, id) in &mut map {
+                        id.0 = id.0.wrapping_add(1);
+                    }
+                }
+                3 => {
+                    let mut copy = map.clone();
+                    copy.clear();
+                    assert_eq!(copy.lookup(Coord::new(1, 1)), None);
+                }
+                4 => {
+                    map = HashMap::from([(Coord::new(2, 2), CharId(19))]).into();
+                }
+                _ => {
+                    map.clear();
+                }
+            }
+        }
+        for entries in [
+            HashMap::from([(Coord::new(i64::MIN, 0), CharId(1)), (Coord::new(i64::MAX, 0), CharId(2))]),
+            HashMap::from([(Coord::new(0, 0), CharId(1)), (Coord::new(100000, 100000), CharId(2))]),
+        ] {
+            let map = InputCoordinateMap::from(entries);
+            for (&coord, &id) in &map {
+                assert_eq!(map.lookup(coord), Some(id));
+            }
+            assert!(map.dense.get().unwrap().is_none());
+        }
+    }
 
     #[test]
     fn recycled_dense_frames_track_consumed_mutations_and_geometry() {

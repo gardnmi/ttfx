@@ -1,0 +1,10 @@
+200x50, 21 repetitions, seed 1, virtual clock, pacing off
+effect               before ms    after ms   speedup
+overflow                130.22       85.42    1.524x
+spotlights              168.09      127.85    1.315x
+matrix                  128.23      110.76    1.158x
+fireworks               272.73      223.94    1.218x
+swarm                   468.78      408.76    1.147x
+colorshift              139.98      146.18    0.958x
+vhstape                 130.99      133.07    0.984x
+Median effect speedup: 1.158x

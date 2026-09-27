@@ -1,0 +1,228 @@
+   Compiling ttfx v0.4.0 (/home/gardnmi/Worktrees/ttfx/perf-rust-engine)
+    Finished `release` profile [optimized] target(s) in 45.90s
+     Running unittests src/lib.rs (target/release/deps/ttfx-828b9cd7131fac88)
+
+running 48 tests
+test engine::active_characters::tests::preserves_order_and_set_semantics_across_word_boundaries ... ok
+test engine::animation::frame_index_tests::diverse_eased_scenes_do_not_rebuild_large_tables_on_every_tick ... ok
+test engine::animation::frame_index_tests::duration_lookup_matches_expanded_ticks_after_preparation_and_appends ... ok
+test engine::animation::shared_visual_tests::equal_symbol_and_styling_share_one_visual ... ok
+test engine::animation::shared_visual_tests::different_symbol_or_styling_do_not_share ... ok
+test engine::effect::tests::a_lost_output_stream_is_not_an_error ... ok
+test engine::animation::frame_index_tests::eased_cache_distinguishes_curves_and_durations_after_eviction ... ok
+test engine::events::sharing_tests::shared_prefix_keeps_local_appends_and_copy_on_write_independent ... ok
+test engine::events::sharing_tests::callback_can_extend_shared_action_list_during_dispatch ... ok
+test engine::animation::appearance_palette_tests::palette_observes_color_code_edits_even_when_constructor_arguments_match ... ok
+test engine::animation::shared_visual_tests::scene_frames_share_visuals_across_scenes ... ok
+test engine::motion_runtime::tests::vector_point_matches_geometry_at_ties_overshoot_and_conversion_limits ... ok
+test engine::motion_runtime::tests::prepared_overshoot_keeps_rounding_and_retires_exit_flags_before_reuse ... ok
+test engine::motion::sharing_tests::shared_routes_keep_playback_origins_and_mutations_independent ... ok
+test engine::motion_runtime::tests::integer_prefix_preparation_matches_sequential_subtraction_and_event_flags ... ok
+test engine::scene_runtime::tests::active_easing_plans_are_bounded_and_fall_back_when_full ... ok
+test engine::scene_runtime::tests::compact_plans_preserve_exact_frame_indices_and_curve_reversals ... ok
+test engine::scene_runtime::tests::unobserved_moving_loops_wrap_without_changing_public_counters ... ok
+test tests::terminal_resize_notifications_are_consumed ... ok
+test utils::ansi::tests::parse_24_bit ... ok
+test utils::ansi::tests::parse_8_bit ... ok
+test utils::easing::tests::sequence_easer_reports_reversed_easing_as_removed ... ok
+test utils::easing::tests::sequence_easer_returns_borrowed_deltas_without_clone ... ok
+test utils::graphics::tests::color_debug_hides_the_cached_representation ... ok
+test utils::graphics::tests::coordinate_mapping_keeps_bounds_and_public_iteration_order ... ok
+test engine::active_characters::tests::matches_btree_set_through_mixed_operations ... ok
+test utils::graphics::tests::extrapolated_colors_keep_hex_validation_behavior ... ok
+test utils::graphics::tests::rgb_string_borrowed_lookup_matches_str_hash ... ok
+test utils::ansi::tests::sgr_emission ... ok
+test utils::hexterm::tests::table_spot_checks ... ok
+test utils::hexterm::tests::repeated_and_equivalent_spellings_share_the_exact_result ... ok
+test utils::hexterm::tests::valid_hex ... ok
+test utils::ordered_map::tests::indexed_maps_preserve_order_and_lookup_after_mutation ... ok
+test utils::pycompat::tests::round_matches_python ... ok
+test utils::pycompat::tests::floor_div_matches_python ... ok
+test effects::spotlights::distance_tests::unchanged_lighting_respects_external_edits_rendering_maps_and_other_animations ... ok
+test engine::terminal::dense_output_cache_tests::recycled_dense_frames_track_consumed_mutations_and_geometry ... ok
+test engine::animation::shared_visual_tests::dropped_visuals_are_swept_out_of_the_table ... ok
+test utils::rng::tests::ranges_respected ... ok
+test utils::rng::tests::deterministic_for_seed ... ok
+test effects::spotlights::distance_tests::cached_and_fallback_distances_match_hypot_bit_for_bit ... ok
+test utils::graphics::tests::fraction_lookup_preserves_division_boundaries ... ok
+test engine::animation::appearance_palette_tests::palette_matches_ordinary_appearance_across_modes_eviction_and_mutation ... ok
+test engine::render::tests::comparison_matches_slices_at_every_tail_alignment_and_mismatch ... ok
+test engine::terminal::dense_output_cache_tests::coordinate_index_and_clipped_ellipses_follow_map_mutations ... ok
+test utils::graphics::tests::generated_rgb_preserves_hex_identity_and_channels ... ok
+test utils::pycompat::tests::rounding_matches_previous_arithmetic_at_boundaries_and_across_exponents ... ok
+test utils::hexterm::tests::cached_conversion_matches_reference_across_rgb_space ... ok
+
+test result: ok. 48 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/main.rs (target/release/deps/ttfx-293a64ffcacedf3f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/animation_playback.rs (target/release/deps/animation_playback-31756ff93b418d40)
+
+running 12 tests
+test appearance_changes_preserve_shared_visuals_and_weak_observers ... ok
+test long_duration_scenes_do_not_need_a_per_tick_allocation ... ok
+test reset_restores_partially_played_frames_and_looping_order ... ok
+test repeated_appearance_respects_color_modes_and_bold_overrides ... ok
+test scene_cache_applies_preexisting_overrides_before_lookup ... ok
+test reused_appearances_reset_styles_and_follow_color_mode_changes ... ok
+test scene_cache_does_not_keep_visuals_alive_after_teardown ... ok
+test scene_programs_share_definitions_but_keep_playback_and_append_independent ... ok
+test shared_scene_visuals_preserve_independent_playback_and_mutation ... ok
+test unequal_gradients_and_symbols_follow_python_distribution ... ok
+test formatted_symbols_append_across_inline_and_heap_boundaries ... ok
+test cached_scene_visuals_distinguish_modes_styles_and_color_representation ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/asm_diff.rs (target/release/deps/asm_diff-44f736e162ae538b)
+
+running 21 tests
+test adjust_color_brightness_matches ... ok
+test bezier_easings_match_bits ... ok
+test chance_threshold_matches_random_compare ... ok
+test coord_on_bezier_curve_and_line_match ... ok
+test coords_in_and_on_rect_match ... ok
+test coords_on_circle_matches ... ok
+test coords_in_circle_matches_list_and_stream ... ok
+test easing_trackers_match_every_step_and_reset ... ok
+test easings_match_bits ... ok
+test extrapolate_along_ray_matches ... ok
+test floor_div_and_py_mod_match ... ok
+test length_of_bezier_curve_matches_bits ... ok
+test length_of_line_matches_bits ... ok
+test normalized_distance_from_center_matches ... ok
+test randint_matches_values_and_state ... ok
+test random_color_matches_values_and_state ... ok
+test round_half_even_and_casts_match ... ok
+test sequence_easers_match_added_removed_current_and_reset ... ok
+test shift_color_towards_matches ... ok
+test shuffle_matches_order_and_state ... ok
+test uniform_matches_bits_and_state ... ok
+
+test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.11s
+
+     Running tests/easing_goldens.rs (target/release/deps/easing_goldens-d0209cb399ec2f8a)
+
+running 1 test
+test easing_matches_python_bit_exactly ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/engine_traces.rs (target/release/deps/engine_traces-a67eb679ebb0fe9b)
+
+running 1 test
+test engine_traces_match_python ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/geometry_goldens.rs (target/release/deps/geometry_goldens-21c4cf2ffc6f9908)
+
+running 2 tests
+test nonpositive_circle_diameters_are_empty ... ok
+test geometry_matches_python ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/graphics_goldens.rs (target/release/deps/graphics_goldens-aa60eb1ec9800c3c)
+
+running 1 test
+test graphics_matches_python ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/idle_scheduling.rs (target/release/deps/idle_scheduling-56d4a00844c79f98)
+
+running 6 tests
+test arena_clone_preserves_pending_runtime_counters_and_detaches_mutations ... ok
+test held_frames_match_eager_state_across_retirement_and_timer_wrap ... ok
+test compact_runtime_matches_reference_without_scheduler_and_after_toggles ... ok
+test callbacks_materialize_and_wake_both_sides_of_the_update_cursor ... ok
+test eased_single_visual_holds_cross_timer_wrap_and_finish_on_time ... ok
+test eased_holds_survive_curve_changes_appends_and_restarts ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/motion_fast_path.rs (target/release/deps/motion_fast_path-799f51cdad10713e)
+
+running 1 test
+test unobserved_motion_matches_reentrant_walker ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/motion_runtime.rs (target/release/deps/motion_runtime-d6f5bf608fdee2d5)
+
+running 4 tests
+test public_edits_clone_growth_map_changes_and_tracing_retire_prepared_progress ... ok
+test callback_observations_and_nested_updates_preserve_character_order ... ok
+test prepared_synced_scenes_match_ordinary_playback_after_public_edits ... ok
+test prepared_motion_matches_walker_for_curves_sync_holds_loops_and_large_coordinates ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+
+     Running tests/render_incremental.rs (target/release/deps/render_incremental-521dc92dae4bfff9)
+
+running 5 tests
+test vectored_frame_output_handles_interrupts_and_partial_writes ... ok
+test dense_repaint_clips_boundaries_and_resolves_overlaps_like_checked_reference ... ok
+test switching_between_dense_and_sparse_updates_keeps_cached_rows_current ... ok
+test cached_frames_match_full_repaint_through_mutation_overlap_and_geometry_changes ... ok
+test stationary_playback_reuses_layout_until_geometry_or_painter_state_changes ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/scene_handles.rs (target/release/deps/scene_handles-f4974aabc1e688f6)
+
+running 1 test
+test handles_follow_names_through_relocation_replacement_and_clone ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/terminal_grouping.rs (target/release/deps/terminal_grouping-df43bf9b75127c1e)
+
+running 1 test
+test direct_buckets_match_scan_grouping_order_and_bounds ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests ttfx
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Finished `release` profile [optimized] target(s) in 1.08s
+Built /home/gardnmi/Worktrees/ttfx/perf-rust-engine/target/release/ttfx
+cli corpus: 19 passed, 0 failed
+  ok   tty dies from SIGTERM
+  ok   tty restores the cursor
+  ok   pipe dies from SIGTERM
+  ok   pipe gets no teardown
+
+sigterm behavior: all checks passed
+  ok   a closed terminal ends the run
+  ok   nothing is reported about it
+  ok   no abort with stderr on the dead terminal
+  ok   that run ends too
+
+terminal close behavior: all checks passed
+reference already at 7a91dd9ca6ee0c4f4b1484efee0ecac1bb84104e
+effect parity: 354 passed, 0 failed
+tty byte-stream parity: 41 passed, 0 failed
+stdout piped to a slow consumer, window resized
+  ok   runs without a resize: got 1, want 1
+  ok   runs with a resize: got 1, want 1
+  ok   bytes match the undisturbed run: got 55735, want 55735
+tty, resize that cannot move a cell
+  ok   runs: got 1, want 1
+tty, resize that changes the canvas
+  ok   runs: got 2, want 2
+tty, burst of resizes during a drag
+  ok   rebuilds for a 6-step drag: 2, want <= 3
+tty, cursor is not shown between runs
+  ok   show-cursor before the rebuild: got 0, want 0
+
+resize behavior: all checks passed

@@ -201,3 +201,52 @@ fn dense_repaint_clips_boundaries_and_resolves_overlaps_like_checked_reference()
         }
     }
 }
+
+#[test]
+fn stationary_playback_reuses_layout_until_geometry_or_painter_state_changes() {
+    use ttfx::engine::animation::VisualParams;
+    use ttfx::engine::character::CharId;
+    use ttfx::engine::ctx::{Clock, EngineCtx, NoopHooks};
+    use ttfx::utils::rng::Rng;
+    let mut ctx = EngineCtx::new(
+        &("X".repeat(40) + "\n").repeat(15),
+        TerminalConfig { canvas_width: 40, canvas_height: 15, ignore_terminal_dimensions: true, ..Default::default() },
+        Rng::seeded(9),
+        Clock::virtual_with_frame_rate(60),
+    )
+    .unwrap();
+    let mut hooks = NoopHooks;
+    for id in ctx.terminal.input_characters.clone() {
+        let animation = &mut ctx.terminal.arena[id.0 as usize].animation;
+        animation.new_scene(false, None, None, "colors", false);
+        let scene = animation.scenes.get_mut("colors").unwrap();
+        for symbol in ["A", "λ", "long", "界"].into_iter().cycle().take(32) {
+            scene.add_frame(symbol, 3, VisualParams::default()).unwrap();
+        }
+        ctx.activate_scene(&mut hooks, id, "colors");
+        ctx.terminal.set_character_visibility(id, true);
+        ctx.active_characters.insert(id);
+    }
+    for frame in 0..100 {
+        match frame {
+            10 => ctx.terminal.arena[0].motion.current_coord = ctx.terminal.arena[1].motion.current_coord,
+            20 => ctx.terminal.arena[0].layer = 9,
+            30 => ctx.terminal.set_character_visibility(CharId(0), false),
+            40 => ctx.terminal.canvas_column_offset = 1,
+            50 => ctx.terminal.visible_right = 35,
+            60 => {
+                let id = ctx.terminal.add_character("new", Coord::new(5, 5));
+                ctx.terminal.set_character_visibility(id, true);
+            }
+            70 => ctx.terminal.arena[1].character_id = u32::MAX,
+            _ => {}
+        }
+        ctx.update(&mut hooks);
+        let expected = reference(&ctx.terminal);
+        assert_eq!(ctx.terminal.get_formatted_output_string(), expected, "frame {frame}");
+        if frame % 4 == 0 {
+            ctx.terminal.update_terminal_state();
+        }
+        assert_eq!(ctx.terminal.get_formatted_output_string(), expected);
+    }
+}

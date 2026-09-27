@@ -33,10 +33,7 @@ struct FloatPoint {
 impl FloatPoint {
     #[inline]
     fn interpolate(self, other: Self, t: f64) -> Self {
-        FloatPoint {
-            column: (1.0 - t) * self.column + t * other.column,
-            row: (1.0 - t) * self.row + t * other.row,
-        }
+        FloatPoint { column: (1.0 - t) * self.column + t * other.column, row: (1.0 - t) * self.row + t * other.row }
     }
 }
 
@@ -48,11 +45,8 @@ pub fn find_coords_on_circle(origin: Coord, radius: i64, coords_limit: i64, uniq
         return points;
     }
     let mut seen: HashSet<Coord> = HashSet::new();
-    let coords_limit = if coords_limit == 0 {
-        round_half_even(2.0 * std::f64::consts::PI * radius as f64)
-    } else {
-        coords_limit
-    };
+    let coords_limit =
+        if coords_limit == 0 { round_half_even(2.0 * std::f64::consts::PI * radius as f64) } else { coords_limit };
     let angle_step = 2.0 * std::f64::consts::PI / coords_limit as f64;
     for i in 0..coords_limit {
         let angle = angle_step * i as f64;
@@ -94,7 +88,13 @@ pub fn find_coords_in_circle(center: Coord, diameter: i64) -> Vec<Coord> {
 }
 
 #[inline]
-fn circle_column_y_range(x: i64, h: i64, k: i64, a_squared: f64, b_squared: f64) -> std::ops::RangeInclusive<i64> {
+pub(crate) fn circle_column_y_range(
+    x: i64,
+    h: i64,
+    k: i64,
+    a_squared: f64,
+    b_squared: f64,
+) -> std::ops::RangeInclusive<i64> {
     let x_component = ((x - h) as f64).powf(2.0) / a_squared;
     let max_y_offset = (b_squared * (1.0 - x_component)).powf(0.5) as i64;
     (k - max_y_offset)..=(k + max_y_offset)
@@ -106,9 +106,10 @@ pub(crate) fn coords_in_circle(center: Coord, diameter: i64) -> impl Iterator<It
     let columns = (diameter != 0).then(|| (h - diameter)..=(h + diameter));
     let a_squared = (diameter as f64).powf(2.0);
     let b_squared = (diameter as f64 / 2.0).powf(2.0);
-    columns.into_iter().flatten().flat_map(move |x| {
-        circle_column_y_range(x, h, k, a_squared, b_squared).map(move |y| Coord::new(x, y))
-    })
+    columns
+        .into_iter()
+        .flatten()
+        .flat_map(move |x| circle_column_y_range(x, h, k, a_squared, b_squared).map(move |y| Coord::new(x, y)))
 }
 
 /// find_coords_in_rect: full (2d+1)^2 block, empty for distance 0.

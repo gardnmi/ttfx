@@ -8,7 +8,7 @@ use crate::cli::parse_color;
 use crate::effects::common::{
     parse_gradient_direction, parse_gradient_steps, parse_positive_int, parse_positive_int_range,
 };
-use crate::engine::animation::ExistingColorHandling;
+use crate::engine::animation::{AppearancePalette, ExistingColorHandling};
 use crate::engine::character::CharId;
 use crate::engine::ctx::{EffectHooks, EngineCtx};
 use crate::engine::effect::Effect;
@@ -75,15 +75,22 @@ impl Row {
     }
 
     /// Row.set_color.
-    fn set_color(&self, ctx: &mut EngineCtx, fg_color: Option<Color>, bg_color: Option<Color>) {
+    fn set_color(
+        &self,
+        ctx: &mut EngineCtx,
+        fg_color: Option<Color>,
+        bg_color: Option<Color>,
+        palette: &mut AppearancePalette,
+    ) {
         for &id in &self.characters {
             let ch = &mut ctx.terminal.arena[id.0 as usize];
             let uses_pre = ch.uses_input_preexisting_colors;
-            ch.animation.set_appearance(
+            ch.animation.set_appearance_with_palette(
                 &ch.input_symbol,
                 uses_pre,
                 None,
-                Some(ColorPair::new(fg_color.clone(), bg_color.clone())),
+                ColorPair::new(fg_color, bg_color),
+                palette,
             );
         }
     }
@@ -96,6 +103,7 @@ pub struct Overflow {
     character_final_color_map: HashMap<CharId, Color>,
     delay: i64,
     overflow_gradient: Option<Gradient>,
+    palette: AppearancePalette,
 }
 
 impl Overflow {
@@ -107,6 +115,7 @@ impl Overflow {
             character_final_color_map: HashMap::new(),
             delay: 0,
             overflow_gradient: None,
+            palette: AppearancePalette::new(),
         }
     }
 }
@@ -129,8 +138,7 @@ impl Effect for Overflow {
                 self.config.final_gradient_direction,
             )
             .map_err(EngineError::Other)?;
-        let fills_filter =
-            CharacterFilter { inner_fill_chars: true, outer_fill_chars: true, ..Default::default() };
+        let fills_filter = CharacterFilter { inner_fill_chars: true, outer_fill_chars: true, ..Default::default() };
         let characters = ctx.terminal.get_characters(
             &mut ctx.rng,
             fills_filter,
@@ -138,15 +146,12 @@ impl Effect for Overflow {
         );
         for &id in &characters {
             let coord = ctx.terminal.arena[id.0 as usize].input_coord;
-            let color = final_gradient_mapping
-                .get(&coord)
-                .cloned()
-                .unwrap_or_else(|| Color::from_hex("000000").unwrap());
+            let color =
+                final_gradient_mapping.get(&coord).cloned().unwrap_or_else(|| Color::from_hex("000000").unwrap());
             self.character_final_color_map.insert(id, color);
         }
         let (lower_range, upper_range) = self.config.overflow_cycles_range;
-        let mut rows =
-            ctx.terminal.get_characters_grouped(CharacterFilter::default(), CharacterGroup::RowTopToBottom);
+        let mut rows = ctx.terminal.get_characters_grouped(CharacterFilter::default(), CharacterGroup::RowTopToBottom);
         if upper_range > 0 {
             for _ in 0..ctx.rng.randint(lower_range, upper_range) {
                 ctx.rng.shuffle(&mut rows);
@@ -223,16 +228,11 @@ impl Effect for Overflow {
         }
         self.delay = 0;
         let steps = std::cmp::max(
-            floor_div(
-                ctx.terminal.canvas.top,
-                std::cmp::max(1, self.config.overflow_gradient_stops.len() as i64 - 1),
-            ),
+            floor_div(ctx.terminal.canvas.top, std::cmp::max(1, self.config.overflow_gradient_stops.len() as i64 - 1)),
             1,
         );
-        self.overflow_gradient = Some(
-            Gradient::with_steps(&self.config.overflow_gradient_stops, steps, false)
-                .map_err(EngineError::Other)?,
-        );
+        self.overflow_gradient =
+            Some(Gradient::with_steps(&self.config.overflow_gradient_stops, steps, false).map_err(EngineError::Other)?);
         Ok(())
     }
 
@@ -248,14 +248,14 @@ impl Effect for Overflow {
                                 let head_row =
                                     ctx.terminal.arena[row.characters[0].0 as usize].motion.current_coord.row;
                                 let index = std::cmp::min(head_row, spectrum.len() as i64 - 1) as usize;
-                                row.set_color(ctx, Some(spectrum[index].clone()), None);
+                                row.set_color(ctx, Some(spectrum[index].clone()), None, &mut self.palette);
                             }
                         }
                         let next_row = self.pending_rows.pop_front().unwrap();
                         next_row.setup(ctx);
                         next_row.move_up(ctx);
                         if !next_row.final_ {
-                            next_row.set_color(ctx, Some(spectrum[0].clone()), None);
+                            next_row.set_color(ctx, Some(spectrum[0].clone()), None, &mut self.palette);
                         }
                         for &id in &next_row.characters {
                             ctx.terminal.set_character_visibility(id, true);
@@ -269,8 +269,7 @@ impl Effect for Overflow {
             }
             let canvas_top = ctx.terminal.canvas.top;
             let arena = &ctx.terminal.arena;
-            self.active_rows
-                .retain(|row| arena[row.characters[0].0 as usize].motion.current_coord.row <= canvas_top);
+            self.active_rows.retain(|row| arena[row.characters[0].0 as usize].motion.current_coord.row <= canvas_top);
             ctx.update(self);
             return Some(ctx.frame());
         }

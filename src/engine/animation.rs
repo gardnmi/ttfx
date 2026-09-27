@@ -357,6 +357,82 @@ fn scene_visual(symbol: &str, mut params: VisualParams, no_color: bool, xterm: b
     })
 }
 
+/// Appearance updates have no frame program retaining earlier visuals. Keep a
+/// bounded set of immutable values alive so repeated row colors and lighting
+/// values do not rebuild ANSI strings. Direct mapping makes both lookup and
+/// eviction constant-time; a collision only loses reuse.
+pub(crate) struct AppearancePalette {
+    slots: Vec<Option<(SceneVisualKey, Rc<CharacterVisual>)>>,
+    enabled: bool,
+}
+
+impl AppearancePalette {
+    const CAPACITY: usize = 4096;
+
+    pub(crate) fn new() -> Self {
+        Self { slots: Vec::new(), enabled: std::env::var_os("TTFX_APPEARANCE_CACHE").is_none_or(|value| value != "0") }
+    }
+
+    fn visual(
+        &mut self,
+        symbol: &str,
+        colors: ColorPair,
+        bold: bool,
+        no_color: bool,
+        xterm: bool,
+    ) -> Option<Rc<CharacterVisual>> {
+        if !self.enabled {
+            return None;
+        }
+        let mut chars = symbol.chars();
+        let single = chars.next()?;
+        if chars.next().is_some() {
+            return None;
+        }
+        let key = SceneVisualKey {
+            symbol: single,
+            styles: bold as u16 | (no_color as u16) << 8 | (xterm as u16) << 9,
+            colors: Some(colors),
+        };
+        use std::hash::{Hash, Hasher};
+        let mut hash = rustc_hash::FxHasher::default();
+        key.hash(&mut hash);
+        let slot = hash.finish() as usize & (Self::CAPACITY - 1);
+        if self.slots.is_empty() {
+            self.slots.resize_with(Self::CAPACITY, || None);
+        }
+        if let Some((previous, visual)) = &self.slots[slot] {
+            // Color equality intentionally compares only its constructor
+            // argument. RGB/xterm fields remain publicly mutable, and formatting
+            // reads those fields, so a palette hit must compare them as well.
+            let same_codes = |left: Option<Color>, right: Option<Color>| match (left, right) {
+                (Some(left), Some(right)) => left.rgb_color == right.rgb_color && left.xterm_color == right.xterm_color,
+                (None, None) => true,
+                _ => false,
+            };
+            let old_colors = previous.colors.unwrap();
+            if *previous == key
+                && same_codes(old_colors.fg_color, colors.fg_color)
+                && same_codes(old_colors.bg_color, colors.bg_color)
+            {
+                return Some(Rc::clone(visual));
+            }
+        }
+        let visual = Rc::new(CharacterVisual::new(
+            symbol,
+            VisualParams {
+                bold,
+                colors: Some(colors),
+                fg_color_code: resolve_color_code(colors.fg_color.as_ref(), no_color, xterm, None),
+                bg_color_code: resolve_color_code(colors.bg_color.as_ref(), no_color, xterm, None),
+                ..Default::default()
+            },
+        ));
+        self.slots[slot] = Some((key, Rc::clone(&visual)));
+        Some(visual)
+    }
+}
+
 /// Inline capacity for a formatted symbol. A 24-bit foreground and background
 /// pair plus a reset is 42 bytes, so all but pathological styling fits.
 const INLINE_SYMBOL_CAPACITY: usize = 63;
@@ -1062,6 +1138,32 @@ impl Animation {
         }
     }
 
+    /// Reuse a bounded effect-local palette when a workload deliberately applies
+    /// the same colors to many symbols. Ordinary one-off appearance changes keep
+    /// their allocation reuse and weak-reference behavior.
+    pub(crate) fn set_appearance_with_palette(
+        &mut self,
+        input_symbol: &str,
+        uses_input_preexisting_colors: bool,
+        symbol: Option<&str>,
+        colors: ColorPair,
+        palette: &mut AppearancePalette,
+    ) {
+        let (resolved, bold) =
+            if self.existing_color_handling == ExistingColorHandling::Always && uses_input_preexisting_colors {
+                (ColorPair::new(self.input_fg_color, self.input_bg_color), self.input_bold)
+            } else {
+                (colors, false)
+            };
+        if let Some(visual) =
+            palette.visual(symbol.unwrap_or(input_symbol), resolved, bold, self.no_color, self.use_xterm_colors)
+        {
+            self.current_character_visual = visual;
+        } else {
+            self.set_appearance(input_symbol, uses_input_preexisting_colors, symbol, Some(colors));
+        }
+    }
+
     /// Animation.set_appearance.
     pub fn set_appearance(
         &mut self,
@@ -1268,5 +1370,71 @@ mod shared_visual_tests {
         a.add_frame("x", 1, params("123456")).unwrap();
         b.add_frame("x", 1, params("123456")).unwrap();
         assert!(Rc::ptr_eq(&a.all_frames[0].character_visual, &b.all_frames[0].character_visual));
+    }
+}
+
+#[cfg(test)]
+mod appearance_palette_tests {
+    use super::*;
+
+    #[test]
+    fn palette_observes_color_code_edits_even_when_constructor_arguments_match() {
+        for xterm in [false, true] {
+            let mut palette = AppearancePalette::new();
+            palette.enabled = true;
+            let mut ordinary = Animation::new("x");
+            ordinary.use_xterm_colors = xterm;
+            let mut cached = ordinary.clone();
+            let mut foreground = Color::from_hex("112233").unwrap();
+            let mut background = Color::from_xterm(42);
+            for step in 0..20 {
+                foreground.rgb_color = Color::from_xterm(100 + step).rgb_color;
+                foreground.xterm_color = Some(100 + step);
+                background.rgb_color = Color::from_xterm(200 + step).rgb_color;
+                background.xterm_color = Some(200 + step);
+                let colors = ColorPair::new(Some(foreground), Some(background));
+                ordinary.set_appearance("x", false, None, Some(colors));
+                cached.set_appearance_with_palette("x", false, None, colors, &mut palette);
+                assert_eq!(ordinary.current_character_visual, cached.current_character_visual);
+                assert_eq!(
+                    ordinary.current_character_visual.formatted_symbol.as_str(),
+                    cached.current_character_visual.formatted_symbol.as_str()
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn palette_matches_ordinary_appearance_across_modes_eviction_and_mutation() {
+        let mut palette = AppearancePalette::new();
+        palette.enabled = true;
+        let mut ordinary = Animation::new("original");
+        let mut cached = ordinary.clone();
+        for iteration in 0..10_000 {
+            let symbol = ["x", "λ", "界", "🥟", "multiple characters", ""][iteration % 6];
+            let colors = ColorPair::new(
+                Some(Color::from_hex(&format!("{:06x}", iteration * 199 % 0x1000000)).unwrap()),
+                (iteration % 3 == 0).then(|| Color::from_xterm((iteration % 256) as u8)),
+            );
+            for animation in [&mut ordinary, &mut cached] {
+                animation.no_color = iteration % 7 == 0;
+                animation.use_xterm_colors = iteration % 5 == 0;
+                animation.existing_color_handling =
+                    if iteration % 4 == 0 { ExistingColorHandling::Always } else { ExistingColorHandling::Ignore };
+                animation.input_bold = iteration % 2 == 0;
+                animation.input_fg_color = Some(Color::from_xterm(196));
+            }
+            let (input, replacement) =
+                if iteration % 2 == 0 { ("original input", Some(symbol)) } else { (symbol, None) };
+            ordinary.set_appearance(input, true, replacement, Some(colors));
+            cached.set_appearance_with_palette(input, true, replacement, colors, &mut palette);
+            assert_eq!(ordinary.current_character_visual, cached.current_character_visual);
+            if iteration % 11 == 0 {
+                Rc::make_mut(&mut cached.current_character_visual).symbol = "independently changed".into();
+                cached.set_appearance_with_palette(input, true, replacement, colors, &mut palette);
+                assert_eq!(ordinary.current_character_visual, cached.current_character_visual);
+            }
+        }
+        assert_eq!(palette.slots.len(), AppearancePalette::CAPACITY);
     }
 }

@@ -73,22 +73,34 @@ mod tests {
 const NONE: u32 = u32::MAX;
 const OFFSCREEN: usize = usize::MAX;
 
-/// Incremental cell membership, stored in parallel arrays. Moving characters
+/// Store the membership fields touched together during a move together.
+#[derive(Clone, Copy)]
+struct CellMember {
+    cell: usize,
+    layer: i64,
+    visual: u64,
+    next: u32,
+    prev: u32,
+    character_id: u32,
+}
+impl Default for CellMember {
+    fn default() -> Self {
+        Self { cell: OFFSCREEN, layer: 0, visual: 0, next: NONE, prev: NONE, character_id: 0 }
+    }
+}
+
+/// Incremental cell membership. Moving characters
 /// unlink/relink in O(1). Only touched cells need their painter winner recomputed.
 #[derive(Default)]
 pub(crate) struct CellGrid {
     pub(crate) dense: bool,
     pub(crate) revision: u64,
     last_geometry: Option<[i64; 6]>,
+    stable_layout: usize,
     pub(crate) dirty_rows: Vec<bool>,
     geometry: Option<[i64; 6]>,
     heads: Vec<u32>,
-    cells: Vec<usize>,
-    next: Vec<u32>,
-    prev: Vec<u32>,
-    layers: Vec<i64>,
-    character_ids: Vec<u32>,
-    visuals: Vec<u64>,
+    members: Vec<CellMember>,
     dirty: Vec<usize>,
     marked: Vec<bool>,
 }
@@ -105,6 +117,8 @@ impl CellGrid {
         let width = right.max(0) as usize;
         let height = top.max(0) as usize;
         let count = width.checked_mul(height).expect("terminal canvas is too large");
+        let layout_unchanged = self.last_geometry == Some(geometry) && !arena.layout_changed();
+        self.stable_layout = if layout_unchanged { self.stable_layout.saturating_add(1) } else { 0 };
         // A held frame can leave every cell unchanged. Keep the current mode
         // and winners instead of rebuilding sparse membership after a dense
         // frame. Revision also covers API calls that consume arena dirtiness.
@@ -113,10 +127,28 @@ impl CellGrid {
         }
         self.last_geometry = Some(geometry);
         self.revision = self.revision.checked_add(1).expect("render revision exhausted");
+        // An animation can change visuals while cell membership and painter
+        // order stay fixed. Update only the affected winners without revisiting
+        // coordinates, layers, or collision lists.
+        if layout_unchanged && self.geometry == Some(geometry) {
+            let changed = arena.take_dirty();
+            for &id in &changed {
+                let visual = arena.render_slice()[id].animation.current_character_visual.formatted_symbol.id();
+                self.members[id].visual = visual;
+                let cell = self.members[id].cell;
+                if cell != OFFSCREEN && winners[cell] == id as u32 && visual_ids[cell] != visual {
+                    visual_ids[cell] = visual;
+                    self.dirty_rows[cell / width] = true;
+                }
+            }
+            arena.recycle_dirty(changed);
+            self.dense = false;
+            return (width, height);
+        }
         // Like memchr's ineffective-prefilter fallback, avoid bookkeeping when
         // most characters are changing. Invalidate membership so switching back
         // to sparse updates will rebuild a correct grid once.
-        self.dense = arena.dirty_len() > 256 && arena.dirty_len() > arena.len() / 3;
+        self.dense = self.stable_layout < 2 && arena.dirty_len() > 256 && arena.dirty_len() > arena.len() / 3;
         if self.dense {
             self.geometry = None;
             winners.resize(count, NONE);
@@ -146,12 +178,7 @@ impl CellGrid {
             self.dirty_rows.resize(height, true);
             self.heads.clear();
             self.heads.resize(count, NONE);
-            self.cells.clear();
-            self.next.clear();
-            self.prev.clear();
-            self.layers.clear();
-            self.character_ids.clear();
-            self.visuals.clear();
+            self.members.clear();
             self.dirty.clear();
             self.marked.clear();
             self.marked.resize(count, false);
@@ -161,12 +188,7 @@ impl CellGrid {
             visual_ids.resize(count, 0);
             arena.mark_all();
         }
-        self.cells.resize(arena.len(), OFFSCREEN);
-        self.next.resize(arena.len(), NONE);
-        self.prev.resize(arena.len(), NONE);
-        self.layers.resize(arena.len(), 0);
-        self.character_ids.resize(arena.len(), 0);
-        self.visuals.resize(arena.len(), 0);
+        self.members.resize(arena.len(), CellMember::default());
         let changed = arena.take_dirty();
         for &id in &changed {
             let ch = &arena.render_slice()[id];
@@ -177,43 +199,59 @@ impl CellGrid {
             } else {
                 OFFSCREEN
             };
-            let old = self.cells[id];
+            let old = self.members[id].cell;
             let visual = ch.animation.current_character_visual.formatted_symbol.id();
             if old != cell {
                 if old != OFFSCREEN {
-                    let prev = self.prev[id];
-                    let next = self.next[id];
+                    let prev = self.members[id].prev;
+                    let next = self.members[id].next;
                     if prev == NONE {
                         self.heads[old] = next;
                     } else {
-                        self.next[prev as usize] = next;
+                        self.members[prev as usize].next = next;
                     }
                     if next != NONE {
-                        self.prev[next as usize] = prev;
+                        self.members[next as usize].prev = prev;
                     }
-                    self.mark(old);
+                    if winners[old] == id as u32 {
+                        self.mark(old);
+                    }
                 }
                 if cell != OFFSCREEN {
                     let head = self.heads[cell];
-                    self.next[id] = head;
-                    self.prev[id] = NONE;
+                    self.members[id].next = head;
+                    self.members[id].prev = NONE;
                     if head != NONE {
-                        self.prev[head as usize] = id as u32;
+                        self.members[head as usize].prev = id as u32;
                     }
                     self.heads[cell] = id as u32;
-                    self.mark(cell);
                 }
-                self.cells[id] = cell;
+                self.members[id].cell = cell;
             } else if cell != OFFSCREEN
-                && (self.visuals[id] != visual
-                    || self.layers[id] != ch.layer
-                    || self.character_ids[id] != ch.character_id)
+                && (self.members[id].layer != ch.layer || self.members[id].character_id != ch.character_id)
             {
                 self.mark(cell);
             }
-            self.visuals[id] = visual;
-            self.layers[id] = ch.layer;
-            self.character_ids[id] = ch.character_id;
+            self.members[id].visual = visual;
+            self.members[id].layer = ch.layer;
+            self.members[id].character_id = ch.character_id;
+            if cell != OFFSCREEN && !self.marked[cell] {
+                let winner = winners[cell];
+                // A newly linked member is at the head, so it wins exact
+                // painter ties just as the membership scan does. Removing a
+                // non-winner or changing only its visual needs no scan.
+                if old != cell
+                    && (winner == NONE
+                        || (ch.layer, ch.character_id)
+                            >= (self.members[winner as usize].layer, self.members[winner as usize].character_id))
+                {
+                    winners[cell] = id as u32;
+                }
+                if winners[cell] == id as u32 && visual_ids[cell] != visual {
+                    visual_ids[cell] = visual;
+                    self.dirty_rows[cell / width] = true;
+                }
+            }
         }
         arena.recycle_dirty(changed);
         for &cell in &self.dirty {
@@ -222,15 +260,15 @@ impl CellGrid {
             while candidate != NONE {
                 let index = candidate as usize;
                 if winner == NONE
-                    || (self.layers[index], self.character_ids[index])
-                        > (self.layers[winner as usize], self.character_ids[winner as usize])
+                    || (self.members[index].layer, self.members[index].character_id)
+                        > (self.members[winner as usize].layer, self.members[winner as usize].character_id)
                 {
                     winner = candidate;
                 }
-                candidate = self.next[index];
+                candidate = self.members[index].next;
             }
             winners[cell] = winner;
-            let visual = if winner == NONE { 0 } else { self.visuals[winner as usize] };
+            let visual = if winner == NONE { 0 } else { self.members[winner as usize].visual };
             if visual_ids[cell] != visual {
                 self.dirty_rows[cell / width] = true;
             }

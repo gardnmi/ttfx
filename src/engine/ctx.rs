@@ -585,7 +585,7 @@ impl EngineCtx {
         if scene.frames().is_empty() {
             return;
         }
-        let prepare_moving = !stationary && !scene.is_looping && scene.sync.is_none();
+        let prepare_moving = !stationary;
         if let Some(sync) = scene.sync {
             drop(edit);
             self.step_synced_scene(id, scene_slot, sync);
@@ -607,14 +607,14 @@ impl EngineCtx {
                 };
                 drop(edit);
                 if prepare_moving {
-                    self.terminal.arena.prepare_scene(id.0 as usize);
+                    self.terminal.arena.prepare_scene(id.0 as usize, self.event_log.is_none());
                 }
                 if self.idle_scheduling
                     && self.nested_updates == 0
                     && idle > 0
                     && self.terminal.arena.playback.is_current(id.0 as usize)
                 {
-                    let kind = if self.terminal.arena.prepare_scene(id.0 as usize) {
+                    let kind = if self.terminal.arena.prepare_scene(id.0 as usize, self.event_log.is_none()) {
                         PlaybackKind::Runtime
                     } else {
                         PlaybackKind::Plain
@@ -629,7 +629,7 @@ impl EngineCtx {
 
         self.complete_scene_if_finished(hooks, id, scene_slot);
         if prepare_moving {
-            self.terminal.arena.prepare_scene(id.0 as usize);
+            self.terminal.arena.prepare_scene(id.0 as usize, self.event_log.is_none());
         }
     }
 
@@ -677,7 +677,7 @@ impl EngineCtx {
         replace_visual(&mut anim.current_character_visual, &scene.all_frames[frame].character_visual);
         drop(edit);
         if idle > 0 {
-            let kind = if self.terminal.arena.prepare_scene(id.0 as usize) {
+            let kind = if self.terminal.arena.prepare_scene(id.0 as usize, self.event_log.is_none()) {
                 PlaybackKind::Runtime
             } else {
                 PlaybackKind::Eased
@@ -718,19 +718,32 @@ impl EngineCtx {
 
     /// EffectCharacter.tick: motion first, then animation.
     pub fn tick(&mut self, hooks: &mut dyn EffectHooks, id: CharId) {
-        if self.terminal.arena.scene_tick(id.0 as usize, self.idle_scheduling && self.nested_updates == 0, false) {
+        if self.terminal.arena.scene_tick(
+            id.0 as usize,
+            self.idle_scheduling && self.nested_updates == 0,
+            false,
+            self.event_log.is_none(),
+        ) {
+            return;
+        }
+        // Prepared interior movement cannot emit events. Keep that common
+        // path outside motion_move's completion and callback machinery.
+        if self.event_log.is_none() && self.terminal.arena.motion_tick(id.0 as usize) {
+            if !self.terminal.arena.scene_tick(id.0 as usize, false, true, self.event_log.is_none()) {
+                self.step_animation(hooks, id);
+            }
             return;
         }
         let moving = self.terminal.arena.settle_stationary_motion(id.0 as usize);
         if moving {
             self.motion_move(hooks, id);
-            if self.terminal.arena.scene_tick(id.0 as usize, false, true) {
+            if self.terminal.arena.scene_tick(id.0 as usize, false, true, self.event_log.is_none()) {
                 return;
             }
         }
         self.step_animation(hooks, id);
         if !moving {
-            self.terminal.arena.prepare_scene(id.0 as usize);
+            self.terminal.arena.prepare_scene(id.0 as usize, self.event_log.is_none());
         }
     }
 
@@ -803,7 +816,7 @@ impl EngineCtx {
             }
         }
         let arena = &self.terminal.arena;
-        self.active_characters.retain_unless_masked(&arena.playback.sleeping, |id| arena.is_active(id.0 as usize));
+        self.active_characters.retain_unless_masked(arena.active_masks(), |id| arena.is_active(id.0 as usize));
         self.active_characters.copy_words_into(&mut members);
         self.terminal.arena.finish_update(&members);
         self.active_members_scratch = members;
@@ -825,7 +838,7 @@ impl EngineCtx {
             }
         }
         let arena = &self.terminal.arena;
-        self.active_characters.retain_unless_masked(&arena.playback.sleeping, |id| arena.is_active(id.0 as usize));
+        self.active_characters.retain_unless_masked(arena.active_masks(), |id| arena.is_active(id.0 as usize));
         self.terminal.arena.finish_sparse_update(&self.active_characters);
         self.sparse_character_scratch = snapshot;
     }

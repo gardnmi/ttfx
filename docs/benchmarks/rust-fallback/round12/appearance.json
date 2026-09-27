@@ -1,0 +1,160 @@
+{
+  "platform": "Linux-7.2.5-3-omarchy-x86_64-with-glibc2.44",
+  "binaries": [
+    "/home/gardnmi/Worktrees/ttfx/perf-rust-engine/target/round12/ttfx-pr41",
+    "/home/gardnmi/Worktrees/ttfx/perf-rust-engine/target/round12/ttfx-appearance"
+  ],
+  "size": [
+    200,
+    50
+  ],
+  "engines": [
+    "baseline",
+    "candidate"
+  ],
+  "assembly_forced": false,
+  "rust_forced": true,
+  "engine_modes": [
+    "rust",
+    "rust"
+  ],
+  "cpu": 2,
+  "seed": 1,
+  "repeats": 7,
+  "warmups": 1,
+  "terminal_options": [
+    "--canvas-width",
+    "200",
+    "--canvas-height",
+    "50",
+    "--ignore-terminal-dimensions"
+  ],
+  "input_sha256": "5520772cb3e4a78263b258c2020280ce291135615cbc193e89added6c41d732b",
+  "input_bytes": 8785,
+  "results": {
+    "overflow": {
+      "times_ms": [
+        [
+          132.367953,
+          151.49487,
+          140.810218,
+          133.006407,
+          135.813287,
+          132.355861,
+          133.66094
+        ],
+        [
+          99.822183,
+          89.449183,
+          92.917369,
+          88.190231,
+          87.416642,
+          85.868381,
+          85.74657
+        ]
+      ],
+      "median_ms": [
+        133.66094,
+        88.190231
+      ],
+      "speedup": 1.5155980258176216,
+      "output_bytes": 54256001,
+      "output_sha256": "ebf64ef09e1c6450b126f68cd720bd46608c378631ff6fd1f97928ac56643b47"
+    },
+    "spotlights": {
+      "times_ms": [
+        [
+          174.440287,
+          174.081946,
+          170.510794,
+          174.235979,
+          169.571831,
+          173.497526,
+          170.821905
+        ],
+        [
+          196.987659,
+          192.899014,
+          189.867867,
+          197.57765,
+          204.085138,
+          193.973154,
+          193.553627
+        ]
+      ],
+      "median_ms": [
+        173.497526,
+        193.973154
+      ],
+      "speedup": 0.8944409183551245,
+      "output_bytes": 130038678,
+      "output_sha256": "b8138de4db82ee36e4ff0af8fb20c20b096215597328ce2ded3128126fef5250"
+    },
+    "matrix": {
+      "times_ms": [
+        [
+          137.327482,
+          137.888418,
+          137.761146,
+          146.839828,
+          135.410341,
+          133.648294,
+          133.821573
+        ],
+        [
+          114.676443,
+          115.075501,
+          115.140114,
+          117.883133,
+          112.795581,
+          112.123986,
+          113.750895
+        ]
+      ],
+      "median_ms": [
+        137.327482,
+        114.676443
+      ],
+      "speedup": 1.1975212904013774,
+      "output_bytes": 312024030,
+      "output_sha256": "30188b8f92aaa70e5ce6b8eb3013e99625c4c2bee269965c58236747b9f634fb"
+    },
+    "vhstape": {
+      "times_ms": [
+        [
+          139.125847,
+          143.631534,
+          142.291008,
+          147.00462,
+          173.74719,
+          195.294713,
+          147.785864
+        ],
+        [
+          154.289316,
+          166.922829,
+          150.326739,
+          202.51243,
+          182.98817,
+          181.358344,
+          144.584695
+        ]
+      ],
+      "median_ms": [
+        147.00462,
+        166.922829
+      ],
+      "speedup": 0.8806741467339976,
+      "output_bytes": 124300235,
+      "output_sha256": "012d27c3bef5bb9b79657ad1d3d0e86af4689f415d0e5cb9fc7e48abd1eb637d"
+    }
+  },
+  "environment_overrides": [
+    {},
+    {}
+  ],
+  "binary_sha256": [
+    "90508073407bc6b5ac83d9c685859b95573fbdfd313db17267c14eac17c27b24",
+    "6a08a8d2afbc48a5e4f2ed4210fffa7ff28406dbe7c74ed32ce840e9e399eb13"
+  ]
+}

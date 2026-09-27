@@ -1,4 +1,4 @@
-//! Persistent playback for non-looping, unsynced scenes.
+//! Persistent playback for non-looping scenes and unobserved moving loops.
 //!
 //! The public Scene remains the construction/introspection API. Ordinary ticks
 //! use a dense 32-byte cursor instead of chasing each character's scene map.
@@ -7,9 +7,12 @@
 use std::cell::Cell;
 use std::rc::Rc;
 
-use super::animation::{Frame, FrameStorage, Scene};
+use super::animation::{Frame, FrameStorage, Scene, SyncMetric};
 use super::character::EffectCharacter;
+use super::events::Event;
+use super::motion_runtime::MotionRuntime;
 use crate::utils::easing::Easing;
+use crate::utils::pycompat::round_half_even;
 
 #[derive(Clone, Copy, Debug, Default)]
 struct Cursor {
@@ -26,6 +29,8 @@ struct Program {
     frames: Rc<[Frame]>,
     scene: usize,
     eased: Option<Rc<EasedProgram>>,
+    sync: Option<SyncMetric>,
+    looping: bool,
     stationary: bool,
 }
 
@@ -135,6 +140,12 @@ impl Default for SceneRuntime {
 }
 
 impl SceneRuntime {
+    /// Prepared non-looping scenes remain incomplete. Admitted loops always
+    /// have active motion; path/subscription mutations retire their program.
+    pub(crate) fn active_mask(&self) -> &[u64] {
+        &self.members
+    }
+
     pub(crate) fn resize(&mut self, len: usize) {
         self.cursors.resize_with(len, Cell::default);
         self.programs.resize_with(len, || None);
@@ -152,7 +163,7 @@ impl SceneRuntime {
         self.stationary_count != 0 && self.stationary_members[id / 64] & (1 << (id % 64)) != 0
     }
 
-    pub(crate) fn prepare(&mut self, id: usize, characters: &[EffectCharacter]) {
+    pub(crate) fn prepare(&mut self, id: usize, characters: &[EffectCharacter], allow_loop: bool) {
         if !self.enabled || self.contains(id) {
             return;
         }
@@ -163,7 +174,12 @@ impl SceneRuntime {
             return;
         };
         let scene = anim.scenes.at(slot);
-        if scene.is_looping || scene.sync.is_some() {
+        // Looping scenes report complete on every tick. Only admit them while
+        // motion keeps the character active and completion is unobserved.
+        // Public path/subscription edits retire this program before mutation.
+        if scene.is_looping
+            && (!allow_loop || ch.motion.active_path.is_none() || ch.event_handler.subscribes(Event::SceneComplete))
+        {
             return;
         }
         let FrameStorage::Shared(frames) = &scene.all_frames else {
@@ -173,7 +189,7 @@ impl SceneRuntime {
         if remaining.is_empty() || remaining.end > frames.len() || remaining.end >= u32::MAX as usize {
             return;
         }
-        let eased = if scene.ease.is_some() {
+        let eased = if scene.ease.is_some() && scene.sync.is_none() {
             let Some(plan) = self.eased_programs.get(scene, frames.len()) else { return };
             Some(plan)
         } else {
@@ -198,7 +214,15 @@ impl SceneRuntime {
             // tick may have retired a frame. Compare once on the first tick.
             shown: u32::MAX,
         });
-        self.programs[id] = Some(Program { frames: Rc::clone(frames), scene: slot, eased, stationary });
+        let stationary = stationary && scene.sync.is_none();
+        self.programs[id] = Some(Program {
+            frames: Rc::clone(frames),
+            scene: slot,
+            eased,
+            sync: scene.sync,
+            looping: scene.is_looping,
+            stationary,
+        });
         self.members[id / 64] |= 1 << (id % 64);
         self.count += 1;
         if stationary {
@@ -219,6 +243,10 @@ impl SceneRuntime {
     #[inline(never)]
     fn materialize_cached(&self, id: usize, characters: &[EffectCharacter]) {
         let program = self.programs[id].as_ref().unwrap();
+        if program.sync.is_some() {
+            // Synced playback chooses a visual without advancing scene counters.
+            return;
+        }
         let cursor = self.cursors[id].get();
         let scene = characters[id].animation.scenes.at(program.scene);
         if program.eased.is_some() {
@@ -269,11 +297,56 @@ impl SceneRuntime {
     /// engine. Some returns whether rendering changed, the scene slot, and the
     /// number of subsequent ticks which can only hold the current visual.
     #[inline]
-    pub(crate) fn tick(&mut self, id: usize, characters: &mut [EffectCharacter]) -> Option<(bool, usize, i64)> {
+    pub(crate) fn tick(
+        &mut self,
+        id: usize,
+        characters: &mut [EffectCharacter],
+        motion: &MotionRuntime,
+        allow_loop: bool,
+    ) -> Option<(bool, usize, i64)> {
         let program = self.programs[id].as_ref()?;
+        if program.looping && !allow_loop {
+            self.invalidate(id, characters);
+            return None;
+        }
         let mut cursor = self.cursors[id].get();
+        if let Some(sync) = program.sync {
+            let progress = motion.progress(id).or_else(|| {
+                let m = &characters[id].motion;
+                let active = m.active_path.as_ref()?;
+                let path = m.paths.get(active).expect("active path missing");
+                Some((path.current_step(), path.max_steps, path.total_distance, path.last_distance_reached()))
+            });
+            let Some((step, max_steps, total_distance, reached_distance)) = progress else {
+                // Preserve force-completion and synchronous callbacks in EngineCtx.
+                self.invalidate(id, characters);
+                return None;
+            };
+            let ratio = match sync {
+                SyncMetric::Step => step.max(1) as f64 / max_steps.max(1) as f64,
+                SyncMetric::Distance => {
+                    let total = total_distance.max(1.0);
+                    let remaining = (total_distance - reached_distance).max(1.0);
+                    (total - remaining).max(1.0) / total
+                }
+            };
+            let last = i64::from(cursor.end - cursor.head) - 1;
+            let frame = cursor.head + round_half_even(last as f64 * ratio).min(last).max(0) as u32;
+            let mut changed = false;
+            if cursor.shown != frame {
+                let next = &program.frames[frame as usize].character_visual;
+                let current = &mut characters[id].animation.current_character_visual;
+                if !Rc::ptr_eq(current, next) {
+                    *current = Rc::clone(next);
+                    changed = true;
+                }
+                cursor.shown = frame;
+                self.cursors[id].set(cursor);
+            }
+            return Some((changed, program.scene, 0));
+        }
         if let Some(eased) = &program.eased {
-            if cursor.ticks + 1 == cursor.duration {
+            if !program.looping && cursor.ticks + 1 == cursor.duration {
                 self.invalidate(id, characters);
                 return None;
             }
@@ -289,11 +362,16 @@ impl SceneRuntime {
                 cursor.shown = run.frame;
             }
             cursor.ticks += 1;
-            let idle = i64::from(run.end).min(cursor.duration - 1) - cursor.ticks;
+            if program.looping && cursor.ticks == cursor.duration {
+                cursor.ticks = 0;
+            }
+            let idle = if program.looping { 0 } else { i64::from(run.end).min(cursor.duration - 1) - cursor.ticks };
             self.cursors[id].set(cursor);
             return Some((changed, program.scene, idle));
         }
-        if cursor.duration <= 0 || (cursor.head + 1 == cursor.end && cursor.ticks + 1 == cursor.duration) {
+        if cursor.duration <= 0
+            || (!program.looping && cursor.head + 1 == cursor.end && cursor.ticks + 1 == cursor.duration)
+        {
             self.invalidate(id, characters);
             return None;
         }
@@ -310,11 +388,14 @@ impl SceneRuntime {
         cursor.ticks += 1;
         if cursor.ticks == cursor.duration {
             cursor.head += 1;
+            if program.looping && cursor.head == cursor.end {
+                cursor.head = 0;
+            }
             cursor.played = cursor.head;
             cursor.ticks = 0;
             cursor.duration = program.frames[cursor.head as usize].duration;
         }
-        let idle = if cursor.ticks > 0 {
+        let idle = if !program.looping && cursor.ticks > 0 {
             cursor.duration - cursor.ticks - i64::from(cursor.head + 1 == cursor.end)
         } else {
             0
@@ -328,6 +409,58 @@ impl SceneRuntime {
 mod tests {
     use super::*;
     use crate::engine::animation::VisualParams;
+
+    #[test]
+    fn unobserved_moving_loops_wrap_without_changing_public_counters() {
+        for ease in [None, Some(Easing::InOutBack)] {
+            let mut ch = EffectCharacter::new(0, "X", 1, 1);
+            ch.motion.active_path = Some(Rc::from("moving"));
+            ch.animation.new_scene(true, None, ease, "loop", false);
+            let scene = ch.animation.scenes.get_mut("loop").unwrap();
+            for symbol in ["A", "B", "C"] {
+                scene.add_frame(symbol, 3, VisualParams::default()).unwrap();
+            }
+            ch.animation.current_character_visual = scene.activate().unwrap();
+            let mut reference = scene.clone();
+            ch.animation.active_scene = ch.animation.scenes.handle("loop");
+            let mut characters = vec![ch];
+            let mut runtime = SceneRuntime::default();
+            runtime.enabled = true;
+            runtime.resize(1);
+            // Warm the bounded eased plan cache as ordinary admission would.
+            for _ in 0..8 {
+                runtime.prepare(0, &characters, true);
+            }
+            assert!(runtime.contains(0));
+            let motion = MotionRuntime::default();
+            let mut easing_cache = super::super::animation::EasedTicksCache::default();
+            for _ in 0..100 {
+                let frame = if let Some(ease) = ease {
+                    reference.step_eased(ease, &mut easing_cache, false).0
+                } else {
+                    reference.step_frame()
+                };
+                assert!(runtime.tick(0, &mut characters, &motion, true).is_some());
+                runtime.materialize(0, &characters);
+                let actual = characters[0].animation.scenes.get("loop").unwrap();
+                assert_eq!(actual.frames(), reference.frames());
+                assert_eq!(actual.played_frames(), reference.played_frames());
+                assert_eq!(actual.ticks_elapsed(), reference.ticks_elapsed());
+                assert_eq!(actual.easing_current_step(), reference.easing_current_step());
+                assert_eq!(
+                    characters[0].animation.current_character_visual,
+                    reference.all_frames[frame].character_visual
+                );
+            }
+            assert!(runtime.tick(0, &mut characters, &motion, false).is_none());
+            assert!(!runtime.contains(0));
+            runtime.prepare(0, &characters, false);
+            assert!(!runtime.contains(0));
+            characters[0].motion.active_path = None;
+            runtime.prepare(0, &characters, true);
+            assert!(!runtime.contains(0));
+        }
+    }
 
     fn eased_scene(total: i64) -> Scene {
         let mut scene = Scene::new("test", false, None, Some(Easing::OutElastic), false, false);

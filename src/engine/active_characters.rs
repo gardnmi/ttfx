@@ -140,20 +140,22 @@ impl ActiveCharacters {
     /// Retains elements in the same ascending order in which `BTreeSet`
     /// invokes its predicate.
     pub fn retain(&mut self, keep: impl FnMut(&CharId) -> bool) {
-        self.retain_unless_masked(&[], keep);
+        self.retain_unless_masked([&[], &[], &[]], keep);
     }
 
-    pub(crate) fn retain_unless_masked(&mut self, mask: &[u64], mut keep: impl FnMut(&CharId) -> bool) {
+    pub(crate) fn retain_unless_masked(&mut self, masks: [&[u64]; 3], mut keep: impl FnMut(&CharId) -> bool) {
         if !self.dense {
             self.sparse.retain(|id| {
-                mask.get(id.0 as usize / 64).is_some_and(|word| word & (1 << (id.0 % 64)) != 0) || keep(id)
+                masks.iter().any(|mask| mask.get(id.0 as usize / 64).is_some_and(|word| word & (1 << (id.0 % 64)) != 0))
+                    || keep(id)
             });
             self.len = self.sparse.len();
             return;
         }
         let mut removed = 0;
         for (word_index, word) in self.words.iter_mut().enumerate() {
-            let mut candidates = *word & !mask.get(word_index).copied().unwrap_or(0);
+            let known_active = masks.iter().fold(0, |bits, mask| bits | mask.get(word_index).copied().unwrap_or(0));
+            let mut candidates = *word & !known_active;
             while candidates != 0 {
                 let bit_index = candidates.trailing_zeros() as usize;
                 let bit = 1 << bit_index;

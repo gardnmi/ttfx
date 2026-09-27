@@ -254,13 +254,11 @@ impl Spotlights {
         self.spotlight_coords
             .extend(self.spotlights.iter().map(|id| ctx.terminal.arena[id.0 as usize].motion.current_coord));
         for &current_coord in &self.spotlight_coords {
-            for coord in geometry::coords_in_circle(current_coord, range_) {
-                if let Some(id) = ctx.terminal.get_character_by_input_coord(coord) {
-                    if Self::is_spotlightable(ctx, id) {
-                        chars_in_range.insert(id);
-                    }
+            ctx.terminal.character_by_input_coord.for_each_in_circle(current_coord, range_, |id| {
+                if Self::is_spotlightable(ctx, id) {
+                    chars_in_range.insert(id);
                 }
-            }
+            });
         }
         for id in self.illuminated_chars.iter().filter(|id| !chars_in_range.contains(id)) {
             let expand_override = self.get_expand_color_override(ctx, id);
@@ -268,9 +266,7 @@ impl Spotlights {
                 None => self.character_color_map[id.0 as usize].as_ref().unwrap().1.clone(),
                 Some(overridden) => overridden,
             };
-            let ch = &mut ctx.terminal.arena[id.0 as usize];
-            let uses_pre = ch.uses_input_preexisting_colors;
-            ch.animation.set_appearance(&ch.input_symbol, uses_pre, None, Some(colors));
+            ctx.terminal.arena.set_appearance(id.0 as usize, None, Some(colors));
         }
 
         for id in &chars_in_range {
@@ -298,9 +294,7 @@ impl Spotlights {
                 None => adjusted_color,
                 Some(overridden) => overridden,
             };
-            let ch = &mut ctx.terminal.arena[id.0 as usize];
-            let uses_pre = ch.uses_input_preexisting_colors;
-            ch.animation.set_appearance(&ch.input_symbol, uses_pre, None, Some(colors));
+            ctx.terminal.arena.set_appearance(id.0 as usize, None, Some(colors));
         }
         self.illuminated_scratch = std::mem::replace(&mut self.illuminated_chars, chars_in_range);
     }

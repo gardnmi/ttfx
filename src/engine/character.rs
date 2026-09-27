@@ -87,6 +87,7 @@ pub struct CharacterArena {
     characters: Vec<EffectCharacter>,
     dirty: Vec<usize>,
     marked: Vec<bool>,
+    layout_dirty: bool,
     pub(crate) playback: super::playback::PlaybackScheduler,
     scene_runtime: super::scene_runtime::SceneRuntime,
     motion_runtime: super::motion_runtime::MotionRuntime,
@@ -104,6 +105,7 @@ impl From<Vec<EffectCharacter>> for CharacterArena {
             characters,
             dirty: (0..len).collect(),
             marked: vec![true; len],
+            layout_dirty: true,
             playback,
             scene_runtime,
             motion_runtime: super::motion_runtime::MotionRuntime::default(),
@@ -151,15 +153,15 @@ impl CharacterArena {
         self.scene_runtime.enabled = enabled;
     }
 
-    pub(crate) fn prepare_scene(&mut self, id: usize) -> bool {
+    pub(crate) fn prepare_scene(&mut self, id: usize, allow_loop: bool) -> bool {
         if !self.playback.is_sleeping(id) {
-            self.scene_runtime.prepare(id, &self.characters);
+            self.scene_runtime.prepare(id, &self.characters, allow_loop);
         }
         self.scene_runtime.contains(id)
     }
 
     #[inline]
-    pub(crate) fn scene_tick(&mut self, id: usize, allow_idle: bool, motion_done: bool) -> bool {
+    pub(crate) fn scene_tick(&mut self, id: usize, allow_idle: bool, motion_done: bool, allow_loop: bool) -> bool {
         let prepared =
             if motion_done { self.scene_runtime.contains(id) } else { self.scene_runtime.contains_stationary(id) };
         if !prepared {
@@ -167,11 +169,13 @@ impl CharacterArena {
         }
         // Direct tick calls from callbacks must settle a pending held interval.
         self.playback.wake(id, &self.characters, &self.scene_runtime);
-        let Some((changed, scene, idle)) = self.scene_runtime.tick(id, &mut self.characters) else {
+        let Some((changed, scene, idle)) =
+            self.scene_runtime.tick(id, &mut self.characters, &self.motion_runtime, allow_loop)
+        else {
             return false;
         };
         if changed {
-            self.mark(id);
+            self.mark_visual(id);
         }
         if allow_idle && idle > 0 && self.playback.is_current(id) {
             self.playback.sleep(id, scene, idle, super::playback::PlaybackKind::Runtime);
@@ -196,6 +200,46 @@ impl CharacterArena {
             id,
             dirty: &mut self.dirty,
             marked: &mut self.marked,
+        }
+    }
+
+    /// Change appearance without invalidating unrelated motion or cell layout.
+    pub(crate) fn set_appearance(
+        &mut self,
+        id: usize,
+        symbol: Option<&str>,
+        colors: Option<crate::utils::graphics::ColorPair>,
+    ) {
+        self.playback.wake(id, &self.characters, &self.scene_runtime);
+        self.scene_runtime.invalidate(id, &self.characters);
+        let ch = &mut self.characters[id];
+        let before = ch.animation.current_character_visual.formatted_symbol.id();
+        ch.animation.set_appearance(&ch.input_symbol, ch.uses_input_preexisting_colors, symbol, colors);
+        if ch.animation.current_character_visual.formatted_symbol.id() != before {
+            self.mark_visual(id);
+        }
+    }
+
+    pub(crate) fn set_appearance_with_palette(
+        &mut self,
+        id: usize,
+        symbol: Option<&str>,
+        colors: crate::utils::graphics::ColorPair,
+        palette: &mut super::animation::AppearancePalette,
+    ) {
+        self.playback.wake(id, &self.characters, &self.scene_runtime);
+        self.scene_runtime.invalidate(id, &self.characters);
+        let ch = &mut self.characters[id];
+        let before = ch.animation.current_character_visual.formatted_symbol.id();
+        ch.animation.set_appearance_with_palette(
+            &ch.input_symbol,
+            ch.uses_input_preexisting_colors,
+            symbol,
+            colors,
+            palette,
+        );
+        if ch.animation.current_character_visual.formatted_symbol.id() != before {
+            self.mark_visual(id);
         }
     }
 
@@ -237,7 +281,7 @@ impl CharacterArena {
         let motion = &mut self.characters[id].motion;
         motion.previous_coord = motion.current_coord;
         motion.current_coord = coord;
-        if motion.previous_coord != coord {
+        if motion.previous_coord != coord && self.characters[id].is_visible {
             self.mark(id);
         }
         true
@@ -265,7 +309,7 @@ impl CharacterArena {
                 self.motion_runtime.prepare(id, len, slot, path, segment);
             }
         }
-        if motion.previous_coord != coord {
+        if motion.previous_coord != coord && self.characters[id].is_visible {
             self.mark(id);
         }
         completed.then_some(slot)
@@ -290,6 +334,10 @@ impl CharacterArena {
         }
     }
 
+    pub(crate) fn active_masks(&self) -> [&[u64]; 3] {
+        [&self.playback.sleeping, self.scene_runtime.active_mask(), self.motion_runtime.active_mask()]
+    }
+
     pub(crate) fn is_active(&self, id: usize) -> bool {
         // Held intervals never complete a scene or change active_path. Its
         // activity is therefore observable without materializing tick counters.
@@ -297,6 +345,7 @@ impl CharacterArena {
     }
 
     pub fn push(&mut self, character: EffectCharacter) {
+        self.layout_dirty = true;
         self.dirty.push(self.characters.len());
         self.marked.push(true);
         self.characters.push(character);
@@ -306,6 +355,12 @@ impl CharacterArena {
 
     #[inline]
     fn mark(&mut self, index: usize) {
+        self.layout_dirty = true;
+        self.mark_visual(index);
+    }
+
+    #[inline]
+    fn mark_visual(&mut self, index: usize) {
         if !self.marked[index] {
             self.marked[index] = true;
             self.dirty.push(index);
@@ -313,6 +368,7 @@ impl CharacterArena {
     }
 
     pub(crate) fn mark_all(&mut self) {
+        self.layout_dirty = true;
         self.dirty.clear();
         self.dirty.extend(0..self.characters.len());
         self.marked.fill(true);
@@ -322,7 +378,12 @@ impl CharacterArena {
         self.dirty.len()
     }
 
+    pub(crate) fn layout_changed(&self) -> bool {
+        self.layout_dirty
+    }
+
     pub(crate) fn take_dirty(&mut self) -> Vec<usize> {
+        self.layout_dirty = false;
         let dirty = std::mem::take(&mut self.dirty);
         for &index in &dirty {
             self.marked[index] = false;

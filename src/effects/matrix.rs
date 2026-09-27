@@ -17,10 +17,10 @@ use clap::Args;
 
 use crate::cli::parse_color;
 use crate::effects::common::{
-    parse_gradient_direction, parse_gradient_steps, parse_positive_float, parse_positive_int,
-    parse_positive_int_range, parse_symbol,
+    parse_gradient_direction, parse_gradient_steps, parse_positive_float, parse_positive_int, parse_positive_int_range,
+    parse_symbol,
 };
-use crate::engine::animation::{Animation, ExistingColorHandling, VisualParams};
+use crate::engine::animation::{Animation, AppearancePalette, ExistingColorHandling, VisualParams};
 use crate::engine::character::CharId;
 use crate::engine::ctx::{EffectHooks, EngineCtx};
 use crate::engine::effect::Effect;
@@ -96,10 +96,8 @@ pub struct MatrixConfig {
 }
 
 /// Animation.set_appearance shorthand (upstream character.animation.set_appearance).
-fn set_appearance(ctx: &mut EngineCtx, id: CharId, symbol: &str, colors: ColorPair) {
-    let ch = &mut ctx.terminal.arena[id.0 as usize];
-    let uses_pre = ch.uses_input_preexisting_colors;
-    ch.animation.set_appearance(&ch.input_symbol, uses_pre, Some(symbol), Some(colors));
+fn set_appearance(ctx: &mut EngineCtx, id: CharId, symbol: &str, colors: ColorPair, palette: &mut AppearancePalette) {
+    ctx.terminal.arena.set_appearance_with_palette(id.0 as usize, Some(symbol), colors, palette);
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -160,10 +158,8 @@ impl RainColumn {
         };
         self.active_rain_fall_delay = 0;
         self.length = if self.phase == ColumnPhase::Rain {
-            ctx.rng.randint(
-                std::cmp::max(1, (self.characters.len() as f64 * 0.1) as i64),
-                self.characters.len() as i64,
-            ) as usize
+            ctx.rng.randint(std::cmp::max(1, (self.characters.len() as f64 * 0.1) as i64), self.characters.len() as i64)
+                as usize
         } else {
             self.characters.len()
         };
@@ -174,14 +170,14 @@ impl RainColumn {
     }
 
     /// RainColumn.trim_column.
-    fn trim_column(&mut self, ctx: &mut EngineCtx, rain_colors: &[Color]) {
+    fn trim_column(&mut self, ctx: &mut EngineCtx, rain_colors: &[Color], palette: &mut AppearancePalette) {
         if self.visible_characters.is_empty() {
             return;
         }
         let popped_char = self.visible_characters.remove(0);
         ctx.terminal.set_character_visibility(popped_char, false);
         if self.visible_characters.len() > 1 {
-            self.fade_last_character(ctx, rain_colors);
+            self.fade_last_character(ctx, rain_colors, palette);
         }
     }
 
@@ -205,13 +201,13 @@ impl RainColumn {
     }
 
     /// RainColumn.fade_last_character.
-    fn fade_last_character(&mut self, ctx: &mut EngineCtx, rain_colors: &[Color]) {
+    fn fade_last_character(&mut self, ctx: &mut EngineCtx, rain_colors: &[Color], palette: &mut AppearancePalette) {
         // random.choice(self.rain_colors[-3:])
         let tail = &rain_colors[rain_colors.len().saturating_sub(3)..];
         let darker_color = Animation::adjust_color_brightness(ctx.rng.choice(tail), 0.65);
         let target = self.visible_characters[0];
         let symbol = ctx.terminal.arena[target.0 as usize].animation.current_character_visual.symbol.clone();
-        set_appearance(ctx, target, &symbol, ColorPair::new(Some(darker_color), None));
+        set_appearance(ctx, target, &symbol, ColorPair::new(Some(darker_color), None), palette);
     }
 
     /// RainColumn.resolve_char.
@@ -221,7 +217,13 @@ impl RainColumn {
     }
 
     /// RainColumn.tick.
-    fn tick(&mut self, ctx: &mut EngineCtx, config: &MatrixConfig, rain_colors: &[Color]) {
+    fn tick(
+        &mut self,
+        ctx: &mut EngineCtx,
+        config: &MatrixConfig,
+        rain_colors: &[Color],
+        palette: &mut AppearancePalette,
+    ) {
         if self.active_rain_fall_delay == 0 {
             if !self.pending_characters.is_empty() {
                 let next_char = self.pending_characters.remove(0);
@@ -231,6 +233,7 @@ impl RainColumn {
                     next_char,
                     &symbol,
                     ColorPair::new(Some(config.highlight_color.clone()), None),
+                    palette,
                 );
                 let previous_character = self.visible_characters.last().copied();
                 // if there is a previous character, remove the highlight
@@ -241,7 +244,7 @@ impl RainColumn {
                         .symbol
                         .clone();
                     let fg = ctx.rng.choice(rain_colors).clone();
-                    set_appearance(ctx, previous_character, &prev_symbol, ColorPair::new(Some(fg), None));
+                    set_appearance(ctx, previous_character, &prev_symbol, ColorPair::new(Some(fg), None), palette);
                 }
                 ctx.terminal.set_character_visibility(next_char, true);
                 self.visible_characters.push(next_char);
@@ -256,13 +259,10 @@ impl RainColumn {
                         .is_some_and(|colors| colors.fg_color.as_ref() == Some(&config.highlight_color))
                 };
                 if last_is_highlight {
-                    let symbol = ctx.terminal.arena[last_char.0 as usize]
-                        .animation
-                        .current_character_visual
-                        .symbol
-                        .clone();
+                    let symbol =
+                        ctx.terminal.arena[last_char.0 as usize].animation.current_character_visual.symbol.clone();
                     let fg = ctx.rng.choice(rain_colors).clone();
-                    set_appearance(ctx, last_char, &symbol, ColorPair::new(Some(fg), None));
+                    set_appearance(ctx, last_char, &symbol, ColorPair::new(Some(fg), None), palette);
                 }
 
                 if self.hold_time != 0 {
@@ -271,13 +271,13 @@ impl RainColumn {
                     if ctx.rng.random() < self.column_drop_chance {
                         self.drop_column(ctx);
                     }
-                    self.trim_column(ctx, rain_colors);
+                    self.trim_column(ctx, rain_colors, palette);
                 }
             }
 
             // if the column is longer than the preset length while still adding characters, trim it
             if self.visible_characters.len() > self.length {
-                self.trim_column(ctx, rain_colors);
+                self.trim_column(ctx, rain_colors, palette);
             }
             self.active_rain_fall_delay = self.base_rain_fall_delay;
         } else {
@@ -293,11 +293,8 @@ impl RainColumn {
             } else {
                 None
             };
-            let next_color = if ctx.rng.random() < config.color_swap_chance {
-                Some(ctx.rng.choice(rain_colors))
-            } else {
-                None
-            };
+            let next_color =
+                if ctx.rng.random() < config.color_swap_chance { Some(ctx.rng.choice(rain_colors)) } else { None };
             if next_symbol.is_none() && next_color.is_none() {
                 continue;
             }
@@ -315,7 +312,7 @@ impl RainColumn {
 
             match (next_symbol, next_color) {
                 (Some(symbol), Some(color)) => {
-                    set_appearance(ctx, character, symbol, ColorPair::new(Some(color.clone()), None));
+                    set_appearance(ctx, character, symbol, ColorPair::new(Some(color.clone()), None), palette);
                 }
                 (Some(symbol), None) => {
                     let color = ctx.terminal.arena[character.0 as usize]
@@ -324,15 +321,12 @@ impl RainColumn {
                         .colors
                         .as_ref()
                         .and_then(|colors| colors.fg_color.clone());
-                    set_appearance(ctx, character, symbol, ColorPair::new(color, None));
+                    set_appearance(ctx, character, symbol, ColorPair::new(color, None), palette);
                 }
                 (None, Some(color)) => {
-                    let symbol = ctx.terminal.arena[character.0 as usize]
-                        .animation
-                        .current_character_visual
-                        .symbol
-                        .clone();
-                    set_appearance(ctx, character, &symbol, ColorPair::new(Some(color.clone()), None));
+                    let symbol =
+                        ctx.terminal.arena[character.0 as usize].animation.current_character_visual.symbol.clone();
+                    set_appearance(ctx, character, &symbol, ColorPair::new(Some(color.clone()), None), palette);
                 }
                 (None, None) => unreachable!("no-change case returned above"),
             }
@@ -364,6 +358,7 @@ pub struct Matrix {
     phase: Phase,
     /// time.time() taken after build (effect_matrix.py:430).
     rain_start: f64,
+    palette: AppearancePalette,
 }
 
 impl Matrix {
@@ -383,6 +378,7 @@ impl Matrix {
             rain_complete: false,
             phase: Phase::Rain,
             rain_start: 0.0,
+            palette: AppearancePalette::new(),
         }
     }
 
@@ -424,8 +420,11 @@ impl Effect for Matrix {
             )
             .map_err(EngineError::Other)?;
         let dynamic = ctx.terminal.config.existing_color_handling == ExistingColorHandling::Dynamic;
-        let characters =
-            ctx.terminal.get_characters(&mut ctx.rng, CharacterFilter::default(), CharacterSort::TopToBottomLeftToRight);
+        let characters = ctx.terminal.get_characters(
+            &mut ctx.rng,
+            CharacterFilter::default(),
+            CharacterSort::TopToBottomLeftToRight,
+        );
         for character in characters {
             let (input_symbol, input_coord, input_fg, input_bg, uses_pre) = {
                 let ch = &ctx.terminal.arena[character.0 as usize];
@@ -445,9 +444,8 @@ impl Effect for Matrix {
             self.character_final_color_map.insert(character, final_colors.clone());
             let final_fg_color = final_colors.fg_color.clone();
             let final_bg_color = final_colors.bg_color.clone();
-            let resolve_scn = ctx.terminal.arena[character.0 as usize]
-                .animation
-                .new_scene(false, None, None, "resolve", uses_pre);
+            let resolve_scn =
+                ctx.terminal.arena[character.0 as usize].animation.new_scene(false, None, None, "resolve", uses_pre);
             if dynamic {
                 let fg_gradient = match &final_fg_color {
                     Some(fg) => Some(
@@ -463,11 +461,7 @@ impl Effect for Matrix {
                     ),
                     None => None,
                 };
-                let scene = ctx.terminal.arena[character.0 as usize]
-                    .animation
-                    .scenes
-                    .get_mut(&resolve_scn)
-                    .unwrap();
+                let scene = ctx.terminal.arena[character.0 as usize].animation.scenes.get_mut(&resolve_scn).unwrap();
                 if fg_gradient.is_some() || bg_gradient.is_some() {
                     scene
                         .apply_gradient_to_symbols(
@@ -510,14 +504,9 @@ impl Effect for Matrix {
             }
         }
 
-        let all_chars_filter = CharacterFilter {
-            input_chars: true,
-            inner_fill_chars: true,
-            outer_fill_chars: true,
-            added_chars: false,
-        };
-        for mut column_chars in
-            ctx.terminal.get_characters_grouped(all_chars_filter, CharacterGroup::ColumnLeftToRight)
+        let all_chars_filter =
+            CharacterFilter { input_chars: true, inner_fill_chars: true, outer_fill_chars: true, added_chars: false };
+        for mut column_chars in ctx.terminal.get_characters_grouped(all_chars_filter, CharacterGroup::ColumnLeftToRight)
         {
             column_chars.reverse();
             let column = RainColumn::new(ctx, &self.config, column_chars);
@@ -557,7 +546,7 @@ impl Effect for Matrix {
             for column_index in active_snapshot {
                 {
                     let (columns, config, rain_colors) = (&mut self.columns, &self.config, &self.rain_colors);
-                    columns[column_index].tick(ctx, config, rain_colors);
+                    columns[column_index].tick(ctx, config, rain_colors, &mut self.palette);
                 }
 
                 if self.columns[column_index].pending_characters.is_empty() {
@@ -610,15 +599,14 @@ impl Effect for Matrix {
             for column_index in full_snapshot {
                 {
                     let (columns, config, rain_colors) = (&mut self.columns, &self.config, &self.rain_colors);
-                    columns[column_index].tick(ctx, config, rain_colors);
+                    columns[column_index].tick(ctx, config, rain_colors, &mut self.palette);
                 }
                 if !self.columns[column_index].visible_characters.is_empty() {
                     if self.resolve_delay == 0 {
                         for _ in 0..ctx.rng.randint(1, 4) {
                             if !self.columns[column_index].visible_characters.is_empty() {
                                 let next_char = self.columns[column_index].resolve_char(ctx);
-                                let input_symbol =
-                                    ctx.terminal.arena[next_char.0 as usize].input_symbol.clone();
+                                let input_symbol = ctx.terminal.arena[next_char.0 as usize].input_symbol.clone();
                                 if input_symbol != " " || Self::has_input_colors(ctx, next_char) {
                                     ctx.activate_scene(self, next_char, "resolve");
                                     ctx.active_characters.insert(next_char);

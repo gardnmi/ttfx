@@ -425,7 +425,7 @@ impl Effect for ErrorCorrect {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if !self.swapped.is_empty() && self.swap_delay == 0 {
             let (char1, char2) = self.swapped.remove(0);
             for id in [char1, char2] {

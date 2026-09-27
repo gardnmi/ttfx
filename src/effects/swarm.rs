@@ -426,7 +426,7 @@ impl Effect for Swarm {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if !self.swarms.is_empty() || !ctx.active_characters.is_empty() {
             if !self.swarms.is_empty() && self.call_next {
                 self.call_next = false;

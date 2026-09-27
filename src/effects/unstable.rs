@@ -357,8 +357,8 @@ impl Effect for Unstable {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
-        let mut next_frame: Option<String> = None;
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
+        let mut next_frame = None;
         if self.phase == Phase::Rumble {
             if self.current_rumble_steps < self.max_rumble_steps {
                 if self.current_rumble_steps > 30 && self.current_rumble_steps % self.rumble_mod_delay == 0 {
@@ -423,9 +423,7 @@ impl Effect for Unstable {
                     .active_characters
                     .iter()
                     .filter(|&id| {
-                        let ch = &ctx.terminal.arena[id.0 as usize];
-                        let explosion_target = ch.motion.paths.get("explosion").unwrap().waypoints[0].coord;
-                        ch.motion.current_coord != explosion_target
+                        !ctx.terminal.arena.at_first_waypoint(id.0 as usize, "explosion")
                     })
                     .collect();
                 ctx.active_characters.clear();
@@ -460,9 +458,8 @@ impl Effect for Unstable {
                 .active_characters
                 .iter()
                 .filter(|&id| {
-                    let ch = &ctx.terminal.arena[id.0 as usize];
-                    let reassembly_target = ch.motion.paths.get("reassembly").unwrap().waypoints[0].coord;
-                    ch.motion.current_coord != reassembly_target || !ch.animation.active_scene_is_complete()
+                    !ctx.terminal.arena.at_first_waypoint(id.0 as usize, "reassembly")
+                        || !ctx.terminal.arena.animation_complete(id.0 as usize)
                 })
                 .collect();
             ctx.active_characters.clear();

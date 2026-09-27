@@ -531,7 +531,7 @@ impl Effect for Matrix {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if self.phase == Phase::Rain || self.phase == Phase::Fill {
             if self.column_delay == 0 {
                 if self.phase == Phase::Rain {

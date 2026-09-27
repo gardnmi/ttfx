@@ -149,7 +149,7 @@ pub enum EventAction {
 /// nothing could match.
 #[derive(Debug, Clone, Default)]
 pub struct EventHandler {
-    registered_events: Vec<RegisteredEvent>,
+    registered_events: EventTable,
     subscribed: u8,
 }
 
@@ -161,22 +161,82 @@ struct RegisteredEvent {
     actions: Vec<EventAction>,
 }
 
+/// Ordinary handlers keep their inline Vec. Explicit templates share a prefix
+/// and append character-specific events locally, preserving insertion indices.
+#[derive(Debug, Clone)]
+enum EventTable {
+    Owned(Vec<RegisteredEvent>),
+    Shared(Box<SharedEvents>),
+}
+
+#[derive(Debug, Clone)]
+struct SharedEvents {
+    prefix: std::rc::Rc<Vec<RegisteredEvent>>,
+    tail: Vec<RegisteredEvent>,
+}
+
+impl Default for EventTable {
+    fn default() -> Self {
+        Self::Owned(Vec::new())
+    }
+}
+
+impl EventTable {
+    fn parts(&self) -> (&[RegisteredEvent], &[RegisteredEvent]) {
+        match self {
+            Self::Owned(entries) => (entries, &[]),
+            Self::Shared(entries) => (&entries.prefix, &entries.tail),
+        }
+    }
+    fn iter(&self) -> impl Iterator<Item = &RegisteredEvent> {
+        let (prefix, tail) = self.parts();
+        prefix.iter().chain(tail)
+    }
+    fn len(&self) -> usize {
+        let (prefix, tail) = self.parts();
+        prefix.len() + tail.len()
+    }
+    fn get(&self, index: usize) -> &RegisteredEvent {
+        let (prefix, tail) = self.parts();
+        if index < prefix.len() {
+            &prefix[index]
+        } else {
+            &tail[index - prefix.len()]
+        }
+    }
+    fn get_mut(&mut self, index: usize) -> &mut RegisteredEvent {
+        // Mutating an existing shared action list detaches this handler. This
+        // rare operation must never affect siblings or invalidate entry order.
+        if matches!(self, Self::Shared(entries) if index < entries.prefix.len()) {
+            *self = Self::Owned(self.iter().cloned().collect());
+        }
+        match self {
+            Self::Owned(entries) => &mut entries[index],
+            Self::Shared(entries) => &mut entries.tail[index - entries.prefix.len()],
+        }
+    }
+    fn push(&mut self, entry: RegisteredEvent) {
+        match self {
+            Self::Owned(entries) => entries.push(entry),
+            Self::Shared(entries) => entries.tail.push(entry),
+        }
+    }
+}
+
 impl EventHandler {
     /// register_event with the duplicate check (upstream raises
     /// DuplicateEventRegistrationError). Caller/target id resolution and type
     /// validation happen in EngineCtx::register_event, which has arena access.
     pub fn push(&mut self, event: Event, caller: CallerKey, action: EventAction) -> Result<(), String> {
         let fingerprint = caller.as_ref().fingerprint();
-        let existing = self.registered_events.iter_mut().find(|entry| {
-            entry.event == event && entry.fingerprint == fingerprint && entry.caller == caller
-        });
-        if let Some(entry) = existing {
+        let existing = self
+            .registered_events
+            .iter()
+            .position(|entry| entry.event == event && entry.fingerprint == fingerprint && entry.caller == caller);
+        if let Some(index) = existing {
+            let entry = self.registered_events.get_mut(index);
             if entry.actions.contains(&action) {
-                return Err(format!(
-                    "duplicate event registration: {:?} {:?}",
-                    (entry.event, &entry.caller),
-                    action
-                ));
+                return Err(format!("duplicate event registration: {:?} {:?}", (entry.event, &entry.caller), action));
             }
             entry.actions.push(action);
         } else {
@@ -207,18 +267,99 @@ impl EventHandler {
                 .position(|entry| entry.event == event && entry.caller.matches(caller));
         }
         let fingerprint = caller.fingerprint();
-        self.registered_events.iter().position(|entry| {
-            entry.event == event && entry.fingerprint == fingerprint && entry.caller.matches(caller)
-        })
+        self.registered_events
+            .iter()
+            .position(|entry| entry.event == event && entry.fingerprint == fingerprint && entry.caller.matches(caller))
     }
 
     #[inline]
     pub fn actions(&self, index: usize) -> &[EventAction] {
-        &self.registered_events[index].actions
+        &self.registered_events.get(index).actions
+    }
+
+    /// Freeze a template before cloning it into independent characters.
+    pub(crate) fn share(&mut self) {
+        if let EventTable::Owned(entries) = &mut self.registered_events {
+            self.registered_events = EventTable::Shared(Box::new(SharedEvents {
+                prefix: std::rc::Rc::new(std::mem::take(entries)),
+                tail: Vec::new(),
+            }));
+        }
     }
 
     pub fn clear(&mut self) {
-        self.registered_events.clear();
+        self.registered_events = EventTable::default();
         self.subscribed = 0;
+    }
+}
+
+#[cfg(test)]
+mod sharing_tests {
+    use super::*;
+
+    #[test]
+    fn shared_prefix_keeps_local_appends_and_copy_on_write_independent() {
+        let mut template = EventHandler::default();
+        for i in 0..4 {
+            template.push(Event::PathComplete, CallerKey::Path(i.to_string()), EventAction::SetLayer(i)).unwrap();
+        }
+        template.share();
+        let mut a = template.clone();
+        let mut b = template.clone();
+        a.push(Event::SceneComplete, CallerKey::Scene("tail".into()), EventAction::SetLayer(10)).unwrap();
+        b.push(Event::PathActivated, CallerKey::Path("other".into()), EventAction::SetLayer(11)).unwrap();
+        assert!(!template.subscribes(Event::SceneComplete));
+        assert!(!b.subscribes(Event::SceneComplete));
+        let index = a.actions_index(Event::PathComplete, CallerRef::Path("2")).unwrap();
+        assert_eq!(index, 2);
+        // Append to the action list while retaining the dispatch entry index.
+        a.push(Event::PathComplete, CallerKey::Path("2".into()), EventAction::SetLayer(12)).unwrap();
+        assert_eq!(a.actions(index), &[EventAction::SetLayer(2), EventAction::SetLayer(12)]);
+        assert_eq!(template.actions(index), &[EventAction::SetLayer(2)]);
+        assert_eq!(b.actions(index), &[EventAction::SetLayer(2)]);
+        assert!(a.push(Event::PathComplete, CallerKey::Path("2".into()), EventAction::SetLayer(12)).is_err());
+        assert_eq!(a.actions_index(Event::SceneComplete, CallerRef::Scene("tail")), Some(4));
+        assert_eq!(a.actions(4), &[EventAction::SetLayer(10)]);
+        let mut c = b.clone();
+        c.push(Event::PathActivated, CallerKey::Path("other".into()), EventAction::SetLayer(13)).unwrap();
+        assert_eq!(b.actions(4), &[EventAction::SetLayer(11)]);
+        assert_eq!(c.actions(4), &[EventAction::SetLayer(11), EventAction::SetLayer(13)]);
+        a.clear();
+        assert!(!a.subscribes(Event::PathComplete));
+        assert!(a.actions_index(Event::PathComplete, CallerRef::Path("2")).is_none());
+        assert_eq!(template.actions(index), &[EventAction::SetLayer(2)]);
+    }
+
+    #[test]
+    fn callback_can_extend_shared_action_list_during_dispatch() {
+        use crate::engine::ctx::{Clock, EffectHooks, EngineCtx};
+        use crate::engine::terminal::TerminalConfig;
+        use crate::utils::rng::Rng;
+        struct AppendAction;
+        impl EffectHooks for AppendAction {
+            fn dispatch_callback(&mut self, ctx: &mut EngineCtx, id: CharId, _: &EffectCallback) {
+                ctx.register_event(id, Event::PathComplete, CallerKey::Path("walk".into()), EventAction::SetLayer(9))
+                    .unwrap();
+            }
+        }
+        let mut ctx =
+            EngineCtx::new("ab", TerminalConfig::default(), Rng::seeded(1), Clock::virtual_with_frame_rate(60))
+                .unwrap();
+        ctx.terminal.arena[0].motion.new_path(1.0, None, None, 0, false, "walk").unwrap();
+        ctx.register_event(
+            CharId(0),
+            Event::PathComplete,
+            CallerKey::Path("walk".into()),
+            EventAction::Callback(EffectCallback { id: 0, args: vec![] }),
+        )
+        .unwrap();
+        ctx.register_event(CharId(0), Event::PathComplete, CallerKey::Path("walk".into()), EventAction::SetLayer(7))
+            .unwrap();
+        ctx.terminal.arena[0].event_handler.share();
+        let sibling = ctx.terminal.arena[0].event_handler.clone();
+        ctx.handle_event(&mut AppendAction, CharId(0), Event::PathComplete, CallerRef::Path("walk"));
+        assert_eq!(ctx.terminal.arena[0].layer, 9);
+        assert_eq!(sibling.actions(0).len(), 2);
+        assert_eq!(ctx.terminal.arena[0].event_handler.actions(0).len(), 3);
     }
 }

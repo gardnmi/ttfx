@@ -222,7 +222,7 @@ impl Effect for BouncyBalls {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if !self.group_by_row.is_empty() || !ctx.active_characters.is_empty() || !self.pending_chars.is_empty() {
             if self.pending_chars.is_empty() && !self.group_by_row.is_empty() {
                 let min_row = *self.group_by_row.keys().next().unwrap();

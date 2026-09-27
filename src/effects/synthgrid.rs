@@ -482,7 +482,7 @@ impl Effect for SynthGrid {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if !self.pending_groups.is_empty() || !ctx.active_characters.is_empty() || self.phase != Phase::Complete {
             match self.phase {
                 Phase::GridExpand => {

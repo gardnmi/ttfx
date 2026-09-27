@@ -23,12 +23,7 @@ pub struct ActiveCharacters {
 impl ActiveCharacters {
     #[inline]
     pub const fn new() -> Self {
-        Self {
-            sparse: Vec::new(),
-            words: Vec::new(),
-            len: 0,
-            dense: false,
-        }
+        Self { sparse: Vec::new(), words: Vec::new(), len: 0, dense: false }
     }
 
     #[inline]
@@ -55,9 +50,7 @@ impl ActiveCharacters {
             return self.sparse.binary_search(id).is_ok();
         }
         let index = id.0 as usize;
-        self.words
-            .get(index / WORD_BITS)
-            .is_some_and(|word| word & (1 << (index % WORD_BITS)) != 0)
+        self.words.get(index / WORD_BITS).is_some_and(|word| word & (1 << (index % WORD_BITS)) != 0)
     }
 
     #[inline]
@@ -124,11 +117,7 @@ impl ActiveCharacters {
     pub fn iter(&self) -> Iter<'_> {
         Iter {
             inner: if self.dense {
-                IterInner::Dense {
-                    words: self.words.iter().enumerate(),
-                    remaining: 0,
-                    word_index: 0,
-                }
+                IterInner::Dense { words: self.words.iter().enumerate(), remaining: 0, word_index: 0 }
             } else {
                 IterInner::Sparse(self.sparse.iter())
             },
@@ -136,17 +125,35 @@ impl ActiveCharacters {
         }
     }
 
+    pub(crate) fn copy_words_into(&self, out: &mut Vec<u64>) {
+        out.clear();
+        if self.dense {
+            out.extend_from_slice(&self.words);
+        } else {
+            out.resize(self.sparse.last().map_or(0, |id| id.0 as usize / 64 + 1), 0);
+            for id in &self.sparse {
+                out[id.0 as usize / 64] |= 1 << (id.0 % 64);
+            }
+        }
+    }
+
     /// Retains elements in the same ascending order in which `BTreeSet`
     /// invokes its predicate.
-    pub fn retain(&mut self, mut keep: impl FnMut(&CharId) -> bool) {
+    pub fn retain(&mut self, keep: impl FnMut(&CharId) -> bool) {
+        self.retain_unless_masked(&[], keep);
+    }
+
+    pub(crate) fn retain_unless_masked(&mut self, mask: &[u64], mut keep: impl FnMut(&CharId) -> bool) {
         if !self.dense {
-            self.sparse.retain(|id| keep(id));
+            self.sparse.retain(|id| {
+                mask.get(id.0 as usize / 64).is_some_and(|word| word & (1 << (id.0 % 64)) != 0) || keep(id)
+            });
             self.len = self.sparse.len();
             return;
         }
         let mut removed = 0;
         for (word_index, word) in self.words.iter_mut().enumerate() {
-            let mut candidates = *word;
+            let mut candidates = *word & !mask.get(word_index).copied().unwrap_or(0);
             while candidates != 0 {
                 let bit_index = candidates.trailing_zeros() as usize;
                 let bit = 1 << bit_index;
@@ -168,10 +175,7 @@ impl ActiveCharacters {
     }
 
     fn promote(&mut self) {
-        let word_len = self
-            .sparse
-            .last()
-            .map_or(0, |id| id.0 as usize / WORD_BITS + 1);
+        let word_len = self.sparse.last().map_or(0, |id| id.0 as usize / WORD_BITS + 1);
         self.words.clear();
         self.words.resize(word_len, 0);
         for id in self.sparse.drain(..) {
@@ -188,8 +192,7 @@ impl ActiveCharacters {
             let mut remaining = word;
             while remaining != 0 {
                 let bit_index = remaining.trailing_zeros() as usize;
-                self.sparse
-                    .push(CharId((word_index * WORD_BITS + bit_index) as u32));
+                self.sparse.push(CharId((word_index * WORD_BITS + bit_index) as u32));
                 remaining &= remaining - 1;
             }
         }
@@ -205,11 +208,7 @@ pub struct Iter<'a> {
 
 enum IterInner<'a> {
     Sparse(std::slice::Iter<'a, CharId>),
-    Dense {
-        words: std::iter::Enumerate<std::slice::Iter<'a, u64>>,
-        remaining: u64,
-        word_index: usize,
-    },
+    Dense { words: std::iter::Enumerate<std::slice::Iter<'a, u64>>, remaining: u64, word_index: usize },
 }
 
 impl Iterator for Iter<'_> {
@@ -219,11 +218,7 @@ impl Iterator for Iter<'_> {
     fn next(&mut self) -> Option<Self::Item> {
         let id = match &mut self.inner {
             IterInner::Sparse(ids) => ids.next().copied(),
-            IterInner::Dense {
-                words,
-                remaining,
-                word_index,
-            } => loop {
+            IterInner::Dense { words, remaining, word_index } => loop {
                 if *remaining != 0 {
                     let bit_index = remaining.trailing_zeros() as usize;
                     *remaining &= *remaining - 1;
@@ -300,14 +295,9 @@ mod tests {
     #[test]
     fn preserves_order_and_set_semantics_across_word_boundaries() {
         let mut active: ActiveCharacters =
-            [CharId(130), CharId(1), CharId(64), CharId(63), CharId(1)]
-                .into_iter()
-                .collect();
+            [CharId(130), CharId(1), CharId(64), CharId(63), CharId(1)].into_iter().collect();
         assert_eq!(active.len(), 4);
-        assert_eq!(
-            active.iter().collect::<Vec<_>>(),
-            [CharId(1), CharId(63), CharId(64), CharId(130)]
-        );
+        assert_eq!(active.iter().collect::<Vec<_>>(), [CharId(1), CharId(63), CharId(64), CharId(130)]);
         assert!(active.contains(&CharId(64)));
         assert!(!active.insert(CharId(64)));
         assert!(active.remove(&CharId(130)));
@@ -349,10 +339,7 @@ mod tests {
             if step % 97 == 0 {
                 assert_eq!(active.len(), reference.len());
                 assert_eq!(active.is_empty(), reference.is_empty());
-                assert_eq!(
-                    active.iter().collect::<Vec<_>>(),
-                    reference.iter().copied().collect::<Vec<_>>()
-                );
+                assert_eq!(active.iter().collect::<Vec<_>>(), reference.iter().copied().collect::<Vec<_>>());
             }
             if step % 997 == 0 {
                 active.clear();

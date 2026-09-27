@@ -166,7 +166,7 @@ impl Color {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 pub struct ColorPair {
     pub fg_color: Option<Color>,
     pub bg_color: Option<Color>,

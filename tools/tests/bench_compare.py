@@ -3,6 +3,8 @@
 Runs the real CLI with pacing disabled and a virtual clock so timed effects do
 the same work. Verifies output before timing, alternates execution order, and
 reports medians. No third-party Python packages are required.
+Both primary binaries run with TTFX_ASM=0 to measure Rust even in default asm
+builds. The optional --assembly binary runs with TTFX_ASM=force.
 
 Example:
     python3 tools/tests/bench_compare.py /tmp/ttfx-before target/release/ttfx \
@@ -16,6 +18,7 @@ import hashlib
 import json
 import os
 import platform
+import random
 import shlex
 import statistics
 import subprocess
@@ -36,6 +39,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("before", type=Path)
     parser.add_argument("after", type=Path)
+    parser.add_argument("--assembly", type=Path, help="optional third binary; force assembly and compare all three")
     parser.add_argument("--size", default="200x50", help="terminal columns x rows")
     parser.add_argument("--repeats", type=int, default=7)
     parser.add_argument("--warmups", type=int, default=1)
@@ -46,7 +50,20 @@ def main() -> None:
     parser.add_argument("--timeout", type=float, default=180)
     parser.add_argument("--cpu", type=int, help="optionally pin to one CPU on Linux")
     parser.add_argument("--json", type=Path, help="save individual timings and output checksums")
+    parser.add_argument("--before-env", action="append", default=[], metavar="KEY=VALUE",
+                        help="additional baseline environment setting (repeatable)")
+    parser.add_argument("--after-env", action="append", default=[], metavar="KEY=VALUE",
+                        help="additional candidate environment setting (repeatable)")
     args = parser.parse_args()
+    settings = []
+    for raw in (args.before_env, args.after_env, []):
+        parsed = {}
+        for item in raw:
+            key, separator, value = item.partition("=")
+            if not separator or not key or key == "TTFX_ASM":
+                parser.error("environment overrides must be KEY=VALUE and cannot override TTFX_ASM")
+            parsed[key] = value
+        settings.append(parsed)
     try:
         columns, rows = map(int, args.size.lower().split("x"))
     except ValueError:
@@ -59,7 +76,10 @@ def main() -> None:
         os.sched_setaffinity(0, {args.cpu})
 
     binaries = [str(args.before.resolve()), str(args.after.resolve())]
+    if args.assembly:
+        binaries.append(str(args.assembly.resolve()))
     env = {**os.environ, "COLUMNS": str(columns), "LINES": str(rows)}
+    order_rng = random.Random(35)
     if args.input:
         data = args.input.read_bytes()
     else:
@@ -76,9 +96,13 @@ def main() -> None:
                    if line.strip() and line.split()[0] != "help"]
     report = {
         "platform": platform.platform(), "binaries": binaries, "size": [columns, rows],
+        "engines": ["baseline", "candidate", "assembly"] if args.assembly else ["baseline", "candidate"],
+        "assembly_forced": bool(args.assembly), "rust_forced": True,
+        "engine_modes": ["rust", "rust", "asm"] if args.assembly else ["rust", "rust"],
         "cpu": args.cpu, "seed": args.seed, "repeats": args.repeats, "warmups": args.warmups,
         "terminal_options": shlex.split(args.terminal_options),
         "input_sha256": hashlib.sha256(data).hexdigest(), "input_bytes": len(data), "results": {},
+        "environment_overrides": settings[:len(binaries)],
     }
     report["binary_sha256"] = []
     for binary in binaries:
@@ -92,22 +116,28 @@ def main() -> None:
 
         def run(index, output):
             result = subprocess.run(commands[index], input=data, stdout=output,
-                                    stderr=subprocess.PIPE, env=env, timeout=args.timeout)
+                                    stderr=subprocess.PIPE,
+                                    env={**env, **settings[index], "TTFX_ASM": "force" if index == 2 else "0"},
+                                    timeout=args.timeout)
             if result.returncode:
                 raise RuntimeError(f"{commands[index]} exited {result.returncode}: {result.stderr.decode(errors='replace')}")
             return result.stderr
 
         outputs = []
-        for index in range(2):
+        for index in range(len(binaries)):
             with tempfile.TemporaryFile() as output:
                 stderr = run(index, output)
                 outputs.append((output.tell(), digest(output), stderr))
-        if outputs[0] != outputs[1]:
+        if any(output != outputs[0] for output in outputs[1:]):
             raise RuntimeError(f"{effect}: builds produce different output: {outputs}")
 
-        times: list[list[float]] = [[], []]
+        times: list[list[float]] = [[] for _ in binaries]
         for repetition in range(args.warmups + args.repeats):
-            for index in ([0, 1] if repetition % 2 == 0 else [1, 0]):
+            order = [0, 1] if repetition % 2 == 0 else [1, 0]
+            if args.assembly:
+                order = list(range(len(binaries)))
+                order_rng.shuffle(order)
+            for index in order:
                 start = time.perf_counter_ns()
                 run(index, subprocess.DEVNULL)
                 elapsed = (time.perf_counter_ns() - start) / 1_000_000
@@ -119,7 +149,11 @@ def main() -> None:
             "times_ms": times, "median_ms": medians, "speedup": ratio,
             "output_bytes": outputs[0][0], "output_sha256": outputs[0][1],
         }
-        print(f"{effect:18} {medians[0]:11.2f} {medians[1]:11.2f} {ratio:8.3f}x", flush=True)
+        extra = ""
+        if args.assembly:
+            report["results"][effect]["assembly_over_candidate"] = medians[1] / medians[2]
+            extra = f"  asm {medians[2]:9.2f} ms ({medians[1] / medians[2]:.3f}x faster than candidate)"
+        print(f"{effect:18} {medians[0]:11.2f} {medians[1]:11.2f} {ratio:8.3f}x{extra}", flush=True)
         if args.json:
             args.json.write_text(json.dumps(report, indent=2) + "\n")
     ratios = [result["speedup"] for result in report["results"].values()]

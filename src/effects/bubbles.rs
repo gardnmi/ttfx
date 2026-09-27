@@ -487,7 +487,7 @@ impl Effect for Bubbles {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if !self.animating_bubbles.is_empty() || !ctx.active_characters.is_empty() || !self.bubbles.is_empty() {
             if !self.bubbles.is_empty() && self.steps_since_last_bubble >= self.config.bubble_delay {
                 let next_bubble = self.bubbles.remove(0);

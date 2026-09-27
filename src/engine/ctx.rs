@@ -13,12 +13,13 @@ use std::rc::Rc;
 use std::time::Instant;
 
 use crate::engine::active_characters::ActiveCharacters;
-use crate::engine::animation::SyncMetric;
+use crate::engine::animation::{EasedTicksCache, SyncMetric};
 use crate::engine::character::CharId;
 use crate::engine::error::EngineError;
 use crate::engine::events::{CallerKey, CallerRef, EffectCallback, Event, EventAction};
-use crate::engine::motion::{Path, Segment};
 use crate::engine::motion::Waypoint;
+use crate::engine::motion::{Path, Segment};
+use crate::engine::playback::PlaybackKind;
 use crate::engine::terminal::{Terminal, TerminalConfig};
 use crate::utils::geometry::{self, Coord};
 use crate::utils::pycompat::round_half_even;
@@ -33,17 +34,21 @@ thread_local! {
 /// reads monotonic time; the parity harness swaps in the virtual variant.
 #[derive(Debug)]
 pub enum Clock {
-    Real { start: Instant, wall_start: f64 },
+    Real {
+        start: Instant,
+        wall_start: f64,
+    },
     /// Virtual time advancing a fixed dt per emitted frame.
-    Virtual { now: f64, dt: f64 },
+    Virtual {
+        now: f64,
+        dt: f64,
+    },
 }
 
 impl Clock {
     pub fn real() -> Self {
-        let wall_start = std::time::SystemTime::now()
-            .duration_since(std::time::UNIX_EPOCH)
-            .map(|d| d.as_secs_f64())
-            .unwrap_or(0.0);
+        let wall_start =
+            std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|d| d.as_secs_f64()).unwrap_or(0.0);
         Clock::Real { start: Instant::now(), wall_start }
     }
 
@@ -96,7 +101,12 @@ pub struct EngineCtx {
     /// BaseEffectIterator.active_characters — canonical ascending-id order
     /// (CharId order == character_id order by construction).
     pub active_characters: ActiveCharacters,
-    active_character_scratch: Vec<CharId>,
+    active_character_scratch: Vec<u64>,
+    active_members_scratch: Vec<u64>,
+    sparse_character_scratch: Vec<CharId>,
+    idle_scheduling: bool,
+    nested_updates: usize,
+    eased_ticks: EasedTicksCache,
     pub preexisting_colors_present: bool,
     /// When Some, every event emission appends a trace line (test harness).
     pub event_log: Option<Vec<String>>,
@@ -115,6 +125,11 @@ impl EngineCtx {
             clock,
             active_characters: ActiveCharacters::new(),
             active_character_scratch: Vec::new(),
+            active_members_scratch: Vec::new(),
+            sparse_character_scratch: Vec::new(),
+            idle_scheduling: std::env::var_os("TTFX_SCHEDULER").is_none_or(|value| value != "0"),
+            nested_updates: 0,
+            eased_ticks: EasedTicksCache::default(),
             preexisting_colors_present,
             event_log: None,
         })
@@ -128,19 +143,13 @@ impl EngineCtx {
     /// false lets hot emission sites skip building the CallerKey entirely.
     #[inline]
     fn observes_event(&self, id: CharId, event: Event) -> bool {
-        self.event_log.is_some() || self.terminal.arena[id.0 as usize].event_handler.subscribes(event)
+        self.event_log.is_some() || self.terminal.arena.event_handler(id.0 as usize).subscribes(event)
     }
 
     /// Execute all actions registered for (event, caller) on `id`, in
     /// registration order, inline and reentrantly. The action list is indexed
     /// per iteration because a callback may append more actions to it.
-    pub fn handle_event(
-        &mut self,
-        hooks: &mut dyn EffectHooks,
-        id: CharId,
-        event: Event,
-        caller: CallerRef<'_>,
-    ) {
+    pub fn handle_event(&mut self, hooks: &mut dyn EffectHooks, id: CharId, event: Event, caller: CallerRef<'_>) {
         if self.event_log.is_some() {
             let character_id = self.terminal.arena[id.0 as usize].character_id;
             let event_name = match event {
@@ -272,14 +281,15 @@ impl EngineCtx {
                 bezier_control: None,
             });
             path.total_distance += distance_to_first_waypoint;
-            if let Some(origin) = &path.origin_segment {
-                path.total_distance -= origin.distance;
+            if let Some(distance) = path.origin_segment_distance {
+                path.total_distance -= distance;
                 path.segments[0] = new_origin_segment;
             } else {
+                path.segments.reserve_exact(1);
                 path.segments.insert(0, new_origin_segment);
             }
-            path.origin_segment = Some(new_origin_segment);
-            path.current_step = 0;
+            path.origin_segment_distance = Some(distance_to_first_waypoint);
+            path.set_current_step(0);
             path.hold_time_remaining = path.hold_time;
             path.max_steps = round_half_even(path.total_distance / path.speed);
             for segment in path.segments.iter_mut() {
@@ -326,17 +336,17 @@ impl EngineCtx {
 
         let mut distance_to_travel = {
             let p = path_mut!();
-            if p.max_steps == 0 || p.current_step >= p.max_steps || p.total_distance == 0.0 {
+            if p.max_steps == 0 || p.current_step() >= p.max_steps || p.total_distance == 0.0 {
                 return p.waypoint_at(p.segments.last().expect("path has no segments").end).coord;
             }
-            p.current_step += 1;
-            let ratio = p.current_step as f64 / p.max_steps as f64;
+            p.set_current_step(p.current_step() + 1);
+            let ratio = p.current_step() as f64 / p.max_steps as f64;
             let distance_factor = match &p.ease {
                 Some(ease) => ease.ease(ratio),
                 None => ratio,
             };
             let distance = distance_factor * p.total_distance;
-            p.last_distance_reached = distance;
+            p.set_last_distance_reached(distance);
             distance
         };
 
@@ -370,8 +380,8 @@ impl EngineCtx {
             }
             distance_to_travel -= seg_distance;
             if !enter_triggered || !exit_triggered {
-                let observes = self.observes_event(id, Event::SegmentEntered)
-                    || self.observes_event(id, Event::SegmentExited);
+                let observes =
+                    self.observes_event(id, Event::SegmentEntered) || self.observes_event(id, Event::SegmentExited);
                 if !observes {
                     let seg = &mut path_mut!().segments[i];
                     seg.enter_event_triggered = true;
@@ -427,33 +437,38 @@ impl EngineCtx {
 
     /// Motion.move.
     pub fn motion_move(&mut self, hooks: &mut dyn EffectHooks, id: CharId) {
+        // Admission checked subscriptions. Public edits invalidate the cursor;
+        // tracing can be enabled directly, so it must bypass prepared stepping.
+        if self.event_log.is_none() && self.terminal.arena.motion_tick(id.0 as usize) {
+            return;
+        }
+        let slot = if !self.observes_event(id, Event::SegmentEntered) && !self.observes_event(id, Event::SegmentExited)
         {
+            let Some(slot) = self.terminal.arena.motion_step(id.0 as usize) else { return };
+            slot
+        } else {
             let motion = &mut self.terminal.arena[id.0 as usize].motion;
             motion.previous_coord = motion.current_coord;
-        }
-        let Some(path_id) = ({
-            let motion = &self.terminal.arena[id.0 as usize].motion;
-            match &motion.active_path {
-                Some(pid) if !motion.paths.get(pid).is_none_or(|p| p.segments.is_empty()) => Some(pid.clone()),
-                _ => None,
-            }
-        }) else {
-            return;
+            let Some(path_id) = motion
+                .active_path
+                .as_ref()
+                .filter(|pid| !motion.paths.get(pid).is_none_or(|p| p.segments.is_empty()))
+                .cloned()
+            else {
+                return;
+            };
+            let new_coord = self.path_step(hooks, id, &path_id);
+            let motion = &mut self.terminal.arena[id.0 as usize].motion;
+            motion.current_coord = new_coord;
+            // Segment callbacks can replace the active path synchronously.
+            let active =
+                motion.active_path.as_ref().expect("active path cleared mid-move (would be an upstream crash)");
+            motion.paths.slot(active).expect("active path missing")
         };
-        let new_coord = self.path_step(hooks, id, &path_id);
-        self.terminal.arena[id.0 as usize].motion.current_coord = new_coord;
-
-        // Python re-reads self.active_path after step (a callback may have
-        // swapped it); None here would be an upstream AttributeError.
-        let active_path_id = self.terminal.arena[id.0 as usize]
-            .motion
-            .active_path
-            .clone()
-            .expect("active path cleared mid-move (would be an upstream crash)");
-        let slot = self.terminal.arena[id.0 as usize].motion.paths.slot(&active_path_id).expect("active path missing");
+        let active_path_id = self.terminal.arena[id.0 as usize].motion.active_path.as_ref().unwrap().clone();
         let (current_step, max_steps, hold_time, hold_time_remaining, loop_, segment_count) = {
             let p = self.terminal.arena[id.0 as usize].motion.paths.at(slot);
-            (p.current_step, p.max_steps, p.hold_time, p.hold_time_remaining, p.loop_, p.segments.len())
+            (p.current_step(), p.max_steps, p.hold_time, p.hold_time_remaining, p.loop_, p.segments.len())
         };
         if current_step == max_steps {
             if hold_time != 0 && hold_time_remaining == hold_time {
@@ -519,26 +534,27 @@ impl EngineCtx {
     /// Animation.activate_scene: does NOT reset playback (resume semantics).
     pub fn activate_scene(&mut self, hooks: &mut dyn EffectHooks, id: CharId, scene_id: &str) {
         {
-            let ch = &mut self.terminal.arena[id.0 as usize];
-            let visual = ch
-                .animation
+            let mut animation = self.terminal.arena.animation_edit(id.0 as usize);
+            let visual = animation
                 .scenes
-                .get(scene_id)
+                .get_mut(scene_id)
                 .expect("activate_scene: scene not found")
                 .activate()
                 .expect("activate_scene: empty scene");
-            ch.animation.active_scene = ch.animation.scenes.shared_key(scene_id);
-            ch.animation.active_scene_current_step = 0;
-            ch.animation.current_character_visual = visual;
+            animation.active_scene = animation.scenes.handle(scene_id);
+            animation.active_scene_current_step = 0;
+            animation.current_character_visual = visual;
         }
         if self.observes_event(id, Event::SceneActivated) {
             self.handle_event(hooks, id, Event::SceneActivated, CallerRef::Scene(scene_id));
         }
+        // Admit playback on its first tick, after effect setup/visibility/event
+        // mutations, instead of constructing and immediately retiring a cursor.
     }
 
     /// Animation.deactivate_scene.
     pub fn deactivate_scene(&mut self, id: CharId, scene_id: Option<&str>) {
-        let animation = &mut self.terminal.arena[id.0 as usize].animation;
+        let mut animation = self.terminal.arena.animation_edit(id.0 as usize);
         match scene_id {
             None => animation.active_scene = None,
             Some(sid) => {
@@ -555,57 +571,83 @@ impl EngineCtx {
     /// scene, so the active scene's slot is resolved once and reused instead of
     /// looking the id up again at every step.
     pub fn step_animation(&mut self, hooks: &mut dyn EffectHooks, id: CharId) {
-        let Some(scene_slot) = ({
-            let anim = &self.terminal.arena[id.0 as usize].animation;
-            match &anim.active_scene {
-                Some(sid) => {
-                    let slot = anim.scenes.slot(sid).expect("active scene missing");
-                    (!anim.scenes.at(slot).frames.is_empty()).then_some(slot)
-                }
-                None => None,
-            }
-        }) else {
+        if !self.terminal.arena.has_scene(id.0 as usize) {
             return;
-        };
-
-        let (sync, ease) = {
-            let scene = self.terminal.arena[id.0 as usize].animation.scenes.at(scene_slot);
-            (scene.sync, scene.ease)
-        };
-
-        if sync.is_some() {
-            self.step_synced_scene(id, scene_slot, sync.unwrap());
-        } else if ease.is_some() {
-            self.step_eased_scene(id, scene_slot, ease.unwrap());
+        }
+        // Take the mutable arena boundary once. No callback can run until the
+        // scene has been stepped, so its slot and flags remain valid here.
+        let stationary = self.terminal.arena.stationary(id.0 as usize);
+        let mut edit = self.terminal.arena.animation_edit(id.0 as usize);
+        let anim = &mut *edit;
+        let Some(active) = &anim.active_scene else { return };
+        let scene_slot = anim.scenes.handle_slot(active).expect("active scene missing");
+        let scene = anim.scenes.at_mut(scene_slot);
+        if scene.frames().is_empty() {
+            return;
+        }
+        let prepare_moving = !stationary && !scene.is_looping && scene.sync.is_none();
+        if let Some(sync) = scene.sync {
+            drop(edit);
+            self.step_synced_scene(id, scene_slot, sync);
+        } else if let Some(ease) = scene.ease {
+            drop(edit);
+            self.step_eased_scene(id, scene_slot, ease);
         } else {
-            let ch = &mut self.terminal.arena[id.0 as usize];
-            let visual = ch.animation.scenes.at_mut(scene_slot).get_next_visual();
-            ch.animation.current_character_visual = visual;
+            let head = scene.step_frame();
+            replace_visual(&mut anim.current_character_visual, &scene.all_frames[head].character_visual);
+            if !scene.is_looping && !scene.frames().is_empty() {
+                let ticks = scene.ticks_elapsed();
+                // A completed path can leave previous_coord one step behind.
+                // Let the next ordinary tick settle it before skipping motion.
+                let idle = if ticks > 0 && stationary {
+                    let frames = scene.frames();
+                    scene.all_frames[head].duration - ticks - i64::from(frames.start + 1 == frames.end)
+                } else {
+                    0
+                };
+                drop(edit);
+                if prepare_moving {
+                    self.terminal.arena.prepare_scene(id.0 as usize);
+                }
+                if self.idle_scheduling
+                    && self.nested_updates == 0
+                    && idle > 0
+                    && self.terminal.arena.playback.is_current(id.0 as usize)
+                {
+                    let kind = if self.terminal.arena.prepare_scene(id.0 as usize) {
+                        PlaybackKind::Runtime
+                    } else {
+                        PlaybackKind::Plain
+                    };
+                    self.terminal.arena.playback.sleep(id.0 as usize, scene_slot, idle, kind);
+                }
+                // An incomplete non-looping scene emits no completion event.
+                return;
+            }
+            drop(edit);
         }
 
         self.complete_scene_if_finished(hooks, id, scene_slot);
+        if prepare_moving {
+            self.terminal.arena.prepare_scene(id.0 as usize);
+        }
     }
 
     /// Animation._step_synced_scene + _synced_scene_frame_index.
     fn step_synced_scene(&mut self, id: CharId, scene_slot: usize, sync: SyncMetric) {
-        let active_path_state = {
-            let ch = &self.terminal.arena[id.0 as usize];
-            ch.motion.active_path.as_ref().map(|pid| {
-                let p = ch.motion.paths.get(pid).expect("active path missing");
-                (p.current_step, p.max_steps, p.total_distance, p.last_distance_reached)
-            })
-        };
-        let ch = &mut self.terminal.arena[id.0 as usize];
-        let scene = ch.animation.scenes.at_mut(scene_slot);
+        let active_path_state = self.terminal.arena.motion_progress(id.0 as usize);
+        let mut edit = self.terminal.arena.animation_edit(id.0 as usize);
+        let anim = &mut *edit;
+        let scene = anim.scenes.at_mut(scene_slot);
         match active_path_state {
             None => {
                 // no active path: jump to final frame and force-complete
-                let last = *scene.frames.back().unwrap();
-                ch.animation.current_character_visual = scene.all_frames[last].character_visual.clone();
-                scene.played_frames.append(&mut scene.frames);
+                let last = scene.frames().end - 1;
+                replace_visual(&mut anim.current_character_visual, &scene.all_frames[last].character_visual);
+                scene.finish_frames();
             }
             Some((current_step, max_steps, total_distance, last_distance_reached)) => {
-                let final_frame_index = scene.frames.len() as i64 - 1;
+                let final_frame_index = scene.frames().len() as i64 - 1;
                 let progress_ratio = match sync {
                     SyncMetric::Step => current_step.max(1) as f64 / max_steps.max(1) as f64,
                     SyncMetric::Distance => {
@@ -615,35 +657,32 @@ impl EngineCtx {
                         reached / total
                     }
                 };
-                let frame_index = round_half_even(final_frame_index as f64 * progress_ratio)
-                    .min(final_frame_index)
-                    .max(0);
-                let frame = scene.frames[frame_index as usize];
-                ch.animation.current_character_visual = scene.all_frames[frame].character_visual.clone();
+                let frame_index =
+                    round_half_even(final_frame_index as f64 * progress_ratio).min(final_frame_index).max(0);
+                let frame = scene.frames().start + frame_index as usize;
+                replace_visual(&mut anim.current_character_visual, &scene.all_frames[frame].character_visual);
             }
         }
     }
 
     /// Animation._step_eased_scene (+ _ease_animation).
     fn step_eased_scene(&mut self, id: CharId, scene_slot: usize, ease: crate::utils::easing::Easing) {
-        let ch = &mut self.terminal.arena[id.0 as usize];
-        let scene = ch.animation.scenes.at_mut(scene_slot);
-        let elapsed_step_ratio = scene.easing_current_step as f64 / scene.easing_total_steps as f64;
-        let easing_factor = ease.ease(elapsed_step_ratio);
-        let final_frame_index = (scene.easing_total_steps - 1).max(0);
-        let frame_index = round_half_even(easing_factor * final_frame_index as f64)
-            .min(final_frame_index)
-            .max(0);
-        let frame = scene.frame_index_map[frame_index as usize];
-        ch.animation.current_character_visual = scene.all_frames[frame].character_visual.clone();
-
-        scene.easing_current_step += 1;
-        if scene.easing_current_step == scene.easing_total_steps {
-            if scene.is_looping {
-                scene.easing_current_step = 0;
+        let allow_idle =
+            self.idle_scheduling && self.nested_updates == 0 && self.terminal.arena.playback.is_current(id.0 as usize);
+        let allow_idle = allow_idle && self.terminal.arena.stationary(id.0 as usize);
+        let mut edit = self.terminal.arena.animation_edit(id.0 as usize);
+        let anim = &mut *edit;
+        let scene = anim.scenes.at_mut(scene_slot);
+        let (frame, idle) = scene.step_eased(ease, &mut self.eased_ticks, allow_idle);
+        replace_visual(&mut anim.current_character_visual, &scene.all_frames[frame].character_visual);
+        drop(edit);
+        if idle > 0 {
+            let kind = if self.terminal.arena.prepare_scene(id.0 as usize) {
+                PlaybackKind::Runtime
             } else {
-                scene.played_frames.append(&mut scene.frames);
-            }
+                PlaybackKind::Eased
+            };
+            self.terminal.arena.playback.sleep(id.0 as usize, scene_slot, idle, kind);
         }
     }
 
@@ -655,12 +694,12 @@ impl EngineCtx {
             // holds it and active_scene_is_complete reduces to its scene test.
             let anim = &self.terminal.arena[id.0 as usize].animation;
             let scene = anim.scenes.at(scene_slot);
-            if !(scene.frames.is_empty() || scene.is_looping) {
+            if !(scene.frames().is_empty() || scene.is_looping) {
                 return;
             }
         }
         {
-            let anim = &mut self.terminal.arena[id.0 as usize].animation;
+            let mut anim = self.terminal.arena.animation_edit(id.0 as usize);
             let scene = anim.scenes.at_mut(scene_slot);
             if !scene.is_looping {
                 scene.reset_scene();
@@ -679,33 +718,137 @@ impl EngineCtx {
 
     /// EffectCharacter.tick: motion first, then animation.
     pub fn tick(&mut self, hooks: &mut dyn EffectHooks, id: CharId) {
-        self.motion_move(hooks, id);
+        if self.terminal.arena.scene_tick(id.0 as usize, self.idle_scheduling && self.nested_updates == 0, false) {
+            return;
+        }
+        let moving = self.terminal.arena.settle_stationary_motion(id.0 as usize);
+        if moving {
+            self.motion_move(hooks, id);
+            if self.terminal.arena.scene_tick(id.0 as usize, false, true) {
+                return;
+            }
+        }
         self.step_animation(hooks, id);
+        if !moving {
+            self.terminal.arena.prepare_scene(id.0 as usize);
+        }
     }
 
-    /// BaseEffectIterator.update: tick a snapshot of active characters in
-    /// canonical ascending-id order, then prune the not-is_active ones.
+    /// Allows comparison with the ordinary object-based playback implementation.
+    pub fn set_scene_runtime(&mut self, enabled: bool) {
+        self.terminal.arena.set_scene_runtime(enabled);
+    }
+
+    /// Compare prepared motion against the ordinary event-free path walker.
+    pub fn set_motion_runtime(&mut self, enabled: bool) {
+        self.terminal.arena.set_motion_runtime(enabled);
+    }
+
+    /// Allows a deterministic reference run without held-frame scheduling.
+    pub fn set_idle_scheduling(&mut self, enabled: bool) {
+        self.terminal.arena.wake_all();
+        self.idle_scheduling = enabled;
+    }
+
+    /// Tick the original active snapshot in ascending order, restoring sleepers
+    /// invalidated by callbacks before their turn, then prune inactive members.
     pub fn update(&mut self, hooks: &mut dyn EffectHooks) {
+        // Nested updates preserve the original snapshot semantics. Settle every
+        // outer sleeper first; its wake is replayed in the outer snapshot too.
+        if self.terminal.arena.playback.updating() {
+            self.terminal.arena.wake_all();
+            self.nested_updates += 1;
+            let snapshot: Vec<_> = self.active_characters.iter().collect();
+            for id in snapshot {
+                self.tick(hooks, id);
+            }
+            let arena = &self.terminal.arena;
+            self.active_characters.retain(|id| arena.is_active(id.0 as usize));
+            self.nested_updates -= 1;
+            return;
+        }
+        if self.active_characters.len() < 128 {
+            self.update_sparse(hooks);
+            return;
+        }
+        let mut members = std::mem::take(&mut self.active_members_scratch);
+        self.active_characters.copy_words_into(&mut members);
+        self.terminal.arena.begin_update(&members);
         let mut snapshot = std::mem::take(&mut self.active_character_scratch);
+        snapshot.clear();
+        snapshot.extend(
+            members
+                .iter()
+                .enumerate()
+                .map(|(i, word)| word & !self.terminal.arena.playback.sleeping.get(i).copied().unwrap_or(0)),
+        );
+        for word in 0..snapshot.len() {
+            while snapshot[word] != 0 {
+                let bit = snapshot[word].trailing_zeros() as usize;
+                snapshot[word] &= snapshot[word] - 1;
+                let id = word * 64 + bit;
+                self.terminal.arena.playback.set_cursor(id);
+                self.tick(hooks, CharId(id as u32));
+                // A callback may wake a higher slot after snapshot filtering.
+                // Reinsert only original members which have not ticked yet.
+                for awakened in self.terminal.arena.playback.woken.drain(..) {
+                    if awakened > id {
+                        let word = awakened / 64;
+                        let bit = 1 << (awakened % 64);
+                        if members.get(word).is_some_and(|members| members & bit != 0) {
+                            snapshot[word] |= bit;
+                        }
+                    }
+                }
+            }
+        }
+        let arena = &self.terminal.arena;
+        self.active_characters.retain_unless_masked(&arena.playback.sleeping, |id| arena.is_active(id.0 as usize));
+        self.active_characters.copy_words_into(&mut members);
+        self.terminal.arena.finish_update(&members);
+        self.active_members_scratch = members;
+        self.active_character_scratch = snapshot;
+    }
+
+    /// A few high-numbered characters should cost O(active), not require a
+    /// bitmap snapshot spanning every earlier arena slot. Keeping sleepers in
+    /// this small snapshot also naturally handles callbacks that wake them.
+    fn update_sparse(&mut self, hooks: &mut dyn EffectHooks) {
+        self.terminal.arena.begin_sparse_update(&self.active_characters);
+        let mut snapshot = std::mem::take(&mut self.sparse_character_scratch);
         snapshot.clear();
         snapshot.extend(self.active_characters.iter());
         for &id in &snapshot {
-            self.tick(hooks, id);
+            self.terminal.arena.playback.set_cursor(id.0 as usize);
+            if !self.terminal.arena.playback.is_sleeping(id.0 as usize) {
+                self.tick(hooks, id);
+            }
         }
-        snapshot.clear();
-        self.active_character_scratch = snapshot;
-
         let arena = &self.terminal.arena;
-        self.active_characters.retain(|id| arena[id.0 as usize].is_active());
+        self.active_characters.retain_unless_masked(&arena.playback.sleeping, |id| arena.is_active(id.0 as usize));
+        self.terminal.arena.finish_sparse_update(&self.active_characters);
+        self.sparse_character_scratch = snapshot;
     }
 
     /// BaseEffectIterator.frame: enforce framerate (real clock only), then the
     /// formatted output string; advances the virtual clock by one frame.
-    pub fn frame(&mut self) -> String {
+    pub fn frame(&mut self) -> crate::engine::terminal::FrameOutput {
         if matches!(self.clock, Clock::Real { .. }) && self.terminal.config.frame_rate != 0 {
             self.terminal.enforce_framerate();
         }
         self.clock.advance_frame();
-        self.terminal.get_formatted_output_string()
+        self.terminal.prepare_frame_output()
+    }
+}
+
+/// Rc's default clone_from still increments and decrements reference counts.
+/// A held frame can keep its existing owner without touching a shared cache line.
+#[inline]
+fn replace_visual(
+    current: &mut Rc<crate::engine::animation::CharacterVisual>,
+    next: &Rc<crate::engine::animation::CharacterVisual>,
+) {
+    if !Rc::ptr_eq(current, next) {
+        *current = Rc::clone(next);
     }
 }

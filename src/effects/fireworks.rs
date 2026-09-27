@@ -401,7 +401,7 @@ impl Effect for Fireworks {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if !self.shells.is_empty() || !ctx.active_characters.is_empty() {
             if !self.shells.is_empty() && self.launch_delay <= 0 {
                 let next_group = self.shells.pop().unwrap();

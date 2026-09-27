@@ -149,7 +149,7 @@ impl Effect for Wipe {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         let easer_complete = self.easer.as_ref().unwrap().is_complete();
         if !ctx.active_characters.is_empty() || !easer_complete {
             if self.wipe_delay == 0 {

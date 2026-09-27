@@ -2,14 +2,86 @@
 //! Scene/Animation stepping that fires events lives on EngineCtx (ctx.rs);
 //! everything here is state plus event-free logic.
 
-use std::collections::{HashMap, VecDeque};
-use std::rc::Rc;
+use std::collections::HashMap;
+use std::hash::{Hash, Hasher};
+use std::rc::{Rc, Weak};
 
 use crate::utils::ansi::{self, ColorCode};
 use crate::utils::easing::Easing;
 use crate::utils::graphics::{Color, ColorPair, Gradient};
 use crate::utils::hexterm;
 use crate::utils::ordered_map::OrderedMap;
+use crate::utils::pycompat::round_half_even;
+
+/// Easing depends on the curve and elapsed step, not the character or colors.
+/// Share the exact rounded tick indices; keep unusually long scenes on the
+/// scalar path so a large duration cannot cause an equally large allocation.
+#[derive(Debug)]
+struct EasedTicks {
+    ease: Easing,
+    total: i64,
+    uses: u8,
+    ticks: Box<[u32]>,
+}
+
+impl EasedTicks {
+    const MAX_STEPS: i64 = 65_536;
+
+    fn tick(ease: Easing, step: i64, total: i64) -> i64 {
+        let ratio = step as f64 / total as f64;
+        let factor = ease.ease(ratio);
+        let last = (total - 1).max(0);
+        round_half_even(factor * last as f64).min(last).max(0)
+    }
+}
+
+/// Numeric easing plans belong to the engine, keeping ordinary Scene records
+/// compact and releasing the plans with the animation. At most 4 MiB of tick
+/// indices are retained; very long scenes use scalar evaluation.
+#[derive(Debug, Default)]
+pub(crate) struct EasedTicksCache {
+    shapes: Vec<EasedTicks>,
+    last: usize,
+    next: usize,
+}
+
+impl EasedTicksCache {
+    fn get(&mut self, ease: Easing, total: i64) -> Option<&EasedTicks> {
+        if !(1..=EasedTicks::MAX_STEPS).contains(&total) {
+            return None;
+        }
+        let matches = |entry: &EasedTicks| entry.ease == ease && entry.total == total;
+        let slot = if self.shapes.get(self.last).is_some_and(matches) {
+            self.last
+        } else if let Some(slot) = self.shapes.iter().position(matches) {
+            slot
+        } else {
+            let shape = EasedTicks { ease, total, uses: 0, ticks: Box::new([]) };
+            if self.shapes.len() < 16 {
+                self.shapes.push(shape);
+                self.shapes.len() - 1
+            } else {
+                let slot = self.next;
+                self.shapes[slot] = shape;
+                self.next = (slot + 1) % 16;
+                slot
+            }
+        };
+        self.last = slot;
+        let shape = &mut self.shapes[slot];
+        if shape.ticks.is_empty() {
+            // Establish reuse before evaluating a whole curve. With many
+            // distinct scenes, eviction should cost a scalar tick rather than
+            // rebuilding thousands of unused future values on each miss.
+            shape.uses += 1;
+            if shape.uses < 8 {
+                return None;
+            }
+            shape.ticks = (0..total).map(|step| EasedTicks::tick(ease, step, total) as u32).collect();
+        }
+        Some(shape)
+    }
+}
 
 /// Handling of preexisting SGR colors in the input (TerminalConfig option).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -25,6 +97,56 @@ pub enum SyncMetric {
     Step,
 }
 
+#[cfg(test)]
+mod frame_index_tests {
+    use super::*;
+
+    #[test]
+    fn eased_cache_distinguishes_curves_and_durations_after_eviction() {
+        let mut cache = EasedTicksCache::default();
+        for total in (1..=24).chain((1..=24).rev()) {
+            for ease in [Easing::Linear, Easing::OutElastic, Easing::CubicBezier(0.2, -0.8, 0.7, 1.5)] {
+                for _ in 0..7 {
+                    cache.get(ease, total);
+                }
+                let cached = cache.get(ease, total).unwrap();
+                let expected: Vec<_> = (0..total).map(|step| EasedTicks::tick(ease, step, total) as u32).collect();
+                assert_eq!(&*cached.ticks, expected);
+                assert!(cache.shapes.len() <= 16);
+            }
+        }
+        assert!(cache.get(Easing::Linear, EasedTicks::MAX_STEPS + 1).is_none());
+        assert!(cache.get(Easing::Linear, 1_000_000_000).is_none());
+    }
+
+    #[test]
+    fn diverse_eased_scenes_do_not_rebuild_large_tables_on_every_tick() {
+        let mut cache = EasedTicksCache::default();
+        for _ in 0..32 {
+            for total in 60_000..60_032 {
+                assert!(cache.get(Easing::InOutSine, total).is_none());
+            }
+        }
+        assert!(cache.shapes.iter().all(|shape| shape.ticks.is_empty()));
+    }
+
+    #[test]
+    fn duration_lookup_matches_expanded_ticks_after_preparation_and_appends() {
+        let mut scene = Scene::new("lookup", false, None, Some(Easing::Linear), false, false);
+        let mut expanded = Vec::new();
+        for (frame, duration) in [3, 3, 3, 1, 5, 2].into_iter().enumerate() {
+            scene.add_frame("X", duration, VisualParams::default()).unwrap();
+            expanded.extend(std::iter::repeat_n(frame, duration as usize));
+            scene.activate().unwrap();
+            for (tick, &expected) in expanded.iter().enumerate() {
+                assert_eq!(scene.frame_at_tick(tick as i64), expected, "frame {frame}, tick {tick}");
+            }
+            scene.get_next_visual();
+            scene.reset_scene();
+        }
+    }
+}
+
 #[inline]
 fn resolve_color_code(
     color: Option<&Color>,
@@ -37,9 +159,7 @@ fn resolve_color_code(
         return None;
     }
     if use_xterm_colors {
-        return Some(ColorCode::Xterm(
-            color.xterm_color.unwrap_or_else(|| hexterm::hex_to_xterm(&color.rgb_color)),
-        ));
+        return Some(ColorCode::Xterm(color.xterm_color.unwrap_or_else(|| hexterm::hex_to_xterm(&color.rgb_color))));
     }
     let hex = match reusable {
         Some(ColorCode::Rgb(mut hex)) => {
@@ -49,6 +169,19 @@ fn resolve_color_code(
         _ => color.rgb_color.as_ref().to_owned(),
     };
     Some(ColorCode::Rgb(hex))
+}
+
+/// Compare derived codes without allocating their RGB string representation.
+fn color_code_matches(code: Option<&ColorCode>, color: Option<&Color>, no_color: bool, xterm: bool) -> bool {
+    let Some(color) = color.filter(|_| !no_color) else {
+        return code.is_none();
+    };
+    if xterm {
+        matches!(code, Some(ColorCode::Xterm(value))
+            if *value == color.xterm_color.unwrap_or_else(|| hexterm::hex_to_xterm(&color.rgb_color)))
+    } else {
+        matches!(code, Some(ColorCode::Rgb(value)) if value == color.rgb_color.as_ref())
+    }
 }
 
 thread_local! {
@@ -168,6 +301,62 @@ impl PartialEq for VisualKey {
 
 impl Eq for VisualKey {}
 
+/// Compact value key. Scene color codes are derived, so retaining their String
+/// fields in every cache slot would waste space and allocate on hits.
+#[derive(Clone, Copy, PartialEq, Eq, Hash)]
+struct SceneVisualKey {
+    symbol: char,
+    styles: u16,
+    colors: Option<ColorPair>,
+}
+
+thread_local! {
+    static SCENE_VISUALS: std::cell::RefCell<std::collections::HashMap<
+        SceneVisualKey, Weak<CharacterVisual>, std::hash::BuildHasherDefault<rustc_hash::FxHasher>
+    >> = std::cell::RefCell::new(std::collections::HashMap::default());
+}
+
+fn scene_visual(symbol: &str, mut params: VisualParams, no_color: bool, xterm: bool) -> Rc<CharacterVisual> {
+    params.fg_color_code = None;
+    params.bg_color_code = None;
+    let mut chars = symbol.chars();
+    let single = chars.next().filter(|_| chars.next().is_none());
+    let build = |mut params: VisualParams| {
+        if let Some(colors) = &params.colors {
+            params.fg_color_code = resolve_color_code(colors.fg_color.as_ref(), no_color, xterm, None);
+            params.bg_color_code = resolve_color_code(colors.bg_color.as_ref(), no_color, xterm, None);
+        }
+        Rc::new(CharacterVisual::new(symbol, params))
+    };
+    let Some(symbol) = single else {
+        return build(params);
+    };
+    let styles = params.bold as u16
+        | (params.dim as u16) << 1
+        | (params.italic as u16) << 2
+        | (params.underline as u16) << 3
+        | (params.blink as u16) << 4
+        | (params.reverse as u16) << 5
+        | (params.hidden as u16) << 6
+        | (params.strike as u16) << 7
+        | (no_color as u16) << 8
+        | (xterm as u16) << 9;
+    let key = SceneVisualKey { symbol, styles, colors: params.colors };
+    SCENE_VISUALS.with(|cache| {
+        let mut cache = cache.borrow_mut();
+        if let Some(visual) = cache.get(&key).and_then(Weak::upgrade) {
+            return visual;
+        }
+        // Bound long-lived embedded use. Eviction affects reuse only, never output.
+        if cache.len() >= 16384 {
+            cache.clear();
+        }
+        let visual = build(params);
+        cache.insert(key, Rc::downgrade(&visual));
+        visual
+    })
+}
+
 /// Inline capacity for a formatted symbol. A 24-bit foreground and background
 /// pair plus a reset is 42 bytes, so all but pathological styling fits.
 const INLINE_SYMBOL_CAPACITY: usize = 63;
@@ -180,38 +369,58 @@ const INLINE_SYMBOL_CAPACITY: usize = 63;
 /// then advance by the real length. The common foreground-only
 /// case fits in 32 bytes; heavily styled symbols use the full inline buffer.
 #[derive(Debug, Clone)]
-pub enum FormattedSymbol {
+pub struct FormattedSymbol {
+    // Immutable identity follows clones and changes whenever bytes are rebuilt.
+    // Zero is reserved for empty render cells.
+    id: u64,
+    data: SymbolBytes,
+}
+
+#[derive(Debug, Clone)]
+enum SymbolBytes {
     Inline { bytes: [u8; INLINE_SYMBOL_CAPACITY], len: u8 },
     Heap(Box<str>),
 }
 
 impl FormattedSymbol {
     fn new(text: &str) -> Self {
-        if text.len() <= INLINE_SYMBOL_CAPACITY {
+        static NEXT_ID: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(1);
+        let id = NEXT_ID.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+        // Do not permit wraparound to alias a previously cached symbol.
+        if id == u64::MAX {
+            std::process::abort();
+        }
+        let data = if text.len() <= INLINE_SYMBOL_CAPACITY {
             let mut bytes = [0u8; INLINE_SYMBOL_CAPACITY];
             bytes[..text.len()].copy_from_slice(text.as_bytes());
-            FormattedSymbol::Inline { bytes, len: text.len() as u8 }
+            SymbolBytes::Inline { bytes, len: text.len() as u8 }
         } else {
-            FormattedSymbol::Heap(text.into())
-        }
+            SymbolBytes::Heap(text.into())
+        };
+        Self { id, data }
+    }
+
+    #[inline]
+    pub(crate) fn id(&self) -> u64 {
+        self.id
     }
 
     #[inline]
     pub fn as_str(&self) -> &str {
-        match self {
-            FormattedSymbol::Inline { bytes, len } => {
+        match &self.data {
+            SymbolBytes::Inline { bytes, len } => {
                 // SAFETY: built from a &str prefix, so the range is valid UTF-8.
                 unsafe { std::str::from_utf8_unchecked(&bytes[..*len as usize]) }
             }
-            FormattedSymbol::Heap(text) => text,
+            SymbolBytes::Heap(text) => text,
         }
     }
 
     /// Append a fixed-size block, then discard its unused padding.
     #[inline]
     pub fn append_to(&self, out: &mut Vec<u8>) {
-        match self {
-            FormattedSymbol::Inline { bytes, len } => {
+        match &self.data {
+            SymbolBytes::Inline { bytes, len } => {
                 let start = out.len();
                 if *len <= 32 {
                     out.extend_from_slice(&bytes[..32]);
@@ -220,7 +429,7 @@ impl FormattedSymbol {
                 }
                 out.truncate(start + *len as usize);
             }
-            FormattedSymbol::Heap(text) => out.extend_from_slice(text.as_bytes()),
+            SymbolBytes::Heap(text) => out.extend_from_slice(text.as_bytes()),
         }
     }
 }
@@ -249,7 +458,7 @@ pub struct CharacterVisual {
     pub formatted_symbol: FormattedSymbol,
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct VisualParams {
     pub bold: bool,
     pub dim: bool,
@@ -283,7 +492,10 @@ impl CharacterVisual {
             colors: p.colors,
             fg_color_code: p.fg_color_code,
             bg_color_code: p.bg_color_code,
-            formatted_symbol: FormattedSymbol::Inline { bytes: [0; INLINE_SYMBOL_CAPACITY], len: 0 },
+            formatted_symbol: FormattedSymbol {
+                id: 0,
+                data: SymbolBytes::Inline { bytes: [0; INLINE_SYMBOL_CAPACITY], len: 0 },
+            },
         };
         // Effects rebuild visuals every frame, so the SGR string is assembled in
         // a reused scratch buffer rather than a fresh allocation per visual.
@@ -359,7 +571,48 @@ impl CharacterVisual {
 pub struct Frame {
     pub character_visual: Rc<CharacterVisual>,
     pub duration: i64,
-    pub ticks_elapsed: i64,
+}
+
+/// Mutable construction and compact shared playback use different layouts.
+/// Rc<[Frame]> points directly at the frames; Rc<Vec<Frame>> adds a dependent
+/// pointer and length load to every animation tick.
+#[derive(Debug, Clone)]
+pub enum FrameStorage {
+    Building(Vec<Frame>),
+    Shared(Rc<[Frame]>),
+}
+
+impl std::ops::Deref for FrameStorage {
+    type Target = [Frame];
+    #[inline]
+    fn deref(&self) -> &[Frame] {
+        match self {
+            Self::Building(frames) => frames,
+            Self::Shared(frames) => frames,
+        }
+    }
+}
+
+impl FrameStorage {
+    pub fn make_mut(&mut self) -> &mut Vec<Frame> {
+        if let Self::Shared(frames) = self {
+            *self = Self::Building(frames.to_vec());
+        }
+        match self {
+            Self::Building(frames) => frames,
+            Self::Shared(_) => unreachable!(),
+        }
+    }
+
+    fn share(&mut self) -> &Rc<[Frame]> {
+        if let Self::Building(frames) = self {
+            *self = Self::Shared(std::mem::take(frames).into());
+        }
+        match self {
+            Self::Shared(frames) => frames,
+            Self::Building(_) => unreachable!(),
+        }
+    }
 }
 
 /// animation.Scene.
@@ -372,15 +625,20 @@ pub struct Scene {
     pub no_color: bool,
     pub use_xterm_colors: bool,
     /// Stable frame storage; never reordered.
-    pub all_frames: Vec<Frame>,
+    pub all_frames: FrameStorage,
+    ticks_elapsed: std::cell::Cell<i64>,
+    prepared: bool,
     /// Remaining frame queue (indices into all_frames).
-    pub frames: VecDeque<usize>,
+    head: std::cell::Cell<usize>,
+    end: usize,
     /// Played frames (indices into all_frames).
-    pub played_frames: VecDeque<usize>,
-    /// Tick index -> frame index (upstream frame_index_map).
-    pub frame_index_map: Vec<usize>,
+    played: std::cell::Cell<usize>,
+    /// Exclusive cumulative ends for nonuniform durations. Uniform scenes use
+    /// division and never allocate this index.
+    frame_end_ticks: Vec<i64>,
+    uniform_duration: Option<i64>,
     pub easing_total_steps: i64,
-    pub easing_current_step: i64,
+    easing_current_step: std::cell::Cell<i64>,
     pub preexisting_colors: Option<ColorPair>,
     pub preexisting_bold: bool,
 }
@@ -401,21 +659,19 @@ impl Scene {
             ease,
             no_color,
             use_xterm_colors,
-            all_frames: Vec::new(),
-            frames: VecDeque::new(),
-            played_frames: VecDeque::new(),
-            frame_index_map: Vec::new(),
+            all_frames: FrameStorage::Building(Vec::new()),
+            ticks_elapsed: std::cell::Cell::new(0),
+            prepared: false,
+            head: std::cell::Cell::new(0),
+            end: 0,
+            played: std::cell::Cell::new(0),
+            frame_end_ticks: Vec::new(),
+            uniform_duration: None,
             easing_total_steps: 0,
-            easing_current_step: 0,
+            easing_current_step: std::cell::Cell::new(0),
             preexisting_colors: None,
             preexisting_bold: false,
         }
-    }
-
-    /// Scene._get_color_code. Upstream memoizes into a process-global ClassVar
-    /// dict; the memo is value-transparent so we just recompute.
-    fn get_color_code(&self, color: Option<&Color>) -> Option<ColorCode> {
-        resolve_color_code(color, self.no_color, self.use_xterm_colors, None)
     }
 
     /// Scene.add_frame with the preexisting-color/bold overrides.
@@ -426,49 +682,159 @@ impl Scene {
         if self.preexisting_bold {
             params.bold = true;
         }
-        if let Some(colors) = &params.colors {
-            params.fg_color_code = self.get_color_code(colors.fg_color.as_ref());
-            params.bg_color_code = self.get_color_code(colors.bg_color.as_ref());
-        } else {
-            params.fg_color_code = None;
-            params.bg_color_code = None;
-        }
         if duration < 1 {
             return Err(format!("Frame duration must be at least 1. Received: {duration}"));
         }
-        let visual = CharacterVisual::shared(symbol, params);
+        let visual = scene_visual(symbol, params, self.no_color, self.use_xterm_colors);
         let frame_index = self.all_frames.len();
-        self.all_frames.push(Frame { character_visual: visual, duration, ticks_elapsed: 0 });
-        self.frames.push_back(frame_index);
-        for _ in 0..duration {
-            self.frame_index_map.push(frame_index);
-            self.easing_total_steps += 1;
+        self.all_frames.make_mut().push(Frame { character_visual: visual, duration });
+        self.prepared = false;
+        self.end = frame_index + 1;
+        if frame_index == 0 {
+            self.uniform_duration = Some(duration);
+        } else if let Some(previous) = self.uniform_duration {
+            if previous != duration {
+                // A later append can turn a uniform scene into a variable one.
+                self.frame_end_ticks.extend((1..=frame_index).map(|index| index as i64 * previous));
+                self.uniform_duration = None;
+            }
+        }
+        self.easing_total_steps += duration;
+        if self.uniform_duration.is_none() {
+            self.frame_end_ticks.push(self.easing_total_steps);
         }
         Ok(())
     }
 
     /// Scene.activate: first frame's visual, error when empty.
-    pub fn activate(&self) -> Result<Rc<CharacterVisual>, String> {
-        match self.frames.front() {
-            Some(&idx) => Ok(self.all_frames[idx].character_visual.clone()),
-            None => Err(format!("Scene {} has no frames.", self.scene_id)),
+    pub fn activate(&mut self) -> Result<Rc<CharacterVisual>, String> {
+        self.prepare();
+        if self.frames().is_empty() {
+            Err(format!("Scene {} has no frames.", self.scene_id))
+        } else {
+            Ok(self.all_frames[self.head.get()].character_visual.clone())
         }
     }
 
     /// Scene.get_next_visual: tick the head frame, retiring it (and looping)
     /// exactly as upstream.
     pub fn get_next_visual(&mut self) -> Rc<CharacterVisual> {
-        let head = self.frames[0];
-        let next_visual = self.all_frames[head].character_visual.clone();
-        self.all_frames[head].ticks_elapsed += 1;
-        if self.all_frames[head].ticks_elapsed == self.all_frames[head].duration {
-            self.all_frames[head].ticks_elapsed = 0;
-            self.played_frames.push_back(self.frames.pop_front().unwrap());
-            if self.is_looping && self.frames.is_empty() {
-                self.frames.append(&mut self.played_frames);
+        let head = self.step_frame();
+        self.all_frames[head].character_visual.clone()
+    }
+
+    pub fn frames(&self) -> std::ops::Range<usize> {
+        self.head.get()..self.end
+    }
+    pub fn played_frames(&self) -> std::ops::Range<usize> {
+        0..self.played.get()
+    }
+    pub fn ticks_elapsed(&self) -> i64 {
+        self.ticks_elapsed.get()
+    }
+
+    pub(crate) fn uniform_frame_duration(&self) -> Option<i64> {
+        self.uniform_duration
+    }
+
+    pub(crate) fn eased_runtime_frame(&self, ease: Easing, step: i64) -> usize {
+        self.frame_at_tick(EasedTicks::tick(ease, step, self.easing_total_steps))
+    }
+
+    pub(crate) fn set_eased_cursor(&self, step: i64) {
+        self.easing_current_step.set(step);
+    }
+
+    /// Materialize the arena's compact playback cursor before API observation.
+    pub(crate) fn set_plain_cursor(&self, head: usize, played: usize, ticks: i64) {
+        self.head.set(head);
+        self.played.set(played);
+        self.ticks_elapsed.set(ticks);
+    }
+
+    pub fn easing_current_step(&self) -> i64 {
+        self.easing_current_step.get()
+    }
+
+    pub fn set_easing_current_step(&mut self, step: i64) {
+        self.easing_current_step.set(step);
+    }
+
+    pub(crate) fn advance_eased_ticks(&self, count: i64) {
+        let next = self.easing_current_step.get() + count;
+        debug_assert!(next < self.easing_total_steps);
+        self.easing_current_step.set(next);
+    }
+
+    /// Returns the visual's frame index and following ticks that hold that same
+    /// visual without completing. Curves can reverse or overshoot, so inspect
+    /// the exact cached indices rather than assuming monotonic progression.
+    pub(crate) fn step_eased(&mut self, ease: Easing, cache: &mut EasedTicksCache, allow_idle: bool) -> (usize, i64) {
+        let total = self.easing_total_steps;
+        let cached = cache.get(ease, total);
+        let step = self.easing_current_step.get();
+        let tick = cached
+            .and_then(|cached| cached.ticks.get(step as usize))
+            .map_or_else(|| EasedTicks::tick(ease, step, total), |&tick| i64::from(tick));
+        let frame = self.frame_at_tick(tick);
+        let next = step + 1;
+        self.easing_current_step.set(next);
+        if next == total {
+            if self.is_looping {
+                self.easing_current_step.set(0);
+            } else {
+                self.finish_frames();
+            }
+            return (frame, 0);
+        }
+        let mut idle = 0;
+        if allow_idle && !self.is_looping && (0..total).contains(&next) {
+            if let Some(cached) = cached {
+                let visual = &self.all_frames[frame].character_visual;
+                // The completion tick must take the ordinary event path. The
+                // scheduler wheel can hold at most 255 ticks in one interval.
+                for future in next..(total - 1).min(next + 255) {
+                    let upcoming = self.frame_at_tick(i64::from(cached.ticks[future as usize]));
+                    if !Rc::ptr_eq(visual, &self.all_frames[upcoming].character_visual) {
+                        break;
+                    }
+                    idle += 1;
+                }
             }
         }
-        next_visual
+        (frame, idle)
+    }
+
+    /// A scheduler interval can include one intermediate retirement, but never
+    /// the final frame or a change to the displayed visual.
+    pub(crate) fn advance_held_ticks(&self, count: i64) {
+        let ticks = self.ticks_elapsed.get() + count;
+        let head = self.head.get();
+        let duration = self.all_frames[head].duration;
+        debug_assert!(ticks <= duration);
+        if ticks == duration {
+            debug_assert!(head + 1 < self.end);
+            self.ticks_elapsed.set(0);
+            self.head.set(head + 1);
+            self.played.set(head + 1);
+        } else {
+            self.ticks_elapsed.set(ticks);
+        }
+    }
+
+    pub(crate) fn step_frame(&mut self) -> usize {
+        let head = self.head.get();
+        self.ticks_elapsed.set(self.ticks_elapsed.get() + 1);
+        if self.ticks_elapsed.get() == self.all_frames[head].duration {
+            self.ticks_elapsed.set(0);
+            self.head.set(head + 1);
+            self.played.set(head + 1);
+            if self.is_looping && self.frames().is_empty() {
+                self.head.set(0);
+                self.played.set(0);
+            }
+        }
+        head
     }
 
     /// Scene.apply_gradient_to_symbols with the exact cyclic_distribution
@@ -480,10 +846,7 @@ impl Scene {
         fg_gradient: Option<&Gradient>,
         bg_gradient: Option<&Gradient>,
     ) -> Result<(), String> {
-        fn cyclic_distribution<'a, T, R>(
-            larger: &'a [T],
-            smaller: &'a [R],
-        ) -> impl Iterator<Item = (&'a T, &'a R)> {
+        fn cyclic_distribution<'a, T, R>(larger: &'a [T], smaller: &'a [R]) -> impl Iterator<Item = (&'a T, &'a R)> {
             let repeat_factor = larger.len() / smaller.len();
             let mut overflow_count = larger.len() % smaller.len();
             let mut overflow_used = false;
@@ -530,13 +893,9 @@ impl Scene {
             let fg = &fg_gradient.unwrap().spectrum;
             let bg = &bg_gradient.unwrap().spectrum;
             if fg.len() >= bg.len() {
-                cyclic_distribution(fg, bg)
-                    .map(|(f, b)| ColorPair::new(Some(*f), Some(*b)))
-                    .collect()
+                cyclic_distribution(fg, bg).map(|(f, b)| ColorPair::new(Some(*f), Some(*b))).collect()
             } else {
-                cyclic_distribution(bg, fg)
-                    .map(|(b, f)| ColorPair::new(Some(*f), Some(*b)))
-                    .collect()
+                cyclic_distribution(bg, fg).map(|(b, f)| ColorPair::new(Some(*f), Some(*b))).collect()
             }
         } else if fg_has {
             fg_gradient.unwrap().spectrum.iter().map(|c| ColorPair::new(Some(c.clone()), None)).collect()
@@ -547,9 +906,7 @@ impl Scene {
         // Every frame of the scene is known up front; size the stores once
         // instead of letting them double their way up.
         let frame_count = symbols.len().max(color_pairs.len());
-        self.all_frames.reserve_exact(frame_count);
-        self.frames.reserve_exact(frame_count);
-        self.frame_index_map.reserve_exact(frame_count * duration.max(0) as usize);
+        self.all_frames.make_mut().reserve_exact(frame_count);
 
         if symbols.len() >= color_pairs.len() {
             for (symbol, colors) in cyclic_distribution(symbols, &color_pairs) {
@@ -566,14 +923,59 @@ impl Scene {
     /// Scene.reset_scene: restore played + remaining frames in original order
     /// (played first), zero tick counters and the easing step.
     pub fn reset_scene(&mut self) {
-        // Remaining frames get ticks_elapsed zeroed as they move to played;
-        // already-played frames were zeroed when they retired.
-        for idx in self.frames.drain(..) {
-            self.all_frames[idx].ticks_elapsed = 0;
-            self.played_frames.push_back(idx);
+        // Only the current head can have nonzero ticks; retired and unplayed
+        // frames are zero. Reset is therefore O(1), including looping scenes.
+        self.ticks_elapsed.set(0);
+        self.head.set(0);
+        self.end = self.all_frames.len();
+        self.played.set(0);
+        self.easing_current_step.set(0);
+    }
+
+    pub(crate) fn prepare(&mut self) {
+        if self.prepared {
+            return;
         }
-        self.frames.extend(self.played_frames.drain(..));
-        self.easing_current_step = 0;
+        // Deduplicate complete immutable frame programs, not playback state.
+        // Bounded weak slots preserve teardown and make collisions harmless.
+        thread_local! {
+            static PROGRAMS: std::cell::RefCell<Vec<Option<Weak<[Frame]>>>> =
+                std::cell::RefCell::new(vec![None; 4096]);
+        }
+        let mut hash = rustc_hash::FxHasher::default();
+        for frame in self.all_frames.iter() {
+            frame.character_visual.formatted_symbol.id().hash(&mut hash);
+            frame.duration.hash(&mut hash);
+        }
+        let slot = hash.finish() as usize & 4095;
+        PROGRAMS.with(|programs| {
+            let mut programs = programs.borrow_mut();
+            if let Some(existing) = programs[slot].as_ref().and_then(Weak::upgrade) {
+                if existing.len() == self.all_frames.len()
+                    && existing
+                        .iter()
+                        .zip(self.all_frames.iter())
+                        .all(|(a, b)| a.duration == b.duration && Rc::ptr_eq(&a.character_visual, &b.character_visual))
+                {
+                    self.all_frames = FrameStorage::Shared(existing);
+                    return;
+                }
+            }
+            programs[slot] = Some(Rc::downgrade(self.all_frames.share()));
+        });
+        self.prepared = true;
+    }
+
+    pub(crate) fn finish_frames(&mut self) {
+        self.played.set(self.all_frames.len());
+        self.head.set(self.end);
+    }
+
+    pub(crate) fn frame_at_tick(&self, tick: i64) -> usize {
+        match self.uniform_duration {
+            Some(duration) => (tick / duration) as usize,
+            None => self.frame_end_ticks.partition_point(|&end| end <= tick),
+        }
     }
 }
 
@@ -581,7 +983,7 @@ impl Scene {
 #[derive(Debug, Clone)]
 pub struct Animation {
     pub scenes: OrderedMap<Scene>,
-    pub active_scene: Option<Rc<str>>,
+    pub active_scene: Option<crate::utils::ordered_map::MapHandle>,
     pub use_xterm_colors: bool,
     pub no_color: bool,
     pub existing_color_handling: ExistingColorHandling,
@@ -638,10 +1040,7 @@ impl Animation {
         };
         let (preexisting_colors, preexisting_bold) =
             if self.existing_color_handling == ExistingColorHandling::Always && uses_input_preexisting_colors {
-                (
-                    Some(ColorPair::new(self.input_fg_color.clone(), self.input_bg_color.clone())),
-                    self.input_bold,
-                )
+                (Some(ColorPair::new(self.input_fg_color.clone(), self.input_bg_color.clone())), self.input_bold)
             } else {
                 (None, false)
             };
@@ -657,8 +1056,8 @@ impl Animation {
         match &self.active_scene {
             None => true,
             Some(id) => {
-                let scene = self.scenes.get(id).expect("active scene must exist");
-                scene.frames.is_empty() || scene.is_looping
+                let scene = self.scenes.get_handle(id).expect("active scene must exist");
+                scene.frames().is_empty() || scene.is_looping
             }
         }
     }
@@ -677,6 +1076,35 @@ impl Animation {
         if self.existing_color_handling == ExistingColorHandling::Always && uses_input_preexisting_colors {
             colors = ColorPair::new(self.input_fg_color.clone(), self.input_bg_color.clone());
             bold = self.input_bold;
+        }
+        // Repeated lighting/appearance updates often resolve to exactly the
+        // current visual. Test the resolved modes too: callers may change
+        // no_color or xterm between updates without changing the ColorPair.
+        let current = &self.current_character_visual;
+        if current.symbol == symbol
+            && current.colors == Some(colors)
+            && current.bold == bold
+            && !(current.dim
+                || current.italic
+                || current.underline
+                || current.blink
+                || current.reverse
+                || current.hidden
+                || current.strike)
+            && color_code_matches(
+                current.fg_color_code.as_ref(),
+                colors.fg_color.as_ref(),
+                self.no_color,
+                self.use_xterm_colors,
+            )
+            && color_code_matches(
+                current.bg_color_code.as_ref(),
+                colors.bg_color.as_ref(),
+                self.no_color,
+                self.use_xterm_colors,
+            )
+        {
+            return;
         }
         // Appearance-driven effects usually own their visual outright. Reuse
         // its allocation and strings; a scene or caller retaining a strong or

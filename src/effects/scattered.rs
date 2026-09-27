@@ -180,7 +180,7 @@ impl Effect for Scattered {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if !self.pending_chars.is_empty() || !ctx.active_characters.is_empty() {
             if self.initial_hold_frames != 0 {
                 self.initial_hold_frames -= 1;

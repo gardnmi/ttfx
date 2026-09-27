@@ -226,6 +226,7 @@ impl Effect for BinaryPath {
             path_coords.push(next_coord);
             let final_coord = input_coord;
             path_coords.push(final_coord);
+            let mut path_template: Option<crate::engine::motion::Path> = None;
             for &bin_effectchar in &bin_rep.binary_characters {
                 let digital_path = {
                     let ch = &mut ctx.terminal.arena[bin_effectchar.0 as usize];
@@ -235,8 +236,18 @@ impl Effect for BinaryPath {
                         .new_path(self.config.movement_speed, None, None, 0, false, "")
                         .map_err(EngineError::Other)?;
                     let path = ch.motion.paths.get_mut(&path_id).unwrap();
-                    for &coord in &path_coords {
-                        path.new_waypoint(coord, None, "").map_err(EngineError::Other)?;
+                    if let Some(template) = &path_template {
+                        let path_id = path.path_id.clone();
+                        *path = template.clone();
+                        path.path_id = path_id;
+                    } else {
+                        for &coord in &path_coords {
+                            path.new_waypoint(coord, None, "").map_err(EngineError::Other)?;
+                        }
+                        // Capture before activation: each player owns its
+                        // origin, counters and segment event flags.
+                        path.waypoints.share();
+                        path_template = Some(path.clone());
                     }
                     path_id
                 };
@@ -356,7 +367,7 @@ impl Effect for BinaryPath {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if !self.complete || !ctx.active_characters.is_empty() {
             if self.phase == Phase::Travel {
                 while (self.active_binary_reps.len() as i64) < self.max_active_binary_groups

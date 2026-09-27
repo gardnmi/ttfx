@@ -404,7 +404,7 @@ impl Effect for Crumble {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if self.stage != Stage::Complete {
             match self.stage {
                 Stage::Falling => {

@@ -884,7 +884,7 @@ impl Effect for Thunderstorm {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if ctx.active_characters.is_empty() && self.phase == Phase::Complete {
             return None;
         }

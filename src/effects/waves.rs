@@ -8,7 +8,7 @@ use crate::cli::parse_color;
 use crate::effects::common::{
     parse_easing, parse_gradient_direction, parse_gradient_steps, parse_positive_int, parse_symbol,
 };
-use crate::engine::animation::{ExistingColorHandling, VisualParams};
+use crate::engine::animation::{ExistingColorHandling, Scene, VisualParams};
 use crate::engine::character::CharId;
 use crate::engine::ctx::{EffectHooks, EngineCtx};
 use crate::engine::effect::Effect;
@@ -114,6 +114,10 @@ impl Effect for Waves {
                 .map_err(EngineError::Other)?;
 
         let dynamic = ctx.terminal.config.existing_color_handling == ExistingColorHandling::Dynamic;
+        // Characters share this wave program unless input colors/bold override
+        // it. Clone independent playback cursors around immutable shared frames
+        // instead of reconstructing all wave_count copies for every character.
+        let mut wave_programs: HashMap<_, Scene> = HashMap::new();
         let characters = {
             let filter = CharacterFilter::default();
             ctx.terminal.get_characters(&mut ctx.rng, filter, CharacterSort::TopToBottomLeftToRight)
@@ -140,15 +144,24 @@ impl Effect for Waves {
                 let ch = &mut ctx.terminal.arena[id.0 as usize];
                 let scene_id = ch.animation.new_scene(false, None, Some(self.config.wave_easing), "", uses_pre);
                 let scene = ch.animation.scenes.get_mut(&scene_id).unwrap();
-                for _ in 0..self.config.wave_count {
-                    scene
-                        .apply_gradient_to_symbols(
-                            &self.config.wave_symbols,
-                            self.config.wave_length,
-                            Some(&wave_gradient),
-                            None,
-                        )
-                        .map_err(EngineError::Other)?;
+                let key = (scene.preexisting_colors, scene.preexisting_bold, scene.no_color, scene.use_xterm_colors);
+                if let Some(program) = wave_programs.get(&key) {
+                    let mut shared = program.clone();
+                    shared.scene_id.clone_from(&scene_id);
+                    *scene = shared;
+                } else {
+                    for _ in 0..self.config.wave_count {
+                        scene
+                            .apply_gradient_to_symbols(
+                                &self.config.wave_symbols,
+                                self.config.wave_length,
+                                Some(&wave_gradient),
+                                None,
+                            )
+                            .map_err(EngineError::Other)?;
+                    }
+                    scene.prepare();
+                    wave_programs.insert(key, scene.clone());
                 }
                 scene_id
             };
@@ -220,8 +233,7 @@ impl Effect for Waves {
                     }
                 }
             } else {
-                let final_fg_color =
-                    final_colors.fg_color.clone().expect("gradient mapping fg");
+                let final_fg_color = final_colors.fg_color.clone().expect("gradient mapping fg");
                 let final_scene_gradient = Gradient::new(
                     &[wave_gradient.spectrum.last().unwrap().clone(), final_fg_color],
                     &self.config.final_gradient_steps,
@@ -265,7 +277,7 @@ impl Effect for Waves {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if !self.pending_columns.is_empty() || !ctx.active_characters.is_empty() {
             if !self.pending_columns.is_empty() {
                 let next_column = self.pending_columns.remove(0);

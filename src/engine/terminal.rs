@@ -8,7 +8,7 @@ use std::time::Instant;
 
 use crate::engine::animation::ExistingColorHandling;
 use crate::engine::canvas::{Anchor, Canvas};
-use crate::engine::character::{CharId, EffectCharacter};
+use crate::engine::character::{CharId, CharacterArena, EffectCharacter};
 use crate::engine::error::EngineError;
 use crate::engine::input::{ColorFrequency, Preprocessor};
 use crate::utils::ansi;
@@ -18,6 +18,13 @@ use crate::utils::rng::Rng;
 
 const EMPTY_RENDER_CELL: u32 = u32::MAX;
 const NOT_VISIBLE: usize = usize::MAX;
+
+/// Output prepared for the current animation frame. Cached rows belong to the
+/// terminal and must be consumed before the next frame is prepared.
+pub enum FrameOutput {
+    Contiguous(String),
+    CachedRows,
+}
 
 #[derive(Debug, Clone)]
 pub struct TerminalConfig {
@@ -110,10 +117,72 @@ impl Default for CharacterFilter {
     }
 }
 
+/// The input-coordinate index retains HashMap access while recording mutable
+/// access and replacement for effect caches. A mutable borrow may perform any
+/// number of map edits; Rust excludes a simultaneous frame update.
+#[derive(Debug, Clone, Default)]
+pub struct InputCoordinateMap {
+    entries: HashMap<Coord, CharId>,
+    revision: super::revision::Revision,
+}
+
+impl From<HashMap<Coord, CharId>> for InputCoordinateMap {
+    fn from(entries: HashMap<Coord, CharId>) -> Self {
+        Self { entries, revision: super::revision::Revision::default() }
+    }
+}
+
+impl std::ops::Deref for InputCoordinateMap {
+    type Target = HashMap<Coord, CharId>;
+    fn deref(&self) -> &Self::Target {
+        &self.entries
+    }
+}
+
+impl std::ops::DerefMut for InputCoordinateMap {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        self.revision = super::revision::Revision::default();
+        &mut self.entries
+    }
+}
+
+impl<'a> IntoIterator for &'a InputCoordinateMap {
+    type Item = (&'a Coord, &'a CharId);
+    type IntoIter = std::collections::hash_map::Iter<'a, Coord, CharId>;
+    fn into_iter(self) -> Self::IntoIter {
+        self.entries.iter()
+    }
+}
+
+impl<'a> IntoIterator for &'a mut InputCoordinateMap {
+    type Item = (&'a Coord, &'a mut CharId);
+    type IntoIter = std::collections::hash_map::IterMut<'a, Coord, CharId>;
+    fn into_iter(self) -> Self::IntoIter {
+        self.revision = super::revision::Revision::default();
+        self.entries.iter_mut()
+    }
+}
+
+impl IntoIterator for InputCoordinateMap {
+    type Item = (Coord, CharId);
+    type IntoIter = std::collections::hash_map::IntoIter<Coord, CharId>;
+    fn into_iter(self) -> Self::IntoIter {
+        self.entries.into_iter()
+    }
+}
+
+impl PartialEq for InputCoordinateMap {
+    fn eq(&self, other: &Self) -> bool {
+        self.entries == other.entries
+    }
+}
+
+impl Eq for InputCoordinateMap {}
+
 pub struct Terminal {
     pub config: TerminalConfig,
     pub canvas: Canvas,
-    pub arena: Vec<EffectCharacter>,
+    pub arena: CharacterArena,
     next_character_id: u32,
     pub input_colors_frequency: ColorFrequency,
     terminal_dimensions: (i64, i64),
@@ -129,12 +198,19 @@ pub struct Terminal {
     pub visible_left: i64,
     pub input_characters: Vec<CharId>,
     pub added_characters: Vec<CharId>,
-    pub character_by_input_coord: HashMap<Coord, CharId>,
+    pub character_by_input_coord: InputCoordinateMap,
     pub inner_fill_characters: Vec<CharId>,
     pub outer_fill_characters: Vec<CharId>,
     visible_characters: Vec<CharId>,
     visible_positions: Vec<usize>,
+    render_grid: crate::engine::render::CellGrid,
     render_cells: Vec<u32>,
+    render_visual_ids: Vec<u64>,
+    previous_visual_ids: Vec<u64>,
+    rendered_rows: Vec<Vec<u8>>,
+    rendered_width: usize,
+    rendered_revision: Option<u64>,
+    rows_equal: fn(&[u64], &[u64]) -> bool,
     pub terminal_state: Vec<String>,
     output_buffer: String,
     move_cursor_to_top: String,
@@ -157,9 +233,7 @@ fn ordered_buckets(
         .and_then(|span| usize::try_from(span).ok())
         .expect("terminal canvas is too large");
     let expected_bucket_len = characters.len() / bucket_count;
-    let mut buckets: Vec<Vec<CharId>> = (0..bucket_count)
-        .map(|_| Vec::with_capacity(expected_bucket_len))
-        .collect();
+    let mut buckets: Vec<Vec<CharId>> = (0..bucket_count).map(|_| Vec::with_capacity(expected_bucket_len)).collect();
     for id in characters {
         let character_key = key(id);
         if first_key <= character_key && character_key <= last_key {
@@ -222,7 +296,7 @@ impl Terminal {
         let mut terminal = Terminal {
             config,
             canvas,
-            arena,
+            arena: arena.into(),
             next_character_id,
             input_colors_frequency,
             terminal_dimensions,
@@ -236,12 +310,19 @@ impl Terminal {
             visible_left,
             input_characters,
             added_characters: Vec::new(),
-            character_by_input_coord,
+            character_by_input_coord: character_by_input_coord.into(),
             inner_fill_characters: Vec::new(),
             outer_fill_characters: Vec::new(),
             visible_characters: Vec::new(),
             visible_positions: vec![NOT_VISIBLE; arena_len],
+            render_grid: crate::engine::render::CellGrid::default(),
             render_cells: Vec::new(),
+            render_visual_ids: Vec::new(),
+            previous_visual_ids: Vec::new(),
+            rendered_rows: Vec::new(),
+            rendered_width: 0,
+            rendered_revision: None,
+            rows_equal: crate::engine::render::select_row_comparison(),
             terminal_state: Vec::new(),
             output_buffer: String::new(),
             move_cursor_to_top,
@@ -317,6 +398,17 @@ impl Terminal {
 
     pub fn get_character_by_input_coord(&self, coord: Coord) -> Option<CharId> {
         self.character_by_input_coord.get(&coord).copied()
+    }
+
+    /// Dirty edits invalidate immediately. A caller that renders those edits
+    /// advances the renderer revision, so consuming dirtiness cannot hide them.
+    /// Replacing/cloning the arena or coordinate map also changes this token.
+    pub(crate) fn lighting_stamp(&self) -> Option<(u64, u64, u64)> {
+        (self.arena.dirty_len() == 0).then_some((
+            self.arena.identity(),
+            self.character_by_input_coord.revision.0,
+            self.render_grid.revision,
+        ))
     }
 
     pub fn set_character_visibility(&mut self, id: CharId, is_visible: bool) {
@@ -473,8 +565,7 @@ impl Terminal {
                     .iter()
                     .map(|&id| {
                         let c = coord(&id);
-                        (c.column - self.canvas.text_center.column).abs()
-                            + (c.row - self.canvas.text_center.row).abs()
+                        (c.column - self.canvas.text_center.column).abs() + (c.row - self.canvas.text_center.row).abs()
                     })
                     .max();
                 let dense_limit = all.len().saturating_mul(4).max(256);
@@ -484,8 +575,7 @@ impl Terminal {
                 {
                     ordered_buckets(all, 0, max_distance.unwrap(), |id| {
                         let c = coord(&id);
-                        (c.column - self.canvas.text_center.column).abs()
-                            + (c.row - self.canvas.text_center.row).abs()
+                        (c.column - self.canvas.text_center.column).abs() + (c.row - self.canvas.text_center.row).abs()
                     })
                 } else {
                     // Out-of-canvas added characters can have sparse, arbitrarily
@@ -512,38 +602,19 @@ impl Terminal {
     /// Paint the visible characters into the reusable cell buffer using the
     /// canonical (layer, character_id) painter order (plan.md §4.3).
     fn update_render_cells(&mut self) -> (usize, usize) {
-        let width = self.visible_right.max(0) as usize;
-        let height = self.visible_top.max(0) as usize;
-        let cell_count = width.checked_mul(height).expect("terminal canvas is too large");
-        self.render_cells.resize(cell_count, EMPTY_RENDER_CELL);
-        self.render_cells.fill(EMPTY_RENDER_CELL);
-
-        // The old implementation sorted every visible character by painter
-        // order and overwrote cells in that order.  A cell only needs the
-        // maximum key, so select that winner directly and avoid the per-frame
-        // allocation and O(n log n) sort.
-        for &id in &self.visible_characters {
-            let ch = &self.arena[id.0 as usize];
-            let row = ch.motion.current_coord.row + self.canvas_row_offset;
-            let column = ch.motion.current_coord.column + self.canvas_column_offset;
-            if self.visible_bottom <= row
-                && row <= self.visible_top
-                && self.visible_left <= column
-                && column <= self.visible_right
-            {
-                let cell = &mut self.render_cells[(row - 1) as usize * width + (column - 1) as usize];
-                if *cell == EMPTY_RENDER_CELL {
-                    *cell = id.0;
-                } else {
-                    let painted = &self.arena[*cell as usize];
-                    if (ch.layer, ch.character_id) > (painted.layer, painted.character_id) {
-                        *cell = id.0;
-                    }
-                }
-            }
-        }
-
-        (width, height)
+        self.render_grid.update(
+            &mut self.arena,
+            [
+                self.visible_left,
+                self.visible_right,
+                self.visible_bottom,
+                self.visible_top,
+                self.canvas_column_offset,
+                self.canvas_row_offset,
+            ],
+            &mut self.render_cells,
+            &mut self.render_visual_ids,
+        )
     }
 
     /// Terminal._update_terminal_state: materialize the row-oriented state
@@ -564,45 +635,162 @@ impl Terminal {
                 if cell == EMPTY_RENDER_CELL {
                     row.push(' ');
                 } else {
-                    row.push_str(arena[cell as usize].animation.current_character_visual.formatted_symbol.as_str());
+                    row.push_str(
+                        arena.render_slice()[cell as usize]
+                            .animation
+                            .current_character_visual
+                            .formatted_symbol
+                            .as_str(),
+                    );
                 }
             }
         }
     }
 
     /// get_formatted_output_string: refresh + emit top row first.
-    pub fn get_formatted_output_string(&mut self) -> String {
+    pub(crate) fn prepare_frame_output(&mut self) -> FrameOutput {
         let (width, height) = self.update_render_cells();
-        let minimum_capacity = width
-            .checked_mul(height)
-            .and_then(|cells| cells.checked_add(height.saturating_sub(1)))
-            .expect("terminal canvas is too large");
-        let mut out = std::mem::take(&mut self.output_buffer).into_bytes();
-        out.clear();
-        if out.capacity() < minimum_capacity {
-            out.reserve(minimum_capacity);
+        let unchanged = self.rendered_revision == Some(self.render_grid.revision);
+        if unchanged {
+            if !self.render_grid.dense {
+                return FrameOutput::CachedRows;
+            }
+            if !self.output_buffer.is_empty() {
+                return FrameOutput::Contiguous(std::mem::take(&mut self.output_buffer));
+            }
+        }
+        self.rendered_revision = Some(self.render_grid.revision);
+        if self.render_grid.dense {
+            let minimum_capacity = width
+                .checked_mul(height)
+                .and_then(|cells| cells.checked_add(height.saturating_sub(1)))
+                .expect("terminal canvas is too large");
+            let mut out = std::mem::take(&mut self.output_buffer).into_bytes();
+            out.clear();
+            if out.capacity() < minimum_capacity {
+                out.reserve(minimum_capacity);
+            }
+
+            for row in (0..height).rev() {
+                if row + 1 < height {
+                    out.push(b'\n');
+                }
+                for &cell in &self.render_cells[row * width..(row + 1) * width] {
+                    if cell == EMPTY_RENDER_CELL {
+                        out.push(b' ');
+                    } else {
+                        self.arena.render_slice()[cell as usize]
+                            .animation
+                            .current_character_visual
+                            .formatted_symbol
+                            .append_to(&mut out);
+                    }
+                }
+            }
+            // SAFETY: only complete UTF-8 symbols, spaces, and newlines were appended.
+            return FrameOutput::Contiguous(unsafe { String::from_utf8_unchecked(out) });
+        }
+        if self.rendered_width != width || self.rendered_rows.len() != height {
+            self.previous_visual_ids.clear();
+            self.previous_visual_ids.resize(width * height, u64::MAX);
+            self.rendered_rows.clear();
+            self.rendered_rows.resize_with(height, Vec::new);
+            self.rendered_width = width;
         }
         let arena = &self.arena;
         for row_index in (0..height).rev() {
-            if row_index + 1 < height {
-                out.push(b'\n');
+            if !self.render_grid.dirty_rows[row_index] {
+                continue;
             }
-            for &cell in &self.render_cells[row_index * width..(row_index + 1) * width] {
-                if cell == EMPTY_RENDER_CELL {
-                    out.push(b' ');
-                } else {
-                    arena[cell as usize].animation.current_character_visual.formatted_symbol.append_to(&mut out);
+            self.render_grid.dirty_rows[row_index] = false;
+            let start = row_index * width;
+            let ids = &self.render_visual_ids[start..start + width];
+            let previous = &mut self.previous_visual_ids[start..start + width];
+            let row = &mut self.rendered_rows[row_index];
+            if !(self.rows_equal)(ids, previous) {
+                row.clear();
+                for &cell in &self.render_cells[start..start + width] {
+                    if cell == EMPTY_RENDER_CELL {
+                        row.push(b' ');
+                    } else {
+                        arena.render_slice()[cell as usize]
+                            .animation
+                            .current_character_visual
+                            .formatted_symbol
+                            .append_to(row);
+                    }
                 }
+                previous.copy_from_slice(ids);
             }
         }
-        // SAFETY: every appended run is a whole formatted symbol, which is UTF-8.
-        unsafe { String::from_utf8_unchecked(out) }
+        FrameOutput::CachedRows
     }
 
-    pub(crate) fn recycle_output_string(&mut self, mut output: String) {
-        output.clear();
+    pub(crate) fn recycle_frame(&mut self, output: FrameOutput) {
+        if let FrameOutput::Contiguous(output) = output {
+            self.recycle_output_string(output);
+        }
+    }
+
+    pub(crate) fn recycle_output_string(&mut self, output: String) {
+        // Retain bytes as well as capacity so unchanged dense frames can emit
+        // the prior serialization. Preparing changed content still clears it.
         if output.capacity() > self.output_buffer.capacity() {
             self.output_buffer = output;
+        }
+    }
+
+    /// Compatibility helper for callers that need an owned snapshot.
+    pub fn get_formatted_output_string(&mut self) -> String {
+        match self.prepare_frame_output() {
+            FrameOutput::Contiguous(output) => output,
+            FrameOutput::CachedRows => {
+                let mut out = std::mem::take(&mut self.output_buffer).into_bytes();
+                out.clear();
+                for (i, row) in self.rendered_rows.iter().rev().enumerate() {
+                    if i != 0 {
+                        out.push(b'\n');
+                    }
+                    out.extend_from_slice(row);
+                }
+                // SAFETY: rows contain only complete UTF-8 symbols.
+                unsafe { String::from_utf8_unchecked(out) }
+            }
+        }
+    }
+
+    pub(crate) fn frame_bytes(&self, frame: &FrameOutput) -> usize {
+        match frame {
+            FrameOutput::Contiguous(output) => output.len(),
+            FrameOutput::CachedRows => {
+                self.rendered_rows.iter().map(Vec::len).sum::<usize>() + self.rendered_rows.len().saturating_sub(1)
+            }
+        }
+    }
+
+    pub(crate) fn write_frame_data(&self, out: &mut impl Write, frame: &FrameOutput) -> std::io::Result<()> {
+        match frame {
+            FrameOutput::Contiguous(output) => out.write_all(output.as_bytes()),
+            FrameOutput::CachedRows => {
+                use std::io::IoSlice;
+                // A bounded stack batch stays below platform iovec limits and
+                // avoids joining/copying potentially gigabytes of repeated rows.
+                let mut slices: [IoSlice<'_>; 128] = std::array::from_fn(|_| IoSlice::new(&[]));
+                let mut used = 0;
+                for (i, row) in self.rendered_rows.iter().rev().enumerate() {
+                    if i != 0 {
+                        slices[used] = IoSlice::new(b"\n");
+                        used += 1;
+                    }
+                    slices[used] = IoSlice::new(row);
+                    used += 1;
+                    if used >= 126 {
+                        crate::engine::render::write_all_vectored(out, &mut slices[..used])?;
+                        used = 0;
+                    }
+                }
+                crate::engine::render::write_all_vectored(out, &mut slices[..used])
+            }
         }
     }
 
@@ -618,12 +806,7 @@ impl Terminal {
     /// exactly where it was, and restarting for those is pure loss. Explicitly
     /// ignored dimensions are fixed by definition.
     pub fn resize_settled(&mut self) -> bool {
-        resize_settled(
-            &mut self.resize_seen_at,
-            &self.config,
-            &self.input_line_lengths,
-            self.terminal_dimensions,
-        )
+        resize_settled(&mut self.resize_seen_at, &self.config, &self.input_line_lengths, self.terminal_dimensions)
     }
 
     /// After a resize: go back to the top of the area this run allocated, wipe
@@ -663,9 +846,9 @@ impl Terminal {
         Ok(())
     }
 
-    pub fn print_frame(&mut self, out: &mut impl Write, output_string: &str) -> std::io::Result<()> {
+    pub fn print_frame(&mut self, out: &mut impl Write, frame: &FrameOutput) -> std::io::Result<()> {
         self.write_move_cursor_to_top(out)?;
-        out.write_all(output_string.as_bytes())?;
+        self.write_frame_data(out, frame)?;
         out.flush()
     }
 
@@ -720,9 +903,7 @@ pub fn resize_settled(
 /// shutil.get_terminal_size semantics: COLUMNS/LINES env vars win; else query
 /// the tty; on failure (80, 24).
 pub fn get_terminal_dimensions() -> (i64, i64) {
-    let env_dim = |name: &str| -> Option<i64> {
-        std::env::var(name).ok()?.parse::<i64>().ok()
-    };
+    let env_dim = |name: &str| -> Option<i64> { std::env::var(name).ok()?.parse::<i64>().ok() };
     let columns = env_dim("COLUMNS");
     let lines = env_dim("LINES");
     if let (Some(c), Some(l)) = (columns, lines) {
@@ -751,14 +932,8 @@ struct Layout {
     visible_left: i64,
 }
 
-fn compute_layout(
-    config: &TerminalConfig,
-    line_lengths: &[i64],
-    terminal_width: i64,
-    terminal_height: i64,
-) -> Layout {
-    let (canvas_height, canvas_width) =
-        get_canvas_dimensions(config, line_lengths, terminal_width, terminal_height);
+fn compute_layout(config: &TerminalConfig, line_lengths: &[i64], terminal_width: i64, terminal_height: i64) -> Layout {
+    let (canvas_height, canvas_width) = get_canvas_dimensions(config, line_lengths, terminal_width, terminal_height);
     let canvas = Canvas::new(canvas_height, canvas_width);
     let (mut width, mut height) = (terminal_width, terminal_height);
     let (column_offset, row_offset) = if !config.ignore_terminal_dimensions {
@@ -875,11 +1050,8 @@ fn setup_input_characters(
     arena: &mut Vec<EffectCharacter>,
     preprocessed_lines: Vec<Vec<CharId>>,
 ) -> Result<Vec<CharId>, EngineError> {
-    let formatted_lines = if config.wrap_text {
-        wrap_lines(preprocessed_lines, canvas.right)
-    } else {
-        preprocessed_lines
-    };
+    let formatted_lines =
+        if config.wrap_text { wrap_lines(preprocessed_lines, canvas.right) } else { preprocessed_lines };
     let input_height = formatted_lines.len() as i64;
     let mut input_characters: Vec<CharId> = Vec::new();
     for (row, line) in formatted_lines.iter().enumerate() {
@@ -887,15 +1059,51 @@ fn setup_input_characters(
             let column = column0 as i64 + 1;
             let ch = &mut arena[id.0 as usize];
             ch.input_coord = Coord::new(column, input_height - row as i64);
-            if ch.input_symbol != " "
-                || ch.animation.input_fg_color.is_some()
-                || ch.animation.input_bg_color.is_some()
+            if ch.input_symbol != " " || ch.animation.input_fg_color.is_some() || ch.animation.input_bg_color.is_some()
             {
                 input_characters.push(id);
             }
         }
     }
-    canvas
-        .anchor_text(arena, input_characters, config.anchor_text)
-        .map_err(EngineError::Other)
+    canvas.anchor_text(arena, input_characters, config.anchor_text).map_err(EngineError::Other)
+}
+
+#[cfg(test)]
+mod dense_output_cache_tests {
+    use super::*;
+
+    #[test]
+    fn recycled_dense_frames_track_consumed_mutations_and_geometry() {
+        let mut terminal = Terminal::new(
+            &"A".repeat(600),
+            TerminalConfig {
+                canvas_width: 600,
+                canvas_height: 1,
+                ignore_terminal_dimensions: true,
+                ..Default::default()
+            },
+        )
+        .unwrap();
+        for id in terminal.input_characters.clone() {
+            terminal.set_character_visibility(id, true);
+        }
+        for iteration in 0..8 {
+            if iteration == 3 {
+                // Consume mutation marks through the public snapshot API before
+                // preparing output. A cached dense string must still change.
+                for ch in terminal.arena.iter_mut() {
+                    ch.animation.set_appearance("A", false, Some("B"), None);
+                }
+                terminal.update_terminal_state();
+            }
+            if iteration == 6 {
+                terminal.visible_right -= 1;
+            }
+            let frame = terminal.prepare_frame_output();
+            let mut bytes = Vec::new();
+            terminal.write_frame_data(&mut bytes, &frame).unwrap();
+            assert_eq!(bytes, vec![if iteration < 3 { b'A' } else { b'B' }; if iteration < 6 { 600 } else { 599 }]);
+            terminal.recycle_frame(frame);
+        }
+    }
 }

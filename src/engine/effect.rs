@@ -10,7 +10,7 @@ use crate::engine::error::EngineError;
 /// also implements EffectHooks for its registered callbacks.
 pub trait Effect: EffectHooks {
     fn build(&mut self, ctx: &mut EngineCtx) -> Result<(), EngineError>;
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String>;
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput>;
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -31,13 +31,15 @@ pub enum RunOutcome {
 /// the top of the area so the caller can rebuild in place, and a terminal that
 /// goes away ends the run. A redirected stream gets neither: SIGWINCH there is
 /// not about our output, and a write that fails to a file is a real failure.
-pub fn run_effect(
-    effect: &mut dyn Effect,
-    ctx: &mut EngineCtx,
-    tty_output: bool,
-) -> Result<RunOutcome, EngineError> {
+pub fn run_effect(effect: &mut dyn Effect, ctx: &mut EngineCtx, tty_output: bool) -> Result<RunOutcome, EngineError> {
     effect.build(ctx)?;
     let stdout = std::io::stdout();
+    #[cfg(unix)]
+    let mut out = {
+        use std::os::fd::AsFd;
+        std::fs::File::from(stdout.as_fd().try_clone_to_owned().map_err(io_err)?)
+    };
+    #[cfg(not(unix))]
     let mut out = stdout.lock();
     let mut outcome = RunOutcome::Complete;
     let result = (|| -> std::io::Result<()> {
@@ -52,11 +54,11 @@ pub fn run_effect(
             };
             if let Some(stop) = requested_stop(ctx, tty_output) {
                 outcome = stop;
-                ctx.terminal.recycle_output_string(frame);
+                ctx.terminal.recycle_frame(frame);
                 break;
             }
             ctx.terminal.print_frame(&mut out, &frame)?;
-            ctx.terminal.recycle_output_string(frame);
+            ctx.terminal.recycle_frame(frame);
         }
         Ok(())
     })();
@@ -103,21 +105,22 @@ fn requested_stop(ctx: &mut EngineCtx, stop_on_resize: bool) -> Option<RunOutcom
 }
 
 /// Parity mode: write length-prefixed frames to stdout, no tty escapes.
-pub fn dump_effect(
-    effect: &mut dyn Effect,
-    ctx: &mut EngineCtx,
-    max_frames: Option<u64>,
-) -> Result<u64, EngineError> {
+pub fn dump_effect(effect: &mut dyn Effect, ctx: &mut EngineCtx, max_frames: Option<u64>) -> Result<u64, EngineError> {
     effect.build(ctx)?;
     let stdout = std::io::stdout();
+    #[cfg(unix)]
+    let mut out = {
+        use std::os::fd::AsFd;
+        std::fs::File::from(stdout.as_fd().try_clone_to_owned().map_err(io_err)?)
+    };
+    #[cfg(not(unix))]
     let mut out = stdout.lock();
     let mut count: u64 = 0;
     while let Some(frame) = effect.next_frame(ctx) {
-        let data = frame.as_bytes();
-        writeln!(out, "{}", data.len()).map_err(io_err)?;
-        out.write_all(data).map_err(io_err)?;
+        writeln!(out, "{}", ctx.terminal.frame_bytes(&frame)).map_err(io_err)?;
+        ctx.terminal.write_frame_data(&mut out, &frame).map_err(io_err)?;
         out.write_all(b"\n").map_err(io_err)?;
-        ctx.terminal.recycle_output_string(frame);
+        ctx.terminal.recycle_frame(frame);
         count += 1;
         if max_frames.is_some_and(|m| count >= m) {
             break;

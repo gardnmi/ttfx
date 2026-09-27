@@ -291,7 +291,7 @@ impl Effect for Print {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if !ctx.active_characters.is_empty() || self.typing {
             if ctx.terminal.arena[self.typing_head.0 as usize].motion.active_path.is_some() {
                 // print head is performing a carriage return

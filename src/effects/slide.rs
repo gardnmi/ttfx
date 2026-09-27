@@ -284,7 +284,7 @@ impl Effect for Slide {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if !self.pending_groups.is_empty() || !ctx.active_characters.is_empty() || !self.active_groups.is_empty() {
             if self.current_gap == self.config.gap && !self.pending_groups.is_empty() {
                 self.active_groups.push(self.pending_groups.remove(0));

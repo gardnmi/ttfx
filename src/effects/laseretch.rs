@@ -449,7 +449,7 @@ impl Effect for LaserEtch {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if self.pending_chars.is_empty() && ctx.active_characters.is_empty() {
             return None;
         }

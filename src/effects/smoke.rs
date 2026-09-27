@@ -242,7 +242,7 @@ impl Effect for Smoke {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         let mut fill_alg = self.fill_alg.take().expect("fill alg");
         let result = if !fill_alg.complete || !ctx.active_characters.is_empty() {
             if !fill_alg.complete {

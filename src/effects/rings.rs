@@ -85,6 +85,8 @@ struct Ring {
     /// Path ids (upstream holds Path objects; Path equality is by id).
     character_last_ring_path: HashMap<CharId, String>,
     rotation_speed: f64,
+    rotation_waypoints: HashMap<Coord, crate::engine::motion::Waypoints>,
+    rotation_events: Option<crate::engine::events::EventHandler>,
 }
 
 impl Ring {
@@ -102,6 +104,8 @@ impl Ring {
             characters: Vec::new(),
             character_last_ring_path: HashMap::new(),
             rotation_speed,
+            rotation_waypoints: HashMap::new(),
+            rotation_events: None,
         }
     }
 
@@ -224,8 +228,13 @@ impl Rings {
                 .new_path(ring.rotation_speed, None, None, 0, false, &ring_paths.len().to_string())
                 .map_err(EngineError::Other)?;
             let path = ch.motion.paths.get_mut(&path_id).unwrap();
-            let waypoint_id = path.waypoints.len().to_string();
-            path.new_waypoint(coord, None, &waypoint_id).map_err(EngineError::Other)?;
+            if let Some(waypoints) = ring.rotation_waypoints.get(&coord) {
+                path.waypoints = waypoints.clone();
+            } else {
+                path.new_waypoint(coord, None, "0").map_err(EngineError::Other)?;
+                path.waypoints.share();
+                ring.rotation_waypoints.insert(coord, path.waypoints.clone());
+            }
             ring_paths.push(path_id);
         }
         ring.character_last_ring_path.insert(id, ring_paths[0].clone());
@@ -255,7 +264,14 @@ impl Rings {
                     .map_err(EngineError::Other)?;
             }
         }
-        ctx.chain_paths(id, &ring_paths, true).map_err(EngineError::Other)?;
+        if let Some(template) = &ring.rotation_events {
+            ctx.terminal.arena[id.0 as usize].event_handler = template.clone();
+        } else {
+            ctx.chain_paths(id, &ring_paths, true).map_err(EngineError::Other)?;
+            let handler = &mut ctx.terminal.arena[id.0 as usize].event_handler;
+            handler.share();
+            ring.rotation_events = Some(handler.clone());
+        }
         ring.characters.push(id);
         Ok(())
     }
@@ -475,7 +491,7 @@ impl Effect for Rings {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if self.phase == Phase::Complete {
             return None;
         }

@@ -156,7 +156,7 @@ impl Effect for Highlight {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         let easer_complete = self.easer.as_ref().unwrap().is_complete();
         if !ctx.active_characters.is_empty() || !easer_complete {
             let mut easer = self.easer.take().unwrap();

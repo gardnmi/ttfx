@@ -325,7 +325,7 @@ impl Effect for OrbittingVolley {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if self.launchers.iter().any(|l| !l.magazine.is_empty()) || ctx.active_characters.len() > 1 {
             let main_character = self.launchers[0].character;
             if ctx.terminal.arena[main_character.0 as usize].motion.active_path.is_none() {

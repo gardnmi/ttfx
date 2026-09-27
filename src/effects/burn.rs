@@ -360,7 +360,7 @@ impl Effect for Burn {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if !self.char_link_order.is_empty() || !ctx.active_characters.is_empty() {
             for _ in 0..ctx.rng.randint(2, 4) {
                 if !self.char_link_order.is_empty() {

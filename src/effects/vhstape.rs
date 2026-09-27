@@ -527,7 +527,7 @@ impl Effect for VhsTape {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if self.phase == Phase::Complete && ctx.active_characters.is_empty() {
             return None;
         }

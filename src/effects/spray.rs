@@ -223,7 +223,7 @@ impl Effect for Spray {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if !self.pending_chars.is_empty() || !ctx.active_characters.is_empty() {
             if !self.pending_chars.is_empty() {
                 for _ in 0..ctx.rng.randint(1, self.volume) {

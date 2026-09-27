@@ -236,7 +236,7 @@ impl Effect for Overflow {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if !self.pending_rows.is_empty() {
             if self.delay == 0 {
                 let spectrum = &self.overflow_gradient.as_ref().unwrap().spectrum;

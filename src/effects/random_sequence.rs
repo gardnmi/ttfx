@@ -178,7 +178,7 @@ impl Effect for RandomSequence {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if !self.pending_chars.is_empty() || !ctx.active_characters.is_empty() {
             for _ in 0..self.characters_per_tick {
                 if let Some(next_char) = self.pending_chars.pop() {

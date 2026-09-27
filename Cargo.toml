@@ -12,6 +12,7 @@ default = ["asm"]
 asm = []
 
 [dependencies]
+rustc-hash = { version = "2.1", default-features = false }
 clap = { version = "4", features = ["derive"] }
 clap_complete = "4.6.9"
 terminal_size = "0.4"

@@ -13,11 +13,55 @@ const NO_CACHED_LOOKUP: usize = usize::MAX;
 /// Keys are shared so that long-lived handles (Motion::active_path,
 /// Animation::active_scene) can hold the map's own key allocation; lookups
 /// then settle on a pointer compare instead of a memcmp.
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct OrderedMap<V> {
     entries: Vec<(Rc<str>, V)>,
     index: Option<Box<HashMap<Rc<str>, usize>>>,
     last_lookup: Cell<usize>,
+    epoch: u64,
+}
+
+/// A named handle with a validated numeric slot. The map's epoch changes when
+/// slots can move, and is unique across map instances/clones. Steady playback
+/// resolves directly; mutations fall back to the ordinary name lookup.
+#[derive(Debug, Clone)]
+pub struct MapHandle {
+    name: Rc<str>,
+    slot: Cell<usize>,
+    epoch: Cell<u64>,
+}
+
+impl std::ops::Deref for MapHandle {
+    type Target = str;
+    fn deref(&self) -> &str {
+        &self.name
+    }
+}
+impl PartialEq for MapHandle {
+    fn eq(&self, other: &Self) -> bool {
+        self.name == other.name
+    }
+}
+impl Eq for MapHandle {}
+
+fn next_epoch() -> u64 {
+    static NEXT: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(1);
+    let epoch = NEXT.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+    if epoch == u64::MAX {
+        std::process::abort();
+    }
+    epoch
+}
+
+impl<V: Clone> Clone for OrderedMap<V> {
+    fn clone(&self) -> Self {
+        Self {
+            entries: self.entries.clone(),
+            index: self.index.clone(),
+            last_lookup: self.last_lookup.clone(),
+            epoch: next_epoch(),
+        }
+    }
 }
 
 /// Same string, same allocation — true only for keys handed out by this map.
@@ -28,7 +72,7 @@ fn same_allocation(entry: &str, key: &str) -> bool {
 
 impl<V> OrderedMap<V> {
     pub fn new() -> Self {
-        OrderedMap { entries: Vec::new(), index: None, last_lookup: Cell::new(NO_CACHED_LOOKUP) }
+        OrderedMap { entries: Vec::new(), index: None, last_lookup: Cell::new(NO_CACHED_LOOKUP), epoch: next_epoch() }
     }
 
     pub fn len(&self) -> usize {
@@ -57,12 +101,7 @@ impl<V> OrderedMap<V> {
         self.entries.push((key, value));
         self.last_lookup.set(position);
         if self.entries.len() == INDEX_THRESHOLD {
-            let index = self
-                .entries
-                .iter()
-                .enumerate()
-                .map(|(position, (key, _))| (key.clone(), position))
-                .collect();
+            let index = self.entries.iter().enumerate().map(|(position, (key, _))| (key.clone(), position)).collect();
             self.index = Some(Box::new(index));
         }
     }
@@ -84,6 +123,26 @@ impl<V> OrderedMap<V> {
     /// hit the pointer fast path.
     pub fn shared_key(&self, key: &str) -> Option<Rc<str>> {
         self.position(key).map(|position| Rc::clone(&self.entries[position].0))
+    }
+
+    pub fn handle(&self, key: &str) -> Option<MapHandle> {
+        let slot = self.position(key)?;
+        Some(MapHandle { name: Rc::clone(&self.entries[slot].0), slot: Cell::new(slot), epoch: Cell::new(self.epoch) })
+    }
+
+    #[inline]
+    pub fn handle_slot(&self, handle: &MapHandle) -> Option<usize> {
+        if handle.epoch.get() == self.epoch {
+            return Some(handle.slot.get());
+        }
+        let slot = self.position(handle)?;
+        handle.slot.set(slot);
+        handle.epoch.set(self.epoch);
+        Some(slot)
+    }
+
+    pub fn get_handle(&self, handle: &MapHandle) -> Option<&V> {
+        self.handle_slot(handle).map(|slot| self.at(slot))
     }
 
     /// Entry slot for `key`, for callers that read the same entry several times
@@ -120,6 +179,7 @@ impl<V> OrderedMap<V> {
     /// the remaining entries.
     pub fn remove(&mut self, key: &str) -> Option<V> {
         let pos = self.position(key)?;
+        self.epoch = next_epoch();
         if let Some(index) = &mut self.index {
             index.remove(key);
             for indexed_position in index.values_mut() {
@@ -133,6 +193,7 @@ impl<V> OrderedMap<V> {
     }
 
     pub fn clear(&mut self) {
+        self.epoch = next_epoch();
         self.entries.clear();
         self.last_lookup.set(NO_CACHED_LOOKUP);
         if let Some(index) = &mut self.index {
@@ -158,10 +219,9 @@ impl<V> OrderedMap<V> {
     fn find_position(&self, key: &str) -> Option<usize> {
         let position = match &self.index {
             Some(index) => index.get(key).copied(),
-            None => self
-                .entries
-                .iter()
-                .position(|(entry_key, _)| same_allocation(entry_key, key) || **entry_key == *key),
+            None => {
+                self.entries.iter().position(|(entry_key, _)| same_allocation(entry_key, key) || **entry_key == *key)
+            }
         };
         self.last_lookup.set(position.unwrap_or(NO_CACHED_LOOKUP));
         position

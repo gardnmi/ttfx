@@ -368,7 +368,7 @@ impl Effect for Beams {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if self.phase != Phase::Complete || !ctx.active_characters.is_empty() {
             match self.phase {
                 Phase::Beams => {

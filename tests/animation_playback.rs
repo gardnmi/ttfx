@@ -38,7 +38,7 @@ fn unequal_gradients_and_symbols_follow_python_distribution() {
                 assert_eq!(scene.get_next_visual().symbol, symbol.to_string());
             }
         }
-        assert!(scene.frames.is_empty());
+        assert!(scene.frames().is_empty());
     }
 }
 
@@ -53,15 +53,15 @@ fn reset_restores_partially_played_frames_and_looping_order() {
             assert_eq!(scene.get_next_visual().symbol, symbol);
         }
         scene.reset_scene();
-        assert!(scene.all_frames.iter().all(|frame| frame.ticks_elapsed == 0));
-        assert!(scene.played_frames.is_empty());
+        assert_eq!(scene.ticks_elapsed(), 0);
+        assert!(scene.played_frames().is_empty());
         for symbol in ["A", "A", "B", "B", "B", "C"] {
             assert_eq!(scene.get_next_visual().symbol, symbol);
         }
         if looping {
             assert_eq!(scene.get_next_visual().symbol, "A");
         } else {
-            assert!(scene.frames.is_empty());
+            assert!(scene.frames().is_empty());
         }
     }
 }
@@ -161,4 +161,148 @@ fn formatted_symbols_append_across_inline_and_heap_boundaries() {
             }
         }
     }
+}
+
+#[test]
+fn shared_scene_visuals_preserve_independent_playback_and_mutation() {
+    let mut first = scene(false);
+    let mut second = scene(false);
+    first.add_frame("λ", 2, VisualParams::default()).unwrap();
+    second.add_frame("λ", 5, VisualParams::default()).unwrap();
+    assert!(Rc::ptr_eq(&first.all_frames[0].character_visual, &second.all_frames[0].character_visual));
+    first.get_next_visual();
+    first.get_next_visual();
+    assert!(first.frames().is_empty());
+    assert_eq!(second.ticks_elapsed(), 0);
+    Rc::make_mut(&mut second.all_frames.make_mut()[0].character_visual).symbol = "changed".into();
+    assert_eq!(first.all_frames[0].character_visual.symbol, "λ");
+}
+
+#[test]
+fn cached_scene_visuals_distinguish_modes_styles_and_color_representation() {
+    let mut retained = Vec::new();
+    for no_color in [false, true] {
+        for xterm in [false, true] {
+            for color in [Color::from_hex("FF0000").unwrap(), Color::from_hex("ff0000").unwrap(), Color::from_xterm(9)]
+            {
+                for style in 0..256u16 {
+                    let params = VisualParams {
+                        bold: style & 1 != 0,
+                        dim: style & 2 != 0,
+                        italic: style & 4 != 0,
+                        underline: style & 8 != 0,
+                        blink: style & 16 != 0,
+                        reverse: style & 32 != 0,
+                        hidden: style & 64 != 0,
+                        strike: style & 128 != 0,
+                        colors: Some(ColorPair::new(Some(color), None)),
+                        // add_frame must ignore explicitly supplied codes.
+                        fg_color_code: Some(ColorCode::Xterm(123)),
+                        bg_color_code: Some(ColorCode::Xterm(234)),
+                    };
+                    let mut animation = Animation::new("x");
+                    animation.no_color = no_color;
+                    animation.use_xterm_colors = xterm;
+                    let mut expected = params.clone();
+                    expected.fg_color_code = animation.get_color_code(Some(&color));
+                    expected.bg_color_code = None;
+                    let expected = CharacterVisual::new("界", expected);
+                    let mut scene = Scene::new("test", false, None, None, no_color, xterm);
+                    for _ in 0..2 {
+                        scene.add_frame("界", 1, params.clone()).unwrap();
+                        assert_eq!(*scene.all_frames.last().unwrap().character_visual, expected);
+                    }
+                    retained.push(scene);
+                }
+            }
+        }
+    }
+}
+
+#[test]
+fn scene_cache_does_not_keep_visuals_alive_after_teardown() {
+    let observer = {
+        let mut scene = scene(false);
+        scene.add_frame("teardown", 1, VisualParams::default()).unwrap();
+        Rc::downgrade(&scene.all_frames[0].character_visual)
+    };
+    assert!(observer.upgrade().is_none());
+}
+
+#[test]
+fn scene_cache_applies_preexisting_overrides_before_lookup() {
+    let red = ColorPair::new(Some(Color::from_hex("ff0000").unwrap()), None);
+    let blue = ColorPair::new(Some(Color::from_hex("0000ff").unwrap()), None);
+    let mut overridden = scene(false);
+    overridden.preexisting_colors = Some(red);
+    overridden.preexisting_bold = true;
+    overridden.add_frame("x", 1, VisualParams { colors: Some(blue), ..Default::default() }).unwrap();
+    let mut explicit = scene(false);
+    explicit.add_frame("x", 1, VisualParams { colors: Some(red), bold: true, ..Default::default() }).unwrap();
+    assert_eq!(overridden.all_frames[0].character_visual, explicit.all_frames[0].character_visual);
+    let len = explicit.all_frames.len();
+    assert!(explicit.add_frame("x", 0, VisualParams::default()).is_err());
+    assert_eq!(explicit.all_frames.len(), len);
+}
+
+#[test]
+fn scene_programs_share_definitions_but_keep_playback_and_append_independent() {
+    let mut a = scene(false);
+    let mut b = scene(false);
+    for (symbol, duration) in [("A", 2), ("λ", 3), ("C", 1)] {
+        a.add_frame(symbol, duration, VisualParams::default()).unwrap();
+        b.add_frame(symbol, duration, VisualParams::default()).unwrap();
+    }
+    a.activate().unwrap();
+    b.activate().unwrap();
+    assert_eq!(a.all_frames.as_ptr(), b.all_frames.as_ptr());
+    a.get_next_visual();
+    assert_eq!(a.ticks_elapsed(), 1);
+    assert_eq!(b.ticks_elapsed(), 0);
+    b.add_frame("D", 2, VisualParams::default()).unwrap();
+    assert_eq!(a.all_frames.len(), 3);
+    assert_eq!(b.all_frames.len(), 4);
+    assert_ne!(a.all_frames.as_ptr(), b.all_frames.as_ptr());
+    for symbol in ["A", "λ", "λ", "λ", "C"] {
+        assert_eq!(a.get_next_visual().symbol, symbol);
+    }
+    a.reset_scene();
+    assert_eq!(a.get_next_visual().symbol, "A");
+}
+
+#[test]
+fn long_duration_scenes_do_not_need_a_per_tick_allocation() {
+    let mut scene = scene(false);
+    scene.add_frame("A", 1_000_000_000, VisualParams::default()).unwrap();
+    scene.add_frame("B", 3, VisualParams::default()).unwrap();
+    for _ in 0..3 {
+        assert_eq!(scene.get_next_visual().symbol, "A");
+    }
+    assert_eq!(scene.ticks_elapsed(), 3);
+    assert_eq!(scene.easing_total_steps, 1_000_000_003);
+}
+
+#[test]
+fn repeated_appearance_respects_color_modes_and_bold_overrides() {
+    let colors = ColorPair::new(Some(Color::from_xterm(196)), Some(Color::from_xterm(7)));
+    let mut animation = Animation::new("λ");
+    for (no_color, xterm, expected) in [
+        (false, false, "\x1b[38;2;255;0;0m\x1b[48;2;192;192;192mλ\x1b[0m"),
+        (true, false, "λ"),
+        (false, true, "\x1b[38;5;196m\x1b[48;5;7mλ\x1b[0m"),
+    ] {
+        animation.no_color = no_color;
+        animation.use_xterm_colors = xterm;
+        for _ in 0..3 {
+            animation.set_appearance("λ", false, None, Some(colors));
+            assert_eq!(animation.current_character_visual.formatted_symbol.as_str(), expected);
+        }
+    }
+    animation.existing_color_handling = ExistingColorHandling::Always;
+    animation.input_bold = true;
+    animation.set_appearance("λ", true, None, Some(colors));
+    assert_eq!(animation.current_character_visual.formatted_symbol.as_str(), "\x1b[1mλ\x1b[0m");
+    animation.input_bold = false;
+    animation.set_appearance("λ", true, None, Some(colors));
+    assert_eq!(animation.current_character_visual.formatted_symbol.as_str(), "λ");
 }

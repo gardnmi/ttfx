@@ -252,7 +252,7 @@ impl Effect for Pour {
         Ok(())
     }
 
-    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<String> {
+    fn next_frame(&mut self, ctx: &mut EngineCtx) -> Option<crate::engine::terminal::FrameOutput> {
         if !self.pending_groups.is_empty() || !ctx.active_characters.is_empty() || !self.current_group.is_empty() {
             if self.current_group.is_empty() && !self.pending_groups.is_empty() {
                 self.current_group = self.pending_groups.remove(0);

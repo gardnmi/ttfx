@@ -85,12 +85,15 @@ echo "oracle $1: 1 passed, 0 failed"
 echo "$1" >> "$CALLS"
 echo "oracle $1: 1 passed, 0 failed"
 ''')
-        for shard in range(1, 4):
-            self.env["ORACLE_SHARD"] = f"{shard}/3"
-            output = self.run_script("oracle-simd.sh", "quick", "widest", success=True)
-            self.assertIn(f"shard {shard}/3", output)
-        self.assertEqual(sorted((self.root / "calls").read_text().splitlines()),
-                         ["fifth", "first", "fourth", "second", "third"])
+        for count in (3, 4):
+            with self.subTest(shards=count):
+                (self.root / "calls").write_text("")
+                for shard in range(1, count + 1):
+                    self.env["ORACLE_SHARD"] = f"{shard}/{count}"
+                    output = self.run_script("oracle-simd.sh", "quick", "widest", success=True)
+                    self.assertIn(f"shard {shard}/{count}", output)
+                self.assertEqual(sorted((self.root / "calls").read_text().splitlines()),
+                                 ["fifth", "first", "fourth", "second", "third"])
 
     def test_native_rejects_invalid_or_empty_shards(self):
         self.write(self.scripts / "oracle.sh", 'echo "oracle $1: 1 passed, 0 failed"')

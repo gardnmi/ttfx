@@ -192,8 +192,8 @@ JOBS=2 tools/fx/qemu-oracle.sh qemu64
 ```
 
 To run just one native setting, append `widest`, `no-avx512`, or `no-avx2` to
-`tools/fx/oracle-simd.sh quick`. CI splits each setting across three disjoint
-effect groups; use `ORACLE_SHARD=1/3` (then `2/3` and `3/3`) to reproduce them.
+`tools/fx/oracle-simd.sh quick`. CI splits each setting across four disjoint
+effect groups; use `ORACLE_SHARD=1/4` (then `2/4`, `3/4`, and `4/4`) to reproduce them.
 Without that variable the script runs every effect. Results stream as each
 effect finishes.
 

@@ -20,15 +20,17 @@ jobs:
       - run: ./bin/test
 
   fx-simd:
-    name: FX SIMD oracle (${{ matrix.kernel }})
+    name: FX SIMD oracle (${{ matrix.kernel }}, shard ${{ matrix.shard }}/3)
     runs-on: ubuntu-latest
     timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
         kernel: [widest, no-avx512, no-avx2]
+        shard: [1, 2, 3]
     env:
       JOBS: "2"
+      ORACLE_SHARD: "${{ matrix.shard }}/3"
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable

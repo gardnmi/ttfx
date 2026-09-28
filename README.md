@@ -192,7 +192,10 @@ JOBS=2 tools/fx/qemu-oracle.sh qemu64
 ```
 
 To run just one native setting, append `widest`, `no-avx512`, or `no-avx2` to
-`tools/fx/oracle-simd.sh quick`.
+`tools/fx/oracle-simd.sh quick`. CI splits each setting across three disjoint
+effect groups; use `ORACLE_SHARD=1/3` (then `2/3` and `3/3`) to reproduce them.
+Without that variable the script runs every effect. Results stream as each
+effect finishes.
 
 The native checks need Bash and python3. The emulated check additionally needs
 `qemu-x86_64` (`sudo apt-get install qemu-user` on Ubuntu). Both compare complete

@@ -26,6 +26,7 @@ class OracleHarnessTests(unittest.TestCase):
         for name in ("first", "second", "mod"):
             (self.effects / f"{name}.rs").touch()
         self.env = {**os.environ, "JOBS": "1", "ORACLE_TMP": str(self.root / "scratch"),
+                    "ORACLE_SHARD": "1/1",
                     "BIN": str(self.commands / "ttfx"),
                     "PATH": str(self.commands) + os.pathsep + os.environ["PATH"]}
         self.write(self.commands / "qemu-x86_64", 'shift 2\nexec "$@"')
@@ -75,6 +76,33 @@ echo "oracle $1: 1 passed, 0 failed"
     def test_native_rejects_unknown_kernel(self):
         self.write(self.scripts / "oracle.sh", 'echo "oracle $1: 1 passed, 0 failed"')
         self.run_script("oracle-simd.sh", "quick", "typo", success=False)
+
+    def test_native_shards_partition_effects_without_gaps_or_duplicates(self):
+        for name in ("third", "fourth", "fifth"):
+            (self.effects / f"{name}.rs").touch()
+        self.env["CALLS"] = str(self.root / "calls")
+        self.write(self.scripts / "oracle.sh", '''
+echo "$1" >> "$CALLS"
+echo "oracle $1: 1 passed, 0 failed"
+''')
+        for shard in range(1, 4):
+            self.env["ORACLE_SHARD"] = f"{shard}/3"
+            output = self.run_script("oracle-simd.sh", "quick", "widest", success=True)
+            self.assertIn(f"shard {shard}/3", output)
+        self.assertEqual(sorted((self.root / "calls").read_text().splitlines()),
+                         ["fifth", "first", "fourth", "second", "third"])
+
+    def test_native_rejects_invalid_or_empty_shards(self):
+        self.write(self.scripts / "oracle.sh", 'echo "oracle $1: 1 passed, 0 failed"')
+        for shard in ("0/2", "3/2", "1/0", "1/99", "1/02", "typo"):
+            with self.subTest(shard=shard):
+                self.env["ORACLE_SHARD"] = shard
+                self.run_script("oracle-simd.sh", "quick", "widest", success=False)
+
+    def test_native_shard_rejects_missing_effect_summary(self):
+        self.env["ORACLE_SHARD"] = "1/2"
+        self.write(self.scripts / "oracle.sh", 'exit 0')
+        self.run_script("oracle-simd.sh", "quick", "widest", success=False)
 
     def test_native_rejects_worker_failure_even_with_passing_summary(self):
         self.write(self.scripts / "oracle.sh", 'echo "oracle $1: 1 passed, 0 failed"\nexit 1')

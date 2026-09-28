@@ -19,6 +19,39 @@ jobs:
           python-version: "3.12"
       - run: ./bin/test
 
+  fx-simd:
+    name: FX SIMD oracle
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      JOBS: "2"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 tools/tests/fx_oracle_harness.py
+      - run: cargo build --release --locked
+      # The widest kernel depends on the runner's CPU; AVX-512 is not required.
+      - run: tools/fx/oracle-simd.sh quick
+
+  fx-qemu:
+    name: FX oracle (qemu64)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      JOBS: "2"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: sudo apt-get update && sudo apt-get install -y qemu-user
+      - run: cargo build --release --locked
+      - run: tools/fx/qemu-oracle.sh qemu64
+
   test-macos:
     name: Tests (macOS)
     # bin/test skips the parity suites off Linux, so what's left here proves the

@@ -170,14 +170,33 @@ cargo build --release
 cargo build --release --target x86_64-unknown-linux-musl   # static, ~3.3 MB
 ```
 
-`./bin/test` runs every suite. It needs python3, and the parity half needs a copy of
-upstream, which it clones at the pinned commit on first run:
+`./bin/test` runs the core test and reference-parity suites. It needs python3, and
+the parity half needs a copy of upstream, which it clones at the pinned commit on
+first run:
 
 ```sh
 ./tools/parity/fetch_reference.sh   # what bin/test calls; safe to run by hand
 ```
 
 Upstream is not vendored here — the harness fetches it, because it's their code.
+
+CI also compares every effect with the original Rust engine using the native SIMD
+choices and an emulated older x86-64 CPU. Run the same checks locally with:
+
+```sh
+cargo build --release --locked
+python3 tools/tests/fx_oracle_harness.py
+JOBS=2 tools/fx/oracle-simd.sh quick
+JOBS=2 tools/fx/qemu-oracle.sh qemu64
+```
+
+The native checks need Bash and python3. The emulated check additionally needs
+`qemu-x86_64` (`sudo apt-get install qemu-user` on Ubuntu). Both compare complete
+stdout, stderr, and exit status. Native runs cover the widest kernels supported
+by the host, AVX-512 disabled, and both AVX-512/AVX2 disabled. This does not promise
+AVX-512 coverage on runners without AVX-512. The qemu64 run checks the x86-64
+baseline CPU path and requires fx to handle each case successfully; a fallback,
+matching errors, or an incomplete effect suite fails the check.
 
 ## Scope
 

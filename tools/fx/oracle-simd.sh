@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # oracle-simd.sh - run tools/fx/oracle.sh for every effect with each of fx's
-# SIMD kernel choices: the widest the CPU runs, TTFX_NO_AVX512=1 and
-# TTFX_NO_AVX2=1 (the SSE2 and scalar paths), at most JOBS (default 4)
+# motion/RNG kernel choices: the widest the CPU runs, TTFX_NO_AVX512=1 and
+# both TTFX_NO_AVX512=1/TTFX_NO_AVX2=1, at most JOBS (default 4)
 # oracles at a time. Pass THREADS=1 to run fx single-threaded.
+# Renderer dispatch is CPU-based; qemu-oracle.sh checks its baseline path.
 #
 # Usage: tools/fx/oracle-simd.sh [quick|full] [widest|no-avx512|no-avx2 ...]
 # With no kernel arguments, run all three. CI selects one per matrix job.

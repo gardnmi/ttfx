@@ -196,11 +196,13 @@ To run just one native setting, append `widest`, `no-avx512`, or `no-avx2` to
 
 The native checks need Bash and python3. The emulated check additionally needs
 `qemu-x86_64` (`sudo apt-get install qemu-user` on Ubuntu). Both compare complete
-stdout, stderr, and exit status. Native runs cover the widest kernels supported
-by the host, AVX-512 disabled, and both AVX-512/AVX2 disabled. This does not promise
-AVX-512 coverage on runners without AVX-512. The qemu64 run checks the x86-64
-baseline CPU path and requires fx to handle each case successfully; a fallback,
-matching errors, or an incomplete effect suite fails the check.
+stdout, stderr, and exit status. Native runs cover the default configuration,
+`TTFX_NO_AVX512=1`, and both `TTFX_NO_AVX512=1`/`TTFX_NO_AVX2=1`. These overrides
+exercise the narrower motion and RNG paths; the renderer still detects the host
+CPU independently. Native CI cannot exercise AVX-512 on runners without it.
+The qemu64 run checks the baseline CPU path, including the renderer, and requires
+fx to handle each case successfully; a fallback, matching errors, or an
+incomplete effect suite fails the check.
 
 ## Scope
 

@@ -133,7 +133,7 @@ mechanically in CI against a pinned upstream checkout (v0.15.0), not by eyeballi
 | `tools/tests/*_behavior.py` | pty | what only a real terminal shows: resize restarts, signal teardown |
 | `cargo test` | goldens + traces | easing/geometry/gradient values and engine state machines |
 
-`./bin/test` runs the lot, which is all CI does.
+`./bin/test` runs these suites. CI also checks the FX engine as described below.
 
 Making that possible meant reproducing upstream's quirks deliberately, not "fixing" them:
 Python's banker's rounding, gradients built from integer floor division rather than float
@@ -181,12 +181,29 @@ first run:
 Upstream is not vendored here — the harness fetches it, because it's their code.
 
 CI also compares every effect with the original Rust engine using the native SIMD
-choices and an emulated older x86-64 CPU. Each native choice runs in a separate
-CI job. Run the same checks locally with:
+choices and an emulated older x86-64 CPU. Each native choice is split across four
+CI jobs. The ordinary test/build jobs and small CI policy/oracle harness tests run
+on every PR update, including drafts. The full FX comparisons run for ready PRs
+and pushes to `main`/`master` with changes outside documentation. Only root
+Markdown files, `LICENSE`, `NOTICE`, and `docs/` are treated as documentation;
+code, dependencies, build configuration, test changes, and unknown paths trigger
+the full suite. The decision uses the whole PR diff, so a documentation follow-up
+cannot hide an earlier code change.
+
+Marking a PR ready starts the full checks; returning it to draft skips them.
+New PR updates cancel superseded runs. Maintainers can also use **Actions → CI →
+Run workflow** to request the full suite regardless of changed files. There is no
+nightly schedule. For merge enforcement, configure branch protection to require
+**FX checks**, along with the ordinary checks: this stable job accepts intentional
+skips but fails if the policy/harness tests fail or a required comparison does not
+succeed. The workflow alone does not change repository branch protection.
+
+Run the same checks locally with:
 
 ```sh
 cargo build --release --locked
 python3 tools/tests/fx_oracle_harness.py
+python3 tools/tests/fx_ci_policy.py
 JOBS=2 tools/fx/oracle-simd.sh quick
 JOBS=2 tools/fx/qemu-oracle.sh qemu64
 ```

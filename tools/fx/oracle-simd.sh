@@ -4,11 +4,21 @@
 # TTFX_NO_AVX2=1 (the SSE2 and scalar paths), at most JOBS (default 4)
 # oracles at a time. Pass THREADS=1 to run fx single-threaded.
 #
-# Usage: tools/fx/oracle-simd.sh [quick|full]
+# Usage: tools/fx/oracle-simd.sh [quick|full] [widest|no-avx512|no-avx2 ...]
+# With no kernel arguments, run all three. CI selects one per matrix job.
 set -uo pipefail
 
 ROOT="$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)"
 MODE="${1:-quick}"
+[ "$#" -eq 0 ] || shift
+kernels=("$@")
+[ "${#kernels[@]}" -gt 0 ] || kernels=(widest no-avx512 no-avx2)
+for kernel in "${kernels[@]}"; do
+    case "$kernel" in
+        widest|no-avx512|no-avx2) ;;
+        *) echo "Unknown SIMD choice: $kernel" >&2; exit 2 ;;
+    esac
+done
 JOBS="${JOBS:-4}"
 TMPROOT="${ORACLE_TMP:-$ROOT/target/oracle-tmp}"
 mkdir -p "$TMPROOT" || exit 2
@@ -27,7 +37,7 @@ done
 unset TTFX_FX TTFX_NO_AVX512 TTFX_NO_AVX2
 
 status=0
-for kernel in widest no-avx512 no-avx2; do
+for kernel in "${kernels[@]}"; do
     case "$kernel" in
     widest) env=() ;;
     no-avx512) env=(TTFX_NO_AVX512=1) ;;

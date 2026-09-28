@@ -181,7 +181,8 @@ first run:
 Upstream is not vendored here — the harness fetches it, because it's their code.
 
 CI also compares every effect with the original Rust engine using the native SIMD
-choices and an emulated older x86-64 CPU. Run the same checks locally with:
+choices and an emulated older x86-64 CPU. Each native choice runs in a separate
+CI job. Run the same checks locally with:
 
 ```sh
 cargo build --release --locked
@@ -189,6 +190,9 @@ python3 tools/tests/fx_oracle_harness.py
 JOBS=2 tools/fx/oracle-simd.sh quick
 JOBS=2 tools/fx/qemu-oracle.sh qemu64
 ```
+
+To run just one native setting, append `widest`, `no-avx512`, or `no-avx2` to
+`tools/fx/oracle-simd.sh quick`.
 
 The native checks need Bash and python3. The emulated check additionally needs
 `qemu-x86_64` (`sudo apt-get install qemu-user` on Ubuntu). Both compare complete

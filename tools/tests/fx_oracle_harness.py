@@ -64,6 +64,18 @@ if [ "$1" = first ]; then echo "oracle $1: 1 passed, 0 failed"; fi
 ''')
         self.run_script("oracle-simd.sh", success=False)
 
+    def test_native_can_select_one_kernel_for_ci(self):
+        self.write(self.scripts / "oracle.sh", '''
+[ "${TTFX_NO_AVX512:-0}" = 1 ] && [ "${TTFX_NO_AVX2:-0}" = 1 ] || exit 9
+echo "oracle $1: 1 passed, 0 failed"
+''')
+        output = self.run_script("oracle-simd.sh", "quick", "no-avx2", success=True)
+        self.assertEqual(output.count("effects pass"), 1)
+
+    def test_native_rejects_unknown_kernel(self):
+        self.write(self.scripts / "oracle.sh", 'echo "oracle $1: 1 passed, 0 failed"')
+        self.run_script("oracle-simd.sh", "quick", "typo", success=False)
+
     def test_native_rejects_worker_failure_even_with_passing_summary(self):
         self.write(self.scripts / "oracle.sh", 'echo "oracle $1: 1 passed, 0 failed"\nexit 1')
         self.run_script("oracle-simd.sh", success=False)

@@ -20,9 +20,13 @@ jobs:
       - run: ./bin/test
 
   fx-simd:
-    name: FX SIMD oracle
+    name: FX SIMD oracle (${{ matrix.kernel }})
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        kernel: [widest, no-avx512, no-avx2]
     env:
       JOBS: "2"
     steps:
@@ -34,7 +38,7 @@ jobs:
       - run: python3 tools/tests/fx_oracle_harness.py
       - run: cargo build --release --locked
       # The widest kernel depends on the runner's CPU; AVX-512 is not required.
-      - run: tools/fx/oracle-simd.sh quick
+      - run: tools/fx/oracle-simd.sh quick "${{ matrix.kernel }}"
 
   fx-qemu:
     name: FX oracle (qemu64)
